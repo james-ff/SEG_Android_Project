@@ -1,4 +1,4 @@
-package com.example.worldly;
+package com.worldly.network;
 
 import java.io.BufferedReader;
 import java.io.IOException;
