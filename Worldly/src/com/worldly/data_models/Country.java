@@ -6,8 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 import com.worldly.network.QuerySystem;
 
 public class Country {
@@ -59,7 +57,7 @@ public class Country {
 	}
 	
 	public void print() {
-		Log.v(this.getClass().getName(), "Name:" + this.name + "  ID:" + this.id + "  iso 2 code:" + this.iso2Code + "  Capital City:" + this.capitalCity + "  Longitude + Latitutde:" + this.longitude + " | " + this.latitude);
+		//Log.v(this.getClass().getName(), "Name:" + this.name + "  ID:" + this.id + "  iso 2 code:" + this.iso2Code + "  Capital City:" + this.capitalCity + "  Longitude + Latitutde:" + this.longitude + " | " + this.latitude);
 	}
 
 	/**

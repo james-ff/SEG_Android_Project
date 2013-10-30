@@ -5,7 +5,11 @@ import java.util.List;
 
 import org.json.JSONException;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.pm.ConfigurationInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,8 +17,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.example.worldly.R;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.worldly.data_models.Country;
 
+@SuppressLint("NewApi")
 public class MainActivity extends Activity {
 	
 	private Activity self;
@@ -22,6 +29,7 @@ public class MainActivity extends Activity {
 	private ArrayList<Country> allCountries;
 	
 	private Spinner myCountrySpinner;
+	private GoogleMap map;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +38,8 @@ public class MainActivity extends Activity {
 		self = this;
 
 		myCountrySpinner = (Spinner) findViewById(R.id.my_country_spinner);
+		
+		//map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
 		
 		Thread aThread = new Thread(new Runnable() {
 			@Override
@@ -46,6 +56,19 @@ public class MainActivity extends Activity {
 			}
 		});
 		aThread.start();
+		
+		if (hasGLES20()) {
+			Log.v(getClass().getName(), "Has Open GL 2.0");
+		} else {
+			Log.v(getClass().getName(), "Has not got Open GL 2.0");
+		}
+	}
+	
+	public boolean hasGLES20() {
+	    ActivityManager am = (ActivityManager)
+	                getSystemService(Context.ACTIVITY_SERVICE);
+	    ConfigurationInfo info = am.getDeviceConfigurationInfo();
+	    return info.reqGlEsVersion >= 0x20000;
 	}
 
 	public void printAllCountries() {
