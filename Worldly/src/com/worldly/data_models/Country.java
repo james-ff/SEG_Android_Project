@@ -8,107 +8,199 @@ import org.json.JSONObject;
 
 import com.worldly.network.QuerySystem;
 
-public class Country {
-	
-	private final String NAME_KEY = "name";
-	private final String ID_KEY = "id";
-	private final String LONGITUDE_KEY = "longitude";
-	private final String LATITUDE_KEY = "latitude";
-	private final String CAPITAL_CITY_KEY = "capitalCity";
-	private final String ISO_2_CODE_KEY = "iso2Code";
-	
+/**
+ * This class represents a single country, it contains various fields which
+ * represent the country's properties, there are also getter and setter methods
+ * for all fields.
+ * 
+ * @author James Bellamy & Team
+ * 
+ */
+public class Country
+{
+	/**
+	 * Constant representing the key to obtain the respective value from the
+	 * JSON raw data.
+	 */
+	private final String NAME_KEY = "name", ID_KEY = "id",
+			LONGITUDE_KEY = "longitude", LATITUDE_KEY = "latitude",
+			CAPITAL_CITY_KEY = "capitalCity", ISO_2_CODE_KEY = "iso2Code";
+
 	private String name;
 	private String id;
 	private String iso2Code;
 	private String capitalCity;
 	private String longitude;
 	private String latitude;
-	
-	
-	public Country(JSONObject rawData) {
+
+	/**
+	 * Constructs a new Country object with the specified JSON raw data.
+	 * 
+	 * @param rawData
+	 *            : A JSONObject containing raw data about a country.
+	 */
+	public Country(JSONObject rawData)
+	{
 		super();
-		
-		try {
+
+		try
+		// Attempts to parse rawData
+		{
 			this.name = rawData.getString(NAME_KEY);
 			this.id = rawData.getString(ID_KEY);
 			this.iso2Code = rawData.getString(ISO_2_CODE_KEY);
 			this.capitalCity = rawData.getString(CAPITAL_CITY_KEY);
 			this.longitude = rawData.getString(LONGITUDE_KEY);
 			this.latitude = rawData.getString(LATITUDE_KEY);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
+		}
+		catch (JSONException e) // Encountered a problem whilst parsing rawData
+		{
 			e.printStackTrace();
 		}
 	}
-	
-	public static ArrayList<Country> getAllCountries() throws JSONException {
-		
+
+	/**
+	 * Retrieves an ArrayList of Country Objects containing all countries from
+	 * the World Bank feed.
+	 * 
+	 * @return An ArrayList of Country objects containing all countries from the
+	 *         World Bank feed.
+	 * @throws JSONException
+	 *             If there was a problem whilst parsing queryData.
+	 */
+	public static ArrayList<Country> getAllCountries() throws JSONException
+	{
+		// Fetching the data from the World Bank feed
 		String queryData = QuerySystem.fetchAllCountriesData();
 		ArrayList<Country> countries = new ArrayList<Country>();
-		
+
+		// Parsing the data onto JSONArray objects
 		JSONArray rootArray = new JSONArray(queryData);
-		JSONArray allCrountriesRaw = rootArray.getJSONArray(1);
-		
-		for (int n = 0; n < allCrountriesRaw.length(); n++) {
-			countries.add(new Country(allCrountriesRaw.getJSONObject(n)));
+		JSONArray allCountriesRaw = rootArray.getJSONArray(1);
+
+		// Iterates through allCountriesRaw
+		for (int n = 0; n < allCountriesRaw.length(); n++)
+		{
+			// Creates and adds a Country object to the ArrayList of countries
+			countries.add(new Country(allCountriesRaw.getJSONObject(n)));
 		}
-		
+
 		return countries;
 	}
-	
-	public void print() {
-		//Log.v(this.getClass().getName(), "Name:" + this.name + "  ID:" + this.id + "  iso 2 code:" + this.iso2Code + "  Capital City:" + this.capitalCity + "  Longitude + Latitutde:" + this.longitude + " | " + this.latitude);
+
+	public void print()
+	{
+		// Log.v(this.getClass().getName(), "Name:" + this.name + "  ID:" +
+		// this.id + "  iso 2 code:" + this.iso2Code + "  Capital City:" +
+		// this.capitalCity + "  Longitude + Latitutde:" + this.longitude +
+		// " | " + this.latitude);
 	}
 
 	/**
-	 * Member Getters and Setters
+	 * Retrieves the name of the Country object.
+	 * @return A String containing the name of the Country object.
 	 */
-	
-	public String getName() {
+	public String getName()
+	{
 		return name;
 	}
 
-	public void setName(String name) {
+	/**
+	 * Assigns a name to the Country object.
+	 * @param name : A String containing the name of the Country object.
+	 */
+	public void setName(String name)
+	{
 		this.name = name;
 	}
 
-	public String getId() {
+	/**
+	 * Retrieves the ID of the Country object.
+	 * @return A String containing the ID of the Country object.
+	 */
+	public String getId()
+	{
 		return id;
 	}
 
-	public void setId(String id) {
+	/**
+	 * Assigns an ID to the Country object.
+	 * @param name : A String containing the ID of the Country object.
+	 */
+	public void setId(String id)
+	{
 		this.id = id;
 	}
 
-	public String getIso2Code() {
+	/**
+	 * Retrieves the country code of the Country object.
+	 * @return A String containing the country code of the Country object.
+	 */
+	public String getIso2Code()
+	{
 		return iso2Code;
 	}
 
-	public void setIso2Code(String iso2Code) {
+	/**
+	 * Assigns a country code to the Country object.
+	 * @param name : A String containing the country code of the Country object.
+	 */
+	public void setIso2Code(String iso2Code)
+	{
 		this.iso2Code = iso2Code;
 	}
 
-	public String getCapitalCity() {
+	/**
+	 * Retrieves the capital city of the Country object.
+	 * @return A String containing the capital city of the Country object.
+	 */
+	public String getCapitalCity()
+	{
 		return capitalCity;
 	}
 
-	public void setCapitalCity(String capitalCity) {
+	/**
+	 * Assigns a capital city to the Country object.
+	 * @param name : A String containing the capital city of the Country object.
+	 */
+	public void setCapitalCity(String capitalCity)
+	{
 		this.capitalCity = capitalCity;
 	}
 
-	public String getLongitude() {
+	/**
+	 * Retrieves the longitude of the Country object.
+	 * @return A String containing the longitude of the Country object.
+	 */
+	public String getLongitude()
+	{
 		return longitude;
 	}
 
-	public void setLongitude(String longitude) {
+	/**
+	 * Assigns a longitude to the Country object.
+	 * @param name : A String containing the longitude of the Country object.
+	 */
+	public void setLongitude(String longitude)
+	{
 		this.longitude = longitude;
 	}
 
-	public String getLatitude() {
+	/**
+	 * Retrieves the latitude of the Country object.
+	 * @return A String containing the latitude of the Country object.
+	 */
+	public String getLatitude()
+	{
 		return latitude;
 	}
 
-	public void setLatitude(String latitude) {
+	/**
+	 * Assigns a latitude to the Country object.
+	 * @param name : A String containing the latitude of the Country object.
+	 */
+	public void setLatitude(String latitude)
+	{
 		this.latitude = latitude;
 	}
 }
