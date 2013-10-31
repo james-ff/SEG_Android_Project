@@ -29,8 +29,8 @@ public class Country {
 	private String id;
 	private String iso2Code;
 	private String capitalCity;
-	private String longitude;
-	private String latitude;
+	private Double longitude;
+	private Double latitude;
 
 	/**
 	 * Constructs a new Country object with the specified JSON raw data.
@@ -48,8 +48,19 @@ public class Country {
 			this.id = rawData.getString(ID_KEY);
 			this.iso2Code = rawData.getString(ISO_2_CODE_KEY);
 			this.capitalCity = rawData.getString(CAPITAL_CITY_KEY);
-			this.longitude = rawData.getString(LONGITUDE_KEY);
-			this.latitude = rawData.getString(LATITUDE_KEY);
+			
+			try {
+				this.longitude = Double.parseDouble(rawData.getString(LONGITUDE_KEY));
+			} catch (NumberFormatException e) {
+				this.longitude = null;
+			}
+			
+			try {
+				this.latitude = Double.parseDouble(rawData.getString(LATITUDE_KEY));
+			} catch (NumberFormatException e) {
+				this.latitude = null;
+			}
+			
 		} catch (JSONException e) // Encountered a problem whilst parsing
 									// rawData
 		{
@@ -173,11 +184,7 @@ public class Country {
 	 * @return A String containing the longitude of the Country object.
 	 */
 	public Double getLongitude() {
-		try {
-			return Double.parseDouble(longitude);
-		} catch (NumberFormatException e) {
-			return null;
-		}
+		return this.longitude;
 	}
 
 	/**
@@ -186,7 +193,7 @@ public class Country {
 	 * @param name
 	 *            : A String containing the longitude of the Country object.
 	 */
-	public void setLongitude(String longitude) {
+	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
 
@@ -196,11 +203,7 @@ public class Country {
 	 * @return A String containing the latitude of the Country object.
 	 */
 	public Double getLatitude() {
-		try {
-			return Double.parseDouble(latitude);
-		} catch (NumberFormatException e) {
-			return null;
-		}
+		return this.latitude;
 	}
 
 	/**
@@ -209,7 +212,7 @@ public class Country {
 	 * @param name
 	 *            : A String containing the latitude of the Country object.
 	 */
-	public void setLatitude(String latitude) {
+	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
 }
