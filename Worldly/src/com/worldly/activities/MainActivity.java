@@ -17,7 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.example.worldly.R;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
