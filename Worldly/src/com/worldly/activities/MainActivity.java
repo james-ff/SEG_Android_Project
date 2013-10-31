@@ -54,7 +54,6 @@ public class MainActivity extends Activity {
 					plotCountriesOnMap();
 					setSpinnerList();
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
