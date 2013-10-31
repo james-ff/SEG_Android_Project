@@ -17,8 +17,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.example.worldly.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.worldly.data_models.Country;
 
 @SuppressLint("NewApi")
@@ -39,7 +42,7 @@ public class MainActivity extends Activity {
 
 		myCountrySpinner = (Spinner) findViewById(R.id.my_country_spinner);
 		
-		//map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
+		map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
 		
 		Thread aThread = new Thread(new Runnable() {
 			@Override
@@ -48,6 +51,7 @@ public class MainActivity extends Activity {
 					Log.v(getClass().getName(), "Starting Download");
 					allCountries = Country.getAllCountries();
 					printAllCountries();
+					plotCountriesOnMap();
 					setSpinnerList();
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -77,12 +81,34 @@ public class MainActivity extends Activity {
 		}
 	}
 	
+	public void plotCountriesOnMap() {
+		self.runOnUiThread(new Runnable() {
+			@Override public void run() {
+				if (allCountries.size() > 0) {
+					for (Country aCountry : allCountries) {
+						if (aCountry.getLatitude() != null && aCountry.getLongitude() != null) {
+							LatLng aLocation = new LatLng(aCountry.getLatitude(), aCountry.getLongitude());
+
+							map.setMyLocationEnabled(true);
+
+				       
+							map.addMarker(new MarkerOptions()
+				                	.title(aCountry.getName())
+				                	.snippet(aCountry.getCapitalCity())
+				                	.position(aLocation));
+						}
+					}
+				}
+			}
+		});
+	}
+	
 	public void setSpinnerList() {
 		self.runOnUiThread(new Runnable() {
 			@Override public void run() {
 				List<String> countryNames = new ArrayList<String>();
 				for (Country aCountry : allCountries) {
-					if (aCountry.getLongitude() != null && aCountry.getLatitude() != null) {
+					if (aCountry.getLatitude() != null && aCountry.getLongitude() != null) {
 						countryNames.add(aCountry.getName());
 					}
 				}
