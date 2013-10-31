@@ -13,11 +13,20 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.util.Log;
 
-
+/**
+ * This class is used to obtain data from the internet.
+ * @author Jeroen Keppens
+ *
+ */
 public class JSONCore {
 	
 	//private final String API_BASE_URL = "http://api.worldbank.org/countries/";
 	
+	/**
+	 * Static method to download a data feed from a given URL.
+	 * @param url : A String object containing the URL of the data feed to be downloaded
+	 * @return A String object containing the data feed.
+	 */
 	public static String readData(String url) {
 	    // Create download objects
 	    HttpClient client = new DefaultHttpClient();
