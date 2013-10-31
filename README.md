@@ -2,8 +2,8 @@ SEG Android Project 1
 =======================
 
 Members:
-- James Bellamy 
-- Ferdiand Keller
+- James Bellamy (Thor)
+- Ferdinand Keller (Annie the Eagle)
 - Marek Matejka
 - Rafael Silva Costa
 
