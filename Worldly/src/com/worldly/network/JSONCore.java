@@ -57,11 +57,7 @@ public class JSONCore {
 	        Log.e("readData","IOException:\n" + e.getMessage());
 	    }
 		
-	    // return data
-	    if (content==null) {
-	        return(null);
-	    } else {
-	        return(content.toString());
-	    }
+	    // Returns data as String object or null if unable to retrieve it
+	    return (content==null) ? null : content.toString();
 	}
 }

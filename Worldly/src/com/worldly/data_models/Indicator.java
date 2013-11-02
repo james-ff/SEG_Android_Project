@@ -13,6 +13,11 @@ import org.json.JSONObject;
  * 
  */
 public class Indicator {
+	
+	/**
+	 * Constant representing the key to obtain the respective value from the
+	 * JSON raw data.
+	 */
 	private final String ID = "id", READABLE_NAME = "name", SOURCE_KEY = "source", SOURCE_NAME = "value";
 	
 	private String id;
@@ -23,7 +28,7 @@ public class Indicator {
 	/**
 	 * Constructs a new Indicator object with the specified JSON raw data.
 	 * 
-	 * @param rawData: A JSONObject containing raw data about an Indicator.
+	 * @param rawArray: A JSONArray containing raw data about an Indicator.
 	 */
 	public Indicator(JSONArray rawArray) {
 		super();
@@ -41,15 +46,63 @@ public class Indicator {
 		}
 	}
 
+	/**
+	 * Retrieves the ID of the Indicator object.
+	 * 
+	 * @return A String containing the ID of the Indicator object.
+	 */
 	public String getId() { return id; }
+	
+	/**
+	 * Assigns an ID to the Indicator object.
+	 * 
+	 * @param sourceName
+	 *            : A String containing the ID of the Indicator object.
+	 */
 	public void setId(String id) { this.id = id; }
 
+	/**
+	 * Retrieves the name of the Indicator object.
+	 * 
+	 * @return A String containing the name of the Indicator object.
+	 */
 	public String getName() { return name; }
+	
+	/**
+	 * Assigns a name to the Indicator object.
+	 * 
+	 * @param name
+	 *            : A String containing the name of the Indicator object.
+	 */
 	public void setName(String name) { this.name = name; }
 
+	/**
+	 * Retrieves the source name of the Indicator object.
+	 * 
+	 * @return A String containing the source name of the Indicator object.
+	 */
 	public String getSourceName() { return sourceName; }
+	
+	/**
+	 * Assigns a source name to the Indicator object.
+	 * 
+	 * @param sourceName
+	 *            : A String containing the source name of the Indicator object.
+	 */
 	public void setSourceName(String sourceName) { this.sourceName = sourceName; }
 
+	/**
+	 * Retrieves the source ID of the Indicator object.
+	 * 
+	 * @return An int containing the source ID of the Indicator object.
+	 */
 	public int getSourceID() { return sourceID; }
+	
+	/**
+	 * Assigns a source ID to the Indicator object.
+	 * 
+	 * @param sourceID
+	 *            : An int containing the source ID of the Indicator object.
+	 */
 	public void setSourceID(int sourceID) { this.sourceID = sourceID; }
 }
