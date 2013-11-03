@@ -21,14 +21,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.worldly.data_models.*;
-
-/* Testing for Annie's Indicator
-import org.json.JSONArray;
-import android.os.StrictMode;
-import android.os.StrictMode.ThreadPolicy;
-import com.worldly.network.QuerySystem;
-*/
+import com.worldly.data_models.Country;
 
 @SuppressLint("NewApi")
 public class MainActivity extends Activity {
@@ -41,20 +34,10 @@ public class MainActivity extends Activity {
 	private GoogleMap map;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {		
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		self = this;
-		
-		/* -- Annie testing-code for Indicator, do not touch --
-		ThreadPolicy tp = ThreadPolicy.LAX;
-		StrictMode.setThreadPolicy(tp);
-		try {
-			Indicator test = new Indicator(new JSONArray(QuerySystem.getIndicatorData("NY.GDP.MKTP.CD")));
-		} catch (JSONException e1) {
-			e1.printStackTrace();
-		}
-		*/
 
 		myCountrySpinner = (Spinner) findViewById(R.id.my_country_spinner);
 		
