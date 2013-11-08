@@ -23,6 +23,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.worldly.data_models.Country;
 
+/* Testing for Annie's Indicator
+import org.json.JSONArray;
+import android.os.StrictMode;
+import android.os.StrictMode.ThreadPolicy;
+import com.worldly.network.QuerySystem;
+*/
+
 @SuppressLint("NewApi")
 public class MainActivity extends Activity {
 	
@@ -31,7 +38,9 @@ public class MainActivity extends Activity {
 	private ArrayList<Country> allCountries;
 	
 	private Spinner myCountrySpinner;
+	private Spinner currentCountrySpinner;
 	private GoogleMap map;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +49,7 @@ public class MainActivity extends Activity {
 		self = this;
 
 		myCountrySpinner = (Spinner) findViewById(R.id.my_country_spinner);
+		currentCountrySpinner = (Spinner) findViewById(R.id.spinner1); //TODO: Change later
 		
 		map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
 		
@@ -112,6 +122,7 @@ public class MainActivity extends Activity {
 				}
 				ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(self, android.R.layout.simple_spinner_dropdown_item, countryNames);
 				myCountrySpinner.setAdapter(spinnerArrayAdapter);
+				currentCountrySpinner.setAdapter(spinnerArrayAdapter);
 			}
 		});
 	}
