@@ -1,6 +1,8 @@
 package com.worldly.data_models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +33,7 @@ public class Country {
 	private String capitalCity;
 	private Double longitude;
 	private Double latitude;
+	private Map<Indicator, Object> data = new HashMap<Indicator, Object>(); // Set up Map to hold all the data.
 
 	/**
 	 * Constructs a new Country object with the specified JSON raw data.
@@ -132,7 +135,7 @@ public class Country {
 	/**
 	 * Assigns an ID to the Country object.
 	 * 
-	 * @param name
+	 * @param id
 	 *            : A String containing the ID of the Country object.
 	 */
 	public void setId(String id) {
@@ -151,7 +154,7 @@ public class Country {
 	/**
 	 * Assigns a country code to the Country object.
 	 * 
-	 * @param name
+	 * @param iso2Code
 	 *            : A String containing the country code of the Country object.
 	 */
 	public void setIso2Code(String iso2Code) {
@@ -170,7 +173,7 @@ public class Country {
 	/**
 	 * Assigns a capital city to the Country object.
 	 * 
-	 * @param name
+	 * @param capitalCity
 	 *            : A String containing the capital city of the Country object.
 	 */
 	public void setCapitalCity(String capitalCity) {
@@ -189,7 +192,7 @@ public class Country {
 	/**
 	 * Assigns a longitude to the Country object.
 	 * 
-	 * @param name
+	 * @param longitude
 	 *            : A String containing the longitude of the Country object.
 	 */
 	public void setLongitude(Double longitude) {
@@ -208,10 +211,22 @@ public class Country {
 	/**
 	 * Assigns a latitude to the Country object.
 	 * 
-	 * @param name
+	 * @param latitude
 	 *            : A String containing the latitude of the Country object.
 	 */
 	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
+	}
+	
+	/**
+	 * Get's a specific data entry from the indicator HashMap.
+	 * 
+	 * @param key
+	 *            : An indicator object which is selected from a list in another class.
+	 *            
+     * @return An Object containing the value of that specific indicator parameter.
+	 */
+	public Object getData(Indicator key) {
+		return data.get(key);
 	}
 }
