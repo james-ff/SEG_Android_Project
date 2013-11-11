@@ -24,6 +24,8 @@ public class Country {
 	private final String NAME_KEY = "name", ID_KEY = "id",
 			LONGITUDE_KEY = "longitude", LATITUDE_KEY = "latitude",
 			CAPITAL_CITY_KEY = "capitalCity", ISO_2_CODE_KEY = "iso2Code";
+	
+	
 
 	private String name;
 	private String id;
