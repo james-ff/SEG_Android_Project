@@ -1,6 +1,5 @@
 package com.worldly.network;
 
-
 public class QuerySystem {
 	
 	//private final String API_BASE_URL = "http://api.worldbank.org/";
