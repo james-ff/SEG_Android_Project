@@ -96,14 +96,12 @@ public class MainActivity extends Activity {
 					for (Country aCountry : allCountries) {
 						if (aCountry.getLatitude() != null && aCountry.getLongitude() != null) {
 							LatLng aLocation = new LatLng(aCountry.getLatitude(), aCountry.getLongitude());
-
-							map.setMyLocationEnabled(true);
-
-				       
-							map.addMarker(new MarkerOptions()
+							if (map != null) {
+								map.addMarker(new MarkerOptions()
 				                	.title(aCountry.getName())
 				                	.snippet(aCountry.getCapitalCity())
 				                	.position(aLocation));
+							}
 						}
 					}
 				}
