@@ -17,8 +17,7 @@ import com.example.worldly.R;
  * @author Rafael da Silva Costa & Team
  * 
  */
-public class SelectionActivity extends Activity
-{
+public class SelectionActivity extends Activity {
 	/**
 	 * Constant representing the mode selected by the user.
 	 */
@@ -37,15 +36,13 @@ public class SelectionActivity extends Activity
 	public static final String PREFS_NAME = "GLOBAL_PREFS";
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_selection);
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
+	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.selection, menu);
 		return true;
@@ -56,10 +53,10 @@ public class SelectionActivity extends Activity
 	 * on the screen, it then detects the option selected and updates the global
 	 * shared preferences file with the mode selected.
 	 * 
-	 * @param v : The View object which the user interacted with.
+	 * @param v
+	 *            : The View object which the user interacted with.
 	 */
-	public void chooseMode(View v)
-	{
+	public void chooseMode(View v) {
 		int option = 0;
 
 		// Creates and instantiates a shared preferences object
@@ -69,17 +66,16 @@ public class SelectionActivity extends Activity
 		SharedPreferences.Editor editor = sharedPref.edit();
 
 		// Detects which button the user has pressed
-		switch (v.getId())
-		{
-			case R.id.btnFamily:
-				option = FAMILY;
-				break;
-			case R.id.btnNewLife:
-				option = NEW_LIFE;
-				break;
-			case R.id.btnBusiness:
-				option = BUSINESS;
-				break;
+		switch (v.getId()) {
+		case R.id.btnFamily:
+			option = FAMILY;
+			break;
+		case R.id.btnNewLife:
+			option = NEW_LIFE;
+			break;
+		case R.id.btnBusiness:
+			option = BUSINESS;
+			break;
 		}
 
 		// Saves the mode selected by the user onto the shared preferences file
