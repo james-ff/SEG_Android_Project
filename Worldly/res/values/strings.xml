@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Worldly</string>
+    <string name="strFamily">Moving with your family</string>
+    <string name="strNewLife">Starting a new life</string>
+    <string name="strBusiness">Expanding your business</string>
     <string name="action_settings">Settings</string>
-    <string name="search_hint">Search</string>
+	<string name="search_hint">Search</string>
     <string name="compare_string">Compare</string>
-
 </resources>
