@@ -11,8 +11,10 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -23,6 +25,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.worldly.data_models.Country;
 
+/* Testing for Annie's Indicator
+import org.json.JSONArray;
+import android.os.StrictMode;
+import android.os.StrictMode.ThreadPolicy;
+import com.worldly.network.QuerySystem;
+*/
+
 @SuppressLint("NewApi")
 public class MainActivity extends Activity {
 	
@@ -31,15 +40,19 @@ public class MainActivity extends Activity {
 	private ArrayList<Country> allCountries;
 	
 	private Spinner myCountrySpinner;
+	private Spinner currentCountrySpinner;
 	private GoogleMap map;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 		self = this;
 
 		myCountrySpinner = (Spinner) findViewById(R.id.my_country_spinner);
+		currentCountrySpinner = (Spinner) findViewById(R.id.spinner1); //TODO: Change later
 		
 		map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
 		
@@ -86,14 +99,12 @@ public class MainActivity extends Activity {
 					for (Country aCountry : allCountries) {
 						if (aCountry.getLatitude() != null && aCountry.getLongitude() != null) {
 							LatLng aLocation = new LatLng(aCountry.getLatitude(), aCountry.getLongitude());
-
-							map.setMyLocationEnabled(true);
-
-				       
-							map.addMarker(new MarkerOptions()
+							if (map != null) {
+								map.addMarker(new MarkerOptions()
 				                	.title(aCountry.getName())
 				                	.snippet(aCountry.getCapitalCity())
 				                	.position(aLocation));
+							}
 						}
 					}
 				}
@@ -112,10 +123,22 @@ public class MainActivity extends Activity {
 				}
 				ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(self, android.R.layout.simple_spinner_dropdown_item, countryNames);
 				myCountrySpinner.setAdapter(spinnerArrayAdapter);
+				currentCountrySpinner.setAdapter(spinnerArrayAdapter);
 			}
 		});
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    // Respond to the action bar's Up/Home button
+	    case android.R.id.home:
+	        NavUtils.navigateUpFromSameTask(this);
+	        return true;
+	    }
+	    return super.onOptionsItemSelected(item);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

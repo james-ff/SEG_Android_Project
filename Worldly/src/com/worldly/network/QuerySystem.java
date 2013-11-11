@@ -4,11 +4,20 @@ package com.worldly.network;
 public class QuerySystem {
 	
 	//private final String API_BASE_URL = "http://api.worldbank.org/";
-	private final static String GET_ALL_COUNTRIES_URL = "http://api.worldbank.org/countries?per_page=500&format=json";
 	
-	public static String fetchAllCountriesData() {
-		
-		return JSONCore.readData(GET_ALL_COUNTRIES_URL);
+	private final static String FORMAT_APPEND = "format=json";
+	
+	private final static String GET_ALL_COUNTRIES_URL = "http://api.worldbank.org/countries";
+	private final static String INDICATOR_BASE_URL = "http://api.worldbank.org/indicators/";
+	
+	public static String getAllCountriesData() {		
+		String url = GET_ALL_COUNTRIES_URL + "?" + "per_page=" + 500 + "&" + FORMAT_APPEND;
+		return JSONCore.readData(url);
+	}
+	
+	public static String getIndicatorData(String indicatorNeeded) {
+		String url = INDICATOR_BASE_URL + indicatorNeeded + "?" + FORMAT_APPEND;
+		return JSONCore.readData(url);
 	}
 
 }

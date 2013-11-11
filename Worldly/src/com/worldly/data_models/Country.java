@@ -81,11 +81,10 @@ public class Country {
 	 */
 	public static ArrayList<Country> getAllCountries() throws JSONException {
 		// Fetching the data from the World Bank feed
-		String queryData = QuerySystem.fetchAllCountriesData();
 		ArrayList<Country> countries = new ArrayList<Country>();
 
 		// Parsing the data onto JSONArray objects
-		JSONArray rootArray = new JSONArray(queryData);
+		JSONArray rootArray = new JSONArray(QuerySystem.getAllCountriesData());
 		JSONArray allCountriesRaw = rootArray.getJSONArray(1);
 
 		// Iterates through allCountriesRaw
