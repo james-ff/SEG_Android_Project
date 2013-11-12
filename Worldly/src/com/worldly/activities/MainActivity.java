@@ -53,8 +53,7 @@ public class MainActivity extends Activity {
 		myCountrySpinner = (Spinner) findViewById(R.id.my_country_spinner);
 		currentCountrySpinner = (Spinner) findViewById(R.id.spinner1);
 
-		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
-				.getMap();
+		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 
 		Thread aThread = new Thread(new Runnable() {
 			@Override
