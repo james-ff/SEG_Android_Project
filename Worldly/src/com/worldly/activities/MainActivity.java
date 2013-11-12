@@ -56,6 +56,7 @@ public class MainActivity extends Activity {
 				Log.d(getClass().getName(), marker.getTitle());
 				Country aCountry = markerToCountry.get(marker);
 				Log.d(getClass().getName(), aCountry.getIso2Code());
+				selectedCountries.add(aCountry);
 				marker.hideInfoWindow();
 			}
 		});
@@ -104,7 +105,7 @@ public class MainActivity extends Activity {
 						if (aCountry.getLatitude() != null && aCountry.getLongitude() != null) {
 							LatLng aLocation = new LatLng(aCountry.getLatitude(), aCountry.getLongitude());
 							if (map != null) {
-								MarkerOptions aMarkerOption = new MarkerOptions().title(aCountry.getName()).snippet(aCountry.getCapitalCity()).position(aLocation);
+								MarkerOptions aMarkerOption = new MarkerOptions().title(aCountry.getName() + " - " + aCountry.getCapitalCity()).snippet("Tap to Add Country").position(aLocation);
 								Marker aMarker = map.addMarker(aMarkerOption);
 								markerToCountry.put(aMarker, aCountry);
 							}
