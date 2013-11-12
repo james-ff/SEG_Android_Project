@@ -51,9 +51,7 @@ public class MainActivity extends Activity {
 		self = this;
 
 		myCountrySpinner = (Spinner) findViewById(R.id.my_country_spinner);
-		currentCountrySpinner = (Spinner) findViewById(R.id.spinner1); // TODO:
-																		// Change
-																		// later
+		currentCountrySpinner = (Spinner) findViewById(R.id.spinner1);
 
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 				.getMap();
