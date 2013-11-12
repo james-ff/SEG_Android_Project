@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.worldly.data_store.CachingEngine;
+import android.util.Log;
 import com.worldly.network.QuerySystem;
 
 /**
@@ -118,12 +119,22 @@ public class Country {
 		}
 		return countries;
 	}
-
+	
+	/**
+	 * Prints a Log of current instantiated Country Object
+	 */
 	public void print() {
-		// Log.v(this.getClass().getName(), "Name:" + this.name + "  ID:" +
-		// this.id + "  iso 2 code:" + this.iso2Code + "  Capital City:" +
-		// this.capitalCity + "  Longitude + Latitutde:" + this.longitude +
-		// " | " + this.latitude);
+		 Log.v(this.getClass().getName(), "Name:" + this.name + "  ID:" +
+		 this.id + "  iso 2 code:" + this.iso2Code + "  Capital City:" +
+		 this.capitalCity + "  Longitude + Latitutde:" + this.longitude +
+		 " | " + this.latitude);
+	}
+	
+	
+	
+	@Override
+	public String toString() {
+		return this.getIso2Code() + " - " + this.getName();
 	}
 
 	/**
