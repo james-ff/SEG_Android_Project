@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -12,56 +13,141 @@ import com.worldly.data_models.Country;
 import android.os.Environment;
 import android.util.Log;
 
-public class CachingEngine {
-	private static final File workingDirectory = new File(Environment.getExternalStorageDirectory() + "/Worldly/");
-	
-	public static boolean writeCountriesCache(ArrayList<Country> countriesData) {
-		try {
-			workingDirectory.mkdirs();
-			File cacheFile = new File(workingDirectory + "/countries.dat");
+/**
+ * This class handles the caching of data to disk and also the procedure to read
+ * data from an existing cached file.
+ * 
+ * @author Annie the Eagle & Team
+ * 
+ */
+public class CachingEngine
+{
+	/**
+	 * Constant representing the directory where the data will be cached.
+	 */
+	private static final File WORKING_DIRECTORY = new File(
+			Environment.getExternalStorageDirectory() + "/Worldly/");
+
+	/**
+	 * Constant representing the name of the file where the data of all
+	 * countries will be saved to.
+	 */
+	private static final String COUNTRIES_FILENAME = "/countries.dat";
+
+	/**
+	 * Constant representing the separator used whilst writing to files.
+	 */
+	private static final String SEPARATOR = ", ";
+
+	/**
+	 * Static method which writes the entire data of all countries from an
+	 * ArrayList to a file in the device's external storage.
+	 * 
+	 * @param allCountries
+	 *            : An ArrayList containing the entire data of all countries.
+	 * @return TRUE if the operation has been successful, FALSE otherwise.
+	 */
+	public static boolean writeCountriesCache(ArrayList<Country> allCountries)
+	{
+		// Tries to save the data to a file in the device's external storage
+		try
+		{
+			// Creates the directory in which the file will be stored
+			WORKING_DIRECTORY.mkdirs();
+
+			// Creates the file and opens an OutputStream to begin writing to it
+			File cacheFile = new File(WORKING_DIRECTORY + COUNTRIES_FILENAME);
 			FileOutputStream os = new FileOutputStream(cacheFile);
-			os.write(("" + (System.currentTimeMillis() + 86400000 + "\n")).getBytes());
-			
-			for (int i = 0; i < countriesData.size(); i++) {
-				Country current = countriesData.get(i);
-				String data = (current.getId() + ", " + current.getName() + ", " + current.getIso2Code() + ", " + current.getCapitalCity() + ", " + current.getLatitude() + ", " + current.getLongitude() + "\n");
+
+			// Writes the "expiry date" of the data to the header of the file
+			os.write(("" + (System.currentTimeMillis() + 86400000 + "\n"))
+					.getBytes());
+
+			String data;
+
+			// Iterates through the ArrayList of countries
+			for (Country aCountry : allCountries)
+			{
+				// Places the country's data to a temporary String object
+				data = aCountry.getId() + SEPARATOR;
+				data += aCountry.getName() + SEPARATOR;
+				data += aCountry.getIso2Code() + SEPARATOR;
+				data += aCountry.getCapitalCity() + SEPARATOR;
+				data += aCountry.getLatitude() + SEPARATOR;
+				data += aCountry.getLongitude() + SEPARATOR;
+
+				// Writes the country's data to the file
 				os.write(data.getBytes());
 			}
+
+			// Flushes and closes the OutputStream object
 			os.flush();
 			os.close();
+
 			return true;
-		} 
-		catch (Exception ex) {
+		}
+		// If the system encountered a problem whilst creating the Working
+		// Directory or whilst writing the data to the file
+		catch (IOException ex)
+		{
 			ex.printStackTrace();
 			return false;
 		}
 	}
 
-	public static ArrayList<Country> checkCacheForCountries() {
-		File cacheFile = new File(workingDirectory + "/countries.dat");
-		if (cacheFile.exists()) {
-			try {
+	/**
+	 * 
+	 * @return
+	 */
+	public static ArrayList<Country> getCachedCountries()
+	{
+		// Creates and initialises a File object to store the countries data
+		File cacheFile = new File(WORKING_DIRECTORY + COUNTRIES_FILENAME);
+
+		if (cacheFile.exists())
+		{
+			// Tries to read the countries data from the cache file
+			try
+			{
+				// Prepares the objects to read the contents of cacheFile
+				ArrayList<Country> cachedCountries = new ArrayList<Country>();
 				FileInputStream is = new FileInputStream(cacheFile);
-				BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-				String line = "";
-				
-				Long expiryMilliseconds = Long.parseLong(reader.readLine());		
-				if (System.currentTimeMillis() > expiryMilliseconds) { 
-					Log.w("CacheEngine", "Cached countries too old, getting again.");
-					reader.close(); is.close();
-					return new ArrayList<Country>(); 					
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(is));
+
+				// Gets the "expiry date" of the cache file
+				Long expiryDateMillis = Long.parseLong(reader.readLine());
+
+				// If the cached data is NOT out of date
+				if (System.currentTimeMillis() <= expiryDateMillis)
+				{
+					String line;
+
+					// Iterates through the cached file creating Country objects
+					while ((line = reader.readLine()) != null)
+						cachedCountries.add(new Country(line));
+
+					// Adds an entry to LogCat describing the current status
+					Log.i("CacheEngine", "Read " + cachedCountries.size()
+							+ " countries from cache");
 				}
-				
-				ArrayList<Country> cached = new ArrayList<Country>();
-				while ((line = reader.readLine()) != null) {
-					cached.add(new Country(line));
+				else
+				{
+					// Adds an entry to LogCat describing the current status
+					Log.w("CacheEngine",
+							"Cached countries out of date, refreshing...");
 				}
-				
-				Log.i("CacheEngine", "Read " + cached.size() + " countries from cache");
-				reader.close(); is.close();
-				return cached;
-			} 
-			catch (Exception ex) {
+
+				// Closes the BufferedReader and InputStream objects
+				reader.close();
+				is.close();
+
+				return cachedCountries;
+			}
+			// If the system encountered a problem whilst opening the cache file
+			// or whilst reading the file
+			catch (IOException ex)
+			{
 				return new ArrayList<Country>();
 			}
 		}

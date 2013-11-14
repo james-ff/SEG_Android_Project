@@ -103,7 +103,7 @@ public class Country {
 	 */
 	public static ArrayList<Country> getAllCountries() throws JSONException {
 		// Fetching the data from the World Bank feed
-		ArrayList<Country> countries = CachingEngine.checkCacheForCountries();
+		ArrayList<Country> countries = CachingEngine.getCachedCountries();
 		
 		if (countries.size() == 0) {
 			// Parsing the data onto JSONArray objects
