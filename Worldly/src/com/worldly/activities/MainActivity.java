@@ -1,7 +1,7 @@
 package com.worldly.activities;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import org.json.JSONException;
 
@@ -20,17 +20,13 @@ import android.widget.Spinner;
 
 import com.example.worldly.R;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.worldly.data_models.Country;
 
-/* Testing for Annie's Indicator
- import org.json.JSONArray;
- import android.os.StrictMode;
- import android.os.StrictMode.ThreadPolicy;
- import com.worldly.network.QuerySystem;
- */
 
 @SuppressLint("NewApi")
 public class MainActivity extends Activity {
@@ -38,11 +34,14 @@ public class MainActivity extends Activity {
 	private Activity self;
 
 	private ArrayList<Country> allCountries;
+	private ArrayList<Country> allAvailableCountries;
+	private ArrayList<Country> selectedCountries;
+	private HashMap<Marker, Country> markerToCountry;
 
-	private Spinner myCountrySpinner;
-	private Spinner currentCountrySpinner;
+	private Spinner allAvailableCountriesSpinner;
+	private Spinner allSelectedCountrySpinner;
 	private GoogleMap map;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,13 +49,17 @@ public class MainActivity extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		self = this;
 
-		myCountrySpinner = (Spinner) findViewById(R.id.my_country_spinner);
-		currentCountrySpinner = (Spinner) findViewById(R.id.spinner1); // TODO:
-																		// Change
-																		// later
-
-		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
-				.getMap();
+		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+		
+		map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+			@Override public void onInfoWindowClick(Marker marker) {
+				Log.d(getClass().getName(), marker.getTitle());
+				Country aCountry = markerToCountry.get(marker);
+				Log.d(getClass().getName(), aCountry.getIso2Code());
+				selectedCountries.add(aCountry);
+				marker.hideInfoWindow();
+			}
+		});
 
 		Thread aThread = new Thread(new Runnable() {
 			@Override
@@ -64,74 +67,51 @@ public class MainActivity extends Activity {
 				try {
 					Log.v(getClass().getName(), "Starting Download");
 					allCountries = Country.getAllCountries();
-					printAllCountries();
+					allAvailableCountries.addAll(allCountries);
 					plotCountriesOnMap();
-					setSpinnerList();
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 			}
 		});
 		aThread.start();
+		
+		allAvailableCountries = new ArrayList<Country>();
+		selectedCountries = new ArrayList<Country>();
+		
+		allAvailableCountriesSpinner = (Spinner) findViewById(R.id.my_country_spinner);
+		allSelectedCountrySpinner = (Spinner) findViewById(R.id.spinner1);
+		
+		allAvailableCountriesSpinner.setAdapter(new ArrayAdapter<Country>(self, android.R.layout.simple_list_item_1, allAvailableCountries));
+		allSelectedCountrySpinner.setAdapter(new ArrayAdapter<Country>(self, android.R.layout.simple_list_item_1, selectedCountries));
 
-		if (hasGLES20()) {
-			Log.v(getClass().getName(), "Has Open GL 2.0");
-		} else {
-			Log.v(getClass().getName(), "Has not got Open GL 2.0");
-		}
+		hasGLES20();
 	}
 
 	public boolean hasGLES20() {
 		ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		ConfigurationInfo info = am.getDeviceConfigurationInfo();
+		Log.d(getClass().getName(), (info.reqGlEsVersion >= 0x20000) ? "Has Open GL 2.0" : "Has not got Open GL 2.0");
 		return info.reqGlEsVersion >= 0x20000;
-	}
-
-	public void printAllCountries() {
-		for (Country aCountry : allCountries) {
-			aCountry.print();
-		}
 	}
 
 	public void plotCountriesOnMap() {
 		self.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
+				markerToCountry = new HashMap<Marker, Country>();
 				if (allCountries.size() > 0) {
 					for (Country aCountry : allCountries) {
-						if (aCountry.getLatitude() != null
-								&& aCountry.getLongitude() != null) {
-							LatLng aLocation = new LatLng(aCountry
-									.getLatitude(), aCountry.getLongitude());
+						if (aCountry.getLatitude() != null && aCountry.getLongitude() != null) {
+							LatLng aLocation = new LatLng(aCountry.getLatitude(), aCountry.getLongitude());
 							if (map != null) {
-								map.addMarker(new MarkerOptions()
-										.title(aCountry.getName())
-										.snippet(aCountry.getCapitalCity())
-										.position(aLocation));
+								MarkerOptions aMarkerOption = new MarkerOptions().title(aCountry.getName() + " - " + aCountry.getCapitalCity()).snippet("Tap to Add Country").position(aLocation);
+								Marker aMarker = map.addMarker(aMarkerOption);
+								markerToCountry.put(aMarker, aCountry);
 							}
 						}
 					}
 				}
-			}
-		});
-	}
-
-	public void setSpinnerList() {
-		self.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				List<String> countryNames = new ArrayList<String>();
-				for (Country aCountry : allCountries) {
-					if (aCountry.getLatitude() != null
-							&& aCountry.getLongitude() != null) {
-						countryNames.add(aCountry.getName());
-					}
-				}
-				ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
-						self, android.R.layout.simple_spinner_dropdown_item,
-						countryNames);
-				myCountrySpinner.setAdapter(spinnerArrayAdapter);
-				currentCountrySpinner.setAdapter(spinnerArrayAdapter);
 			}
 		});
 	}

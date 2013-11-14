@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.worldly.data_store.CachingEngine;
+import android.util.Log;
 import com.worldly.network.QuerySystem;
 
 /**
@@ -63,10 +65,30 @@ public class Country {
 				this.latitude = null;
 			}
 			
-		} catch (JSONException e) // Encountered a problem whilst parsing
-									// rawData
-		{
+		} 
+		catch (JSONException e) { // Encountered a problem whilst parsing rawData
 			e.printStackTrace();
+		}
+	}
+	
+	public Country(String cacheLine) {
+		super();
+	
+		String[] countryParts = cacheLine.split(", ");
+		try {
+			this.name = countryParts[1];
+			this.id = countryParts[0];
+			this.iso2Code = countryParts[2];
+			this.capitalCity = countryParts[3];
+			
+			try { this.longitude = Double.parseDouble(countryParts[5]); } 
+			catch (NumberFormatException e) { this.longitude = null; }
+			
+			try { this.latitude = Double.parseDouble(countryParts[4]); } 
+			catch (NumberFormatException e) { this.latitude = null; }
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 
@@ -81,26 +103,38 @@ public class Country {
 	 */
 	public static ArrayList<Country> getAllCountries() throws JSONException {
 		// Fetching the data from the World Bank feed
-		ArrayList<Country> countries = new ArrayList<Country>();
-
-		// Parsing the data onto JSONArray objects
-		JSONArray rootArray = new JSONArray(QuerySystem.getAllCountriesData());
-		JSONArray allCountriesRaw = rootArray.getJSONArray(1);
-
-		// Iterates through allCountriesRaw
-		for (int n = 0; n < allCountriesRaw.length(); n++) {
-			// Creates and adds a Country object to the ArrayList of countries
-			countries.add(new Country(allCountriesRaw.getJSONObject(n)));
+		ArrayList<Country> countries = CachingEngine.checkCacheForCountries();
+		
+		if (countries.size() == 0) {
+			// Parsing the data onto JSONArray objects
+			JSONArray rootArray = new JSONArray(QuerySystem.getAllCountriesData());
+			JSONArray allCountriesRaw = rootArray.getJSONArray(1);
+	
+			// Iterates through allCountriesRaw
+			for (int n = 0; n < allCountriesRaw.length(); n++) {
+				// Creates and adds a Country object to the ArrayList of countries
+				countries.add(new Country(allCountriesRaw.getJSONObject(n)));
+			}
+			CachingEngine.writeCountriesCache(countries); // Cache response for 1 day.
 		}
-
 		return countries;
 	}
-
+	
+	/**
+	 * Prints a Log of current instantiated Country Object
+	 */
 	public void print() {
-		// Log.v(this.getClass().getName(), "Name:" + this.name + "  ID:" +
-		// this.id + "  iso 2 code:" + this.iso2Code + "  Capital City:" +
-		// this.capitalCity + "  Longitude + Latitutde:" + this.longitude +
-		// " | " + this.latitude);
+		 Log.v(this.getClass().getName(), "Name:" + this.name + "  ID:" +
+		 this.id + "  iso 2 code:" + this.iso2Code + "  Capital City:" +
+		 this.capitalCity + "  Longitude + Latitutde:" + this.longitude +
+		 " | " + this.latitude);
+	}
+	
+	
+	
+	@Override
+	public String toString() {
+		return this.getIso2Code() + " - " + this.getName();
 	}
 
 	/**
