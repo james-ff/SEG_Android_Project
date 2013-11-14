@@ -130,8 +130,6 @@ public class Country {
 		 " | " + this.latitude);
 	}
 	
-	
-	
 	@Override
 	public String toString() {
 		return this.getIso2Code() + " - " + this.getName();

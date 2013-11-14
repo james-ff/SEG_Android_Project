@@ -15,10 +15,14 @@ import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.example.worldly.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.MapFragment;
@@ -29,13 +33,14 @@ import com.worldly.data_models.Country;
 
 
 @SuppressLint("NewApi")
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnItemSelectedListener {
 
 	private Activity self;
 
 	private ArrayList<Country> allCountries;
 	private ArrayList<Country> allAvailableCountries;
 	private ArrayList<Country> selectedCountries;
+	private ArrayList<String> allAvailableCountryStrings;
 	private HashMap<Marker, Country> markerToCountry;
 
 	private Spinner allAvailableCountriesSpinner;
@@ -68,6 +73,9 @@ public class MainActivity extends Activity {
 					Log.v(getClass().getName(), "Starting Download");
 					allCountries = Country.getAllCountries();
 					allAvailableCountries.addAll(allCountries);
+					for (Country aCountry : allCountries) {
+						allAvailableCountryStrings.add(aCountry.getName());
+					}
 					plotCountriesOnMap();
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -79,11 +87,25 @@ public class MainActivity extends Activity {
 		allAvailableCountries = new ArrayList<Country>();
 		selectedCountries = new ArrayList<Country>();
 		
+		allAvailableCountryStrings = new ArrayList<String>();
+		
 		allAvailableCountriesSpinner = (Spinner) findViewById(R.id.my_country_spinner);
 		allSelectedCountrySpinner = (Spinner) findViewById(R.id.spinner1);
 		
-		allAvailableCountriesSpinner.setAdapter(new ArrayAdapter<Country>(self, android.R.layout.simple_list_item_1, allAvailableCountries));
-		allSelectedCountrySpinner.setAdapter(new ArrayAdapter<Country>(self, android.R.layout.simple_list_item_1, selectedCountries));
+		ArrayAdapter<String> availableAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, allAvailableCountryStrings);
+		ArrayAdapter<Country> selectedAdapter = new ArrayAdapter<Country>(this, android.R.layout.simple_spinner_item, selectedCountries);
+		
+		availableAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		selectedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
+		availableAdapter.setNotifyOnChange(true);
+		selectedAdapter.setNotifyOnChange(true);
+		
+		allAvailableCountriesSpinner.setAdapter(availableAdapter);
+		allSelectedCountrySpinner.setAdapter(selectedAdapter);
+		
+		allAvailableCountriesSpinner.setOnItemSelectedListener(this);
+		//allSelectedCountrySpinner.setOnItemSelectedListener(this);
 
 		hasGLES20();
 	}
@@ -132,6 +154,21 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+		
+		Log.d(getClass().getName(), "HERE");
+		Log.d(getClass().getName(), parent.getSelectedItem().toString());
+		
+		Country aCountry = allAvailableCountries.get(pos);
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(aCountry.getLatitude(), aCountry.getLongitude()), 13));
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> parent) {
+		Log.d(getClass().getName(), "HERE??");
 	}
 
 }
