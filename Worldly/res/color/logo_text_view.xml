@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Color switcher for LogoTextView -->
+<selector 
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <!-- When the View is pressed -->
+    <item 
+        android:state_pressed="true"
+        android:color="@color/dark_gray" />
+    
+    <!-- When the View is focused -->
+    <item 
+        android:state_focused="true"
+        android:color="@color/dark_gray" />
+    
+    <!-- Else -->
+    <item 
+        android:color="@color/black" />
+
+</selector>
