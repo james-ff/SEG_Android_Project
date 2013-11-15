@@ -79,6 +79,8 @@ public class CachingEngine
 				// Writes the country's data to the file
 				os.write(data.getBytes());
 			}
+			
+			Log.d("CachingEngine", "Written " + allCountries.size() + " countries to file");
 
 			// Flushes and closes the OutputStream object
 			os.flush();
@@ -90,6 +92,7 @@ public class CachingEngine
 		// Directory or whilst writing the data to the file
 		catch (IOException ex)
 		{
+			Log.d("CachingEngine", "Not Writing to File");
 			ex.printStackTrace();
 			return false;
 		}
