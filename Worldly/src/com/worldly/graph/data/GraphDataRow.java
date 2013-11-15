@@ -68,6 +68,16 @@ public class GraphDataRow
 	}
 	
 	/**
+	 * Removes data from the row from a given index.
+	 * 
+	 * @param index Index of value to be removed.
+	 */
+	public void removeRowData(int index)
+	{
+		this.rowData.remove(index);
+	}
+	
+	/**
 	 * Returns data from the row as a formatted String.
 	 * 
 	 * @return Formatted data from the row.
@@ -79,14 +89,15 @@ public class GraphDataRow
 		
 		String result = "[";
 		
+		//get row name
 		result += "'"+rowData.get(0).toString()+"',";
 		
+		//get row values
 		for (int i = 1; i < rowData.size(); i++)
 			result += rowData.get(i).toString()+",";
 		
-		result = result.substring(0, result.length()-1);
-		
-		return result + "]";
+		//replace the last comma (',') with right square bracket (']')
+		return result.substring(0, result.length()-1) + "]";
 	}
 	
 	/**
@@ -155,19 +166,6 @@ public class GraphDataRow
 	public boolean isNamesRow()
 	{
 		return namesRow;
-	}
-	
-	/**
-	 * Checks whether the row contains a NULL value.
-	 * 
-	 * @return TRUE if NULL value is contained, FALSE otherwise.
-	 */
-	public boolean containsNull()
-	{
-		for (int i = 0; i < rowData.size(); i++)
-			if (rowData.get(i) == null || rowData.get(i).equals(null))
-				return true;
-		return false;
 	}
 	
 	/* (non-Javadoc)

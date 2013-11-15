@@ -1,5 +1,6 @@
 package com.worldly.graph.data;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,15 +9,31 @@ import com.worldly.graph.exception.GraphDataSizeMismatchException;
 
 /**
  * Class that contains the source data for any graph.
- * The Data is organized as a table with rows and columns.
+ * 
+ * Class implements {@link Serializable} therefore, it can be
+ * passed between Activities in Bundle -> bundle.putSerializable(GRAPH_DATA_KEY, data);.
+ * 
  * See also {@link GraphDataColumn} and {@link GraphDataRow}
- * for more information on how to use this class.
+ * for more information on how to use this class. 
  * 
  * @author Marek Matejka
  *
  */
-public class GraphData 
+public class GraphData implements Serializable
 {	
+	/**
+	 * Default serial version ID.
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Key to be used when passing GraphData object between activities.
+	 */
+	public static final String GRAPH_DATA_KEY = "GraphDataKey";
+	
+	/**
+	 * List of GraphDataRows which contains all the data for the graph.
+	 */
 	List<GraphDataRow> data;
 	
 	/**
@@ -42,14 +59,16 @@ public class GraphData
 	 * Constructor which adds one column to the data.
 	 * See also {@link GraphDataColumn}.
 	 * 
-	 * @param column Column to be added.
+	 * @param names Column of row names to be added.
+	 * @param values Column of values to be added.
 	 * @throws CannotBeNullException If any data from the column is NULL, exception is thrown.
 	 */
-	public GraphData(GraphDataColumn column) throws CannotBeNullException
+	public GraphData(GraphDataColumn names, GraphDataColumn values) throws CannotBeNullException
 	{
 		data = new LinkedList<GraphDataRow>();
 		try{
-			addColumn(column);
+			addColumn(names);
+			addColumn(values);
 		}catch (GraphDataSizeMismatchException e){e.printStackTrace();} // this will never happen
 	}
 	
@@ -79,16 +98,12 @@ public class GraphData
 	 * @param rowData Data row to be added.
 	 * @throws GraphDataSizeMismatchException If the size of the row
 	 * does not match the number of columns exception is thrown.
-	 * @throws CannotBeNullException If the rowData or any data within the row is NULL.
 	 */
-	public void addRow(GraphDataRow rowData) throws GraphDataSizeMismatchException, CannotBeNullException
+	public void addRow(GraphDataRow rowData) throws GraphDataSizeMismatchException
 	{
-		if (rowData == null || rowData.containsNull())
-			throw new CannotBeNullException();
+		if (getNumberOfColumns() != rowData.size())
+			throw new GraphDataSizeMismatchException(rowData.size(), getNumberOfColumns());
 		
-		if (getNamesSize() != rowData.size())
-			throw new GraphDataSizeMismatchException(rowData.size(), getNamesSize());
-				
 		data.add(rowData);
 	}
 	
@@ -103,9 +118,6 @@ public class GraphData
 	 */
 	public void addColumn(GraphDataColumn column) throws GraphDataSizeMismatchException, CannotBeNullException
 	{
-		if (column == null)
-			throw new CannotBeNullException();
-		
 		if (!data.isEmpty())
 		{
 			if (data.size() != column.size())
@@ -137,9 +149,8 @@ public class GraphData
 		for (int i = 0; i < data.size(); i++)
 			result += data.get(i).toString()+",";
 			
-		result = result.substring(0,  result.length()-1);
-		
-		return result+"]";
+		//replace the last comma (',') for right square bracket (']')
+		return result.substring(0,  result.length()-1)+"]";
 	}
 	
 	/* (non-Javadoc)
@@ -149,16 +160,6 @@ public class GraphData
 	public String toString()
 	{
 		return getData();
-	}
-	
-	/**
-	 * Returns the size of the first row.
-	 * 
-	 * @return Size of the first row.
-	 */
-	private int getNamesSize()
-	{
-		return data.get(0).size();
 	}
 	
 	/**
@@ -179,5 +180,34 @@ public class GraphData
 	public int getNumberOfRows()
 	{
 		return data.size();
+	}
+	
+	/**
+	 * Removes a row at a given index from data.
+	 * 
+	 * <i>Note: Data must always contain at least two rows.
+	 * Row of Names and 1 row of Values.</i>
+	 * 
+	 * @param index Index of a row to be removed.
+	 */
+	public void removeRow(int index)
+	{
+		if (index > 1 && index < getNumberOfRows())
+			data.remove(index);
+	}
+	
+	/**
+	 * Removes a column at a given index from data.
+	 * 
+	 * <i>Note: Data must always contain at least 2 columns.
+	 * Column with row names and one column with values.</i>
+	 * 
+	 * @param index Index of a row to be removed.
+	 */
+	public void removeColumn(int index)
+	{
+		if (index > 1 && index < getNumberOfColumns())
+			for (int i = 0; i < data.size(); i++)
+				data.get(i).removeRowData(index);
 	}
 }

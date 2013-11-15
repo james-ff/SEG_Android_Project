@@ -7,6 +7,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.worldly.graph.Chart;
+import com.worldly.graph.listener.GraphDataChangeListener;
 
 /**
  * View that loads and displays the graph.
@@ -14,7 +15,7 @@ import com.worldly.graph.Chart;
  * @author Marek Matejka
  *
  */
-public class GraphView extends WebView
+public class GraphView extends WebView implements GraphDataChangeListener
 {
 	
 	/**
@@ -36,10 +37,20 @@ public class GraphView extends WebView
 	@SuppressLint("SetJavaScriptEnabled")
 	public void loadGraph(Chart chart)
 	{
+		chart.setGraphDataChangeListener(this);
 		WebSettings webSettings = getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(true);
         loadDataWithBaseURL( "file:///android_asset/", chart.getContent(), "text/html", "utf-8", null );
+	}
+
+	/* (non-Javadoc)
+	 * @see com.example.seg_graph.graph.listener.GraphDataChangeListener#onGraphDataChanged(com.example.seg_graph.graph.Chart)
+	 */
+	@Override
+	public void onGraphDataChanged(Chart chart)
+	{
+		loadGraph(chart);
 	}
 
 }

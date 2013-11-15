@@ -5,6 +5,7 @@ import com.worldly.graph.data.GraphDataColumn;
 import com.worldly.graph.data.GraphDataRow;
 import com.worldly.graph.exception.CannotBeNullException;
 import com.worldly.graph.exception.GraphDataSizeMismatchException;
+import com.worldly.graph.listener.GraphDataChangeListener;
 
 /**
  * Abstract class which all types of Graphs/Charts
@@ -13,8 +14,19 @@ import com.worldly.graph.exception.GraphDataSizeMismatchException;
  * @author Marek Matejka
  *
  */
-public abstract class Chart 
+public abstract class Chart
 {	
+	/**
+	 * Listener which automatically updates the graph with new data,
+	 * each time the data is changed.
+	 */
+	protected GraphDataChangeListener listener;
+	
+	/**
+	 * Data for the graph.
+	 */
+	protected GraphData data;
+	
 	/**
 	 * Returns the HTML and Javascript content used
 	 * to load and display the graph in GraphView.
@@ -29,7 +41,20 @@ public abstract class Chart
 	 * 
 	 * @param data Fully formatted data for the graph.
 	 */
-	public abstract void setGraphData(GraphData data);
+	public void setGraphData(GraphData data)
+	{
+		this.data = data;
+	}
+	
+	/**
+	 * Returns the current data for the graph.
+	 * 
+	 * @return Current graph's data.
+	 */
+	public GraphData getGraphData()
+	{
+		return this.data;
+	}
 	
 	/**
 	 * Adds column to graph's current data.
@@ -49,4 +74,49 @@ public abstract class Chart
 	 * in the GraphData exception is thrown.
 	 */
 	public abstract void addRow(GraphDataRow row) throws CannotBeNullException, GraphDataSizeMismatchException;
+	
+	/**
+	 * Removes a row from data on a given index.
+	 * Index starts with 0.
+	 * 
+	 * @param index Index of row to be removed.
+	 */
+	public abstract void removeRow(int index);
+	
+	/**
+	 * Removes a column from data on a given index.
+	 * 
+	 * @param index Index of a column to be removed.
+	 */
+	public abstract void removeColumn(int index);
+	
+	/**
+	 * Sets {@link GraphDataChangeListener} for this Chart.
+	 * 
+	 * @param listener Concrete instance of the listener.
+	 */
+	public void setGraphDataChangeListener(GraphDataChangeListener listener)
+	{
+		this.listener = listener;
+	}
+	
+	/**
+	 * Returns the number of columns in the data for the graph.
+	 * 
+	 * @return Number of columns in graph's data.
+	 */
+	public int getNumberOfColumns()
+	{
+		return data.getNumberOfColumns();
+	}
+	
+	/**
+	 * Returns the number of rows in the data for the graph.
+	 * 
+	 * @return Number of rows in graph's data.
+	 */
+	public int getNumberOfRows()
+	{
+		return data.getNumberOfRows();
+	}
 }
