@@ -2,6 +2,7 @@ package com.worldly.activities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import org.json.JSONException;
 
@@ -12,19 +13,29 @@ import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.worldly.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.worldly.controller.WorldlyController;
 import com.worldly.data_models.Country;
 
 
@@ -33,12 +44,12 @@ public class MainActivity extends Activity {
 
 	private Activity self;
 
-	private ArrayList<Country> allCountries;
-	private ArrayList<Country> allAvailableCountries;
-	private ArrayList<Country> selectedCountries;
+	private ArrayList<Country> availableCountries = new ArrayList<Country>();
+	private ArrayList<Country> selectedCountries = new ArrayList<Country>();
 	private HashMap<Marker, Country> markerToCountry;
 
-	private Spinner allAvailableCountriesSpinner;
+	private EditText countrySearchField;
+	private Button goCompareButton;
 	private Spinner allSelectedCountrySpinner;
 	private GoogleMap map;
 	
@@ -49,15 +60,64 @@ public class MainActivity extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		self = this;
 
-		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+		if (hasGLES20()) {
+			map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+			map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+				@Override public void onInfoWindowClick(Marker marker) {
+					Country aCountry = markerToCountry.get(marker);
+					Log.d(getClass().getName(), marker.getTitle() + " code: " + aCountry.getIso2Code());
+					if (selectedCountries.contains(aCountry)) {
+						selectedCountries.remove(aCountry);
+					} else {
+						selectedCountries.add(aCountry);
+						allSelectedCountrySpinner.setSelection(selectedCountries.indexOf(aCountry), true);
+					}
+					marker.hideInfoWindow();
+				}
+			});
+		}
 		
-		map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
-			@Override public void onInfoWindowClick(Marker marker) {
-				Log.d(getClass().getName(), marker.getTitle());
-				Country aCountry = markerToCountry.get(marker);
-				Log.d(getClass().getName(), aCountry.getIso2Code());
-				selectedCountries.add(aCountry);
-				marker.hideInfoWindow();
+		countrySearchField = (EditText) findViewById(R.id.country_search_field);
+		goCompareButton = (Button) findViewById(R.id.compare_button);
+		allSelectedCountrySpinner = (Spinner) findViewById(R.id.countries_selected_spinner);
+		
+		ArrayAdapter<Country> arrayAdapter = new ArrayAdapter<Country>(self, android.R.layout.simple_list_item_1, selectedCountries);
+		allSelectedCountrySpinner.setAdapter(arrayAdapter);
+		allSelectedCountrySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			
+			@Override public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				Log.v(getClass().getName(), "SELECTED");
+			}
+			
+			@Override public void onNothingSelected(AdapterView<?> arg0) {
+				Log.v(getClass().getName(), "NOT SELECTED");
+			}
+			
+		});
+		
+		countrySearchField.addTextChangedListener(new TextWatcher() {
+			@Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			@Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+			
+			@Override public void afterTextChanged(Editable s) {
+				String inputString = countrySearchField.getText().toString();
+				Log.d(getClass().getName(), "ATC :" + inputString);
+				if (inputString.length() >= 0) {
+					plotCountriesOnMap();
+				}
+			}
+		});
+		
+		goCompareButton.setOnClickListener(new OnClickListener() {
+			@Override public void onClick(View v) {
+				if (selectedCountries.size() > 0) {
+					Log.d(getClass().getName(), "Go Compare These Countries!");
+					WorldlyController appController = WorldlyController.getInstance();
+					appController.setCurrentSelectedCountries(selectedCountries);
+					
+					// TODO: Transition to Country Compare Activity
+				}
 			}
 		});
 
@@ -65,9 +125,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void run() {
 				try {
-					Log.v(getClass().getName(), "Starting Download");
-					allCountries = Country.getAllCountries();
-					allAvailableCountries.addAll(allCountries);
+					availableCountries = Country.getAllCountries();
 					plotCountriesOnMap();
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -75,17 +133,6 @@ public class MainActivity extends Activity {
 			}
 		});
 		aThread.start();
-		
-		allAvailableCountries = new ArrayList<Country>();
-		selectedCountries = new ArrayList<Country>();
-		
-		allAvailableCountriesSpinner = (Spinner) findViewById(R.id.my_country_spinner);
-		allSelectedCountrySpinner = (Spinner) findViewById(R.id.spinner1);
-		
-		allAvailableCountriesSpinner.setAdapter(new ArrayAdapter<Country>(self, android.R.layout.simple_list_item_1, allAvailableCountries));
-		allSelectedCountrySpinner.setAdapter(new ArrayAdapter<Country>(self, android.R.layout.simple_list_item_1, selectedCountries));
-
-		hasGLES20();
 	}
 
 	public boolean hasGLES20() {
@@ -99,21 +146,43 @@ public class MainActivity extends Activity {
 		self.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				markerToCountry = new HashMap<Marker, Country>();
-				if (allCountries.size() > 0) {
-					for (Country aCountry : allCountries) {
-						if (aCountry.getLatitude() != null && aCountry.getLongitude() != null) {
-							LatLng aLocation = new LatLng(aCountry.getLatitude(), aCountry.getLongitude());
-							if (map != null) {
-								MarkerOptions aMarkerOption = new MarkerOptions().title(aCountry.getName() + " - " + aCountry.getCapitalCity()).snippet("Tap to Add Country").position(aLocation);
-								Marker aMarker = map.addMarker(aMarkerOption);
-								markerToCountry.put(aMarker, aCountry);
-							}
-						}
+				plotSpecificCountriesOnMap();
+			}
+		});
+	}
+	
+	public void plotSpecificCountriesOnMap() {
+		map.clear();
+		markerToCountry = new HashMap<Marker, Country>();
+		if (availableCountries.size() > 0) {
+			int markerCount = 0;
+			Marker lastMarker = null;
+			for (Country aCountry : availableCountries) {
+				Locale current = getResources().getConfiguration().locale;
+				String inputString = countrySearchField.getText().toString().toLowerCase(current);
+				String countryName = aCountry.getName().toLowerCase(current);
+				String iso2Code = aCountry.getIso2Code().toLowerCase(current);
+				if (aCountry.getLatitude() != null && aCountry.getLongitude() != null 
+						&& (countryName.startsWith(inputString) || iso2Code.startsWith(inputString))) {
+					LatLng aLocation = new LatLng(aCountry.getLatitude(), aCountry.getLongitude());
+					if (map != null) {
+						String title = aCountry.getName() + " - " + aCountry.getCapitalCity();
+						MarkerOptions aMarkerOption = new MarkerOptions().title(title).snippet("Tap to Add / Remove").position(aLocation);
+						Marker aMarker = map.addMarker(aMarkerOption);
+						markerToCountry.put(aMarker, aCountry);
+						lastMarker = aMarker;
+						markerCount++;
 					}
 				}
 			}
-		});
+			if (markerCount == 1) {
+				map.moveCamera(CameraUpdateFactory.newLatLngZoom(lastMarker.getPosition(), 4));
+				lastMarker = null;
+			} else {
+				map.moveCamera(CameraUpdateFactory.zoomTo(1));
+				//map.animateCamera(CameraUpdateFactory.zoomTo(2000), 0, null);
+			}
+		}
 	}
 
 	@Override

@@ -103,7 +103,8 @@ public class Country {
 	 */
 	public static ArrayList<Country> getAllCountries() throws JSONException {
 		// Fetching the data from the World Bank feed
-		ArrayList<Country> countries = CachingEngine.checkCacheForCountries();
+		ArrayList<Country> countries = CachingEngine.getCachedCountries();
+		//ArrayList<Country> countries = new ArrayList<Country>();
 		
 		if (countries.size() == 0) {
 			// Parsing the data onto JSONArray objects
@@ -113,7 +114,10 @@ public class Country {
 			// Iterates through allCountriesRaw
 			for (int n = 0; n < allCountriesRaw.length(); n++) {
 				// Creates and adds a Country object to the ArrayList of countries
-				countries.add(new Country(allCountriesRaw.getJSONObject(n)));
+				Country aCountry = new Country(allCountriesRaw.getJSONObject(n));
+				if (aCountry.longitude != null && aCountry.latitude != null) {
+					countries.add(aCountry);
+				}
 			}
 			CachingEngine.writeCountriesCache(countries); // Cache response for 1 day.
 		}

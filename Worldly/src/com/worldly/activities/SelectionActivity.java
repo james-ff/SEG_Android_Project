@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.View;
 
 import com.example.worldly.R;
+import com.worldly.controller.WorldlyController;
 
 /**
  * This activity lets the user pick the desired mode of search within the
@@ -65,16 +66,24 @@ public class SelectionActivity extends Activity {
 		// Creates an editor object to update the shared preferences
 		SharedPreferences.Editor editor = sharedPref.edit();
 
+		WorldlyController appController = WorldlyController.getInstance();
+		
 		// Detects which button the user has pressed
 		switch (v.getId()) {
 		case R.id.btnFamily:
 			option = FAMILY;
+			appController.setCurrentMoveStatus(WorldlyController.FAMILY_MOVE);
 			break;
 		case R.id.btnNewLife:
 			option = NEW_LIFE;
+			appController.setCurrentMoveStatus(WorldlyController.PERSONAL_MOVE);
 			break;
 		case R.id.btnBusiness:
 			option = BUSINESS;
+			appController.setCurrentMoveStatus(WorldlyController.BUSINESS_MOVE);
+			break;
+		default:
+			appController.setCurrentMoveStatus(WorldlyController.CUSTOM_MOVE);
 			break;
 		}
 
