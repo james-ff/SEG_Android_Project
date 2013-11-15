@@ -35,6 +35,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.worldly.controller.WorldlyController;
 import com.worldly.data_models.Country;
 
 
@@ -59,7 +60,23 @@ public class MainActivity extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		self = this;
 
-		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+		if (hasGLES20()) {
+			map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+			map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+				@Override public void onInfoWindowClick(Marker marker) {
+					Country aCountry = markerToCountry.get(marker);
+					Log.d(getClass().getName(), marker.getTitle() + " code: " + aCountry.getIso2Code());
+					if (selectedCountries.contains(aCountry)) {
+						selectedCountries.remove(aCountry);
+					} else {
+						selectedCountries.add(aCountry);
+						allSelectedCountrySpinner.setSelection(selectedCountries.indexOf(aCountry), true);
+					}
+					marker.hideInfoWindow();
+				}
+			});
+		}
+		
 		countrySearchField = (EditText) findViewById(R.id.country_search_field);
 		goCompareButton = (Button) findViewById(R.id.compare_button);
 		allSelectedCountrySpinner = (Spinner) findViewById(R.id.countries_selected_spinner);
@@ -96,22 +113,11 @@ public class MainActivity extends Activity {
 			@Override public void onClick(View v) {
 				if (selectedCountries.size() > 0) {
 					Log.d(getClass().getName(), "Go Compare These Countries!");
-					// TODO: Save to singleton class or move via an intent
+					WorldlyController appController = WorldlyController.getInstance();
+					appController.setCurrentSelectedCountries(selectedCountries);
+					
+					// TODO: Transition to Country Compare Activity
 				}
-			}
-		});
-		
-		map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
-			@Override public void onInfoWindowClick(Marker marker) {
-				Country aCountry = markerToCountry.get(marker);
-				Log.d(getClass().getName(), marker.getTitle() + " code: " + aCountry.getIso2Code());
-				if (selectedCountries.contains(aCountry)) {
-					selectedCountries.remove(aCountry);
-				} else {
-					selectedCountries.add(aCountry);
-					allSelectedCountrySpinner.setSelection(selectedCountries.indexOf(aCountry), true);
-				}
-				marker.hideInfoWindow();
 			}
 		});
 
@@ -127,8 +133,6 @@ public class MainActivity extends Activity {
 			}
 		});
 		aThread.start();
-
-		hasGLES20();
 	}
 
 	public boolean hasGLES20() {
