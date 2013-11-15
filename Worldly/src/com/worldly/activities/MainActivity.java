@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.worldly.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.MapFragment;
@@ -150,6 +151,8 @@ public class MainActivity extends Activity {
 		map.clear();
 		markerToCountry = new HashMap<Marker, Country>();
 		if (availableCountries.size() > 0) {
+			int markerCount = 0;
+			Marker lastMarker = null;
 			for (Country aCountry : availableCountries) {
 				Locale current = getResources().getConfiguration().locale;
 				String inputString = countrySearchField.getText().toString().toLowerCase(current);
@@ -163,8 +166,17 @@ public class MainActivity extends Activity {
 						MarkerOptions aMarkerOption = new MarkerOptions().title(title).snippet("Tap to Add / Remove").position(aLocation);
 						Marker aMarker = map.addMarker(aMarkerOption);
 						markerToCountry.put(aMarker, aCountry);
+						lastMarker = aMarker;
+						markerCount++;
 					}
 				}
+			}
+			if (markerCount == 1) {
+				map.moveCamera(CameraUpdateFactory.newLatLngZoom(lastMarker.getPosition(), 4));
+				lastMarker = null;
+			} else {
+				map.moveCamera(CameraUpdateFactory.zoomTo(1));
+				//map.animateCamera(CameraUpdateFactory.zoomTo(2000), 0, null);
 			}
 		}
 	}
