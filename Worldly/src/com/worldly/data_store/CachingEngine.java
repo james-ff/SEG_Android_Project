@@ -38,6 +38,7 @@ public class CachingEngine
 	 * Constant representing the separator used whilst writing to files.
 	 */
 	private static final String SEPARATOR = ", ";
+	private static final String NEWLINE = "\n";
 
 	/**
 	 * Static method which writes the entire data of all countries from an
@@ -60,7 +61,7 @@ public class CachingEngine
 			FileOutputStream os = new FileOutputStream(cacheFile);
 
 			// Writes the "expiry date" of the data to the header of the file
-			os.write(("" + (System.currentTimeMillis() + 86400000 + "\n"))
+			os.write(("" + (System.currentTimeMillis() + 86400000 + NEWLINE))
 					.getBytes());
 
 			String data;
@@ -74,7 +75,7 @@ public class CachingEngine
 				data += aCountry.getIso2Code() + SEPARATOR;
 				data += aCountry.getCapitalCity() + SEPARATOR;
 				data += aCountry.getLatitude() + SEPARATOR;
-				data += aCountry.getLongitude() + SEPARATOR;
+				data += aCountry.getLongitude() + NEWLINE;
 
 				// Writes the country's data to the file
 				os.write(data.getBytes());
