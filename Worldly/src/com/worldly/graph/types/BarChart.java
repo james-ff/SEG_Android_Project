@@ -15,13 +15,7 @@ import com.worldly.graph.exception.GraphDataSizeMismatchException;
  *
  */
 public class BarChart extends Chart
-{
-	
-	/**
-	 * Data for the graph.
-	 */
-	GraphData data;
-	
+{	
 	/**
 	 * Basic constructor which uses the fully prepared data (table)
 	 * to create the graph.
@@ -36,13 +30,14 @@ public class BarChart extends Chart
 	/**
 	 * Constructor which uses one Column as the initial data.
 	 * 
-	 * @param column Column of data to be included in the data table.
+	 * @param names Column of row names.
+	 * @param values Column of data to be included in the data table.
 	 * @throws CannotBeNullException Thrown if some value in the column is NULL
 	 * or if the column itself is NULL.
 	 */
-	public BarChart(GraphDataColumn column) throws CannotBeNullException
+	public BarChart(GraphDataColumn names, GraphDataColumn values) throws CannotBeNullException
 	{
-		this.data = new GraphData(column);
+		this.data = new GraphData(names, values);
 	}
 	
 	/**
@@ -89,21 +84,13 @@ public class BarChart extends Chart
 	}
 
 	/* (non-Javadoc)
-	 * @see com.worldly.graph.Chart#setGraphData(com.worldly.graph.data.GraphData)
-	 */
-	@Override
-	public void setGraphData(GraphData data) 
-	{
-		this.data = data;
-	}
-
-	/* (non-Javadoc)
 	 * @see com.worldly.graph.Chart#addColumn(com.worldly.graph.data.GraphDataColumn)
 	 */
 	@Override
 	public void addColumn(GraphDataColumn column) throws CannotBeNullException, GraphDataSizeMismatchException 
 	{
 		this.data.addColumn(column);
+		listener.onGraphDataChanged(this);
 	}
 
 	/* (non-Javadoc)
@@ -113,6 +100,26 @@ public class BarChart extends Chart
 	public void addRow(GraphDataRow row) throws CannotBeNullException, GraphDataSizeMismatchException 
 	{
 		this.data.addRow(row);
+		listener.onGraphDataChanged(this);
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see com.example.seg_graph.graph.Chart#removeRow(int)
+	 */
+	@Override
+	public void removeRow(int index) 
+	{
+		this.data.removeRow(index);
+		listener.onGraphDataChanged(this);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.example.seg_graph.graph.Chart#removeColumn(int)
+	 */
+	@Override
+	public void removeColumn(int index)
+	{
+		this.data.removeColumn(index);
+		listener.onGraphDataChanged(this);
+	}
 }

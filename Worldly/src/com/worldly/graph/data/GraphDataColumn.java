@@ -61,6 +61,17 @@ public class GraphDataColumn
 	}
 	
 	/**
+	 * Removes data from a given index from the column.
+	 * 
+	 * @param index Index of an element to be removed.
+	 */
+	public void removeColumnData(int index)
+	{
+		if (index >= 0 && index < columnData.size())
+			this.columnData.remove(index);
+	}
+	
+	/**
 	 * Returns the data stored in the column in an unchanged format.
 	 * 
 	 * @return Data from the column in an unchanged format.
