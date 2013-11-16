@@ -29,17 +29,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <Spinner
+        <!-- <Spinner
             android:id="@+id/countries_selected_spinner"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
-
+            android:layout_weight="1"
+            android:spinnerMode="dialog"
+            android:prompt="@string/countries_spinner_prompt" /> -->
+        
+        <Button
+            android:id="@+id/countries_selected_button"
+            style="@style/AppTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:text="@string/countries_spinner_prompt" />
+        
+        <Button 
+            android:id="@+id/clear_country_selection_button"
+            style="@style/AppTheme"
+            android:layout_width="wrap_content" 
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="@string/clear_string" />
+        
         <Button
             android:id="@+id/compare_button"
             style="@style/AppTheme"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:text="@string/compare_string" />
 
     </LinearLayout>

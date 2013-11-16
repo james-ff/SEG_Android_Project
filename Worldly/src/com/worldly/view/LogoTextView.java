@@ -61,6 +61,7 @@ public class LogoTextView extends TextView
 			case 0: return "&#xf015;"; //home
 			case 1: return "&#xf0b1;"; //briefcase
 			case 2: return "&#xf018;"; //road
+			case 3: return "&#xf02c;"; //custom
 			default: return null;
 		}
 	}

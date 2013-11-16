@@ -22,7 +22,7 @@ public class SelectionActivity extends Activity {
 	/**
 	 * Constant representing the mode selected by the user.
 	 */
-	public static final int FAMILY = 0, NEW_LIFE = 1, BUSINESS = 2;
+	public static final int FAMILY = 0, NEW_LIFE = 1, BUSINESS = 2, CUSTOM = 3;
 
 	/**
 	 * Constant representing the key used to store the selected mode in the

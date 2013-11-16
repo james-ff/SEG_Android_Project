@@ -9,27 +9,31 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".SelectionActivity">
+    tools:context=".SelectionActivity" >
 
-    <!-- <LinearLayout
+    <!--
+         <LinearLayout
         android:id="@+id/rowOne"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
-        android:orientation="horizontal" > -->
+        android:orientation="horizontal" >
+    -->
 
-        <com.worldly.view.LogoTextView
-            android:id="@+id/btnFamily"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:onClick="chooseMode"
-            logo:logo_type="home"
-            android:textColor="@color/logo_text_view"
-            android:textSize="50sp"
-            android:text="@string/strFamily" />
-        
-         <!-- <TextView
+    <com.worldly.view.LogoTextView
+        android:id="@+id/btnFamily"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.25"
+        android:layout_gravity="center"
+        android:onClick="chooseMode"
+        android:text="@string/strFamily"
+        android:textColor="@color/logo_text_view"
+        android:textSize="50sp"
+        logo:logo_type="home" />
+
+    <!--
+    <TextView
             android:id="@+id/lblFamily"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,20 +47,23 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
-        android:orientation="horizontal" > -->
+        android:orientation="horizontal" >
+    -->
 
-        <com.worldly.view.LogoTextView
-            android:id="@+id/btnNewLife"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:onClick="chooseMode"
-            logo:logo_type="road"
-            android:textColor="@color/logo_text_view"
-            android:textSize="50sp"
-            android:text="@string/strNewLife" />
-        
-         <!-- <TextView
+    <com.worldly.view.LogoTextView
+        android:id="@+id/btnNewLife"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.25"
+        android:layout_gravity="center"
+        android:onClick="chooseMode"
+        android:text="@string/strNewLife"
+        android:textColor="@color/logo_text_view"
+        android:textSize="50sp"
+        logo:logo_type="road" />
+
+    <!--
+    <TextView
             android:id="@+id/lblNewLife"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,26 +77,43 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
-        android:orientation="horizontal" > -->
+        android:orientation="horizontal" >
+    -->
 
-        <com.worldly.view.LogoTextView
-            android:id="@+id/btnBusiness"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:onClick="chooseMode" 
-            logo:logo_type="briefcase"
-            android:textColor="@color/logo_text_view"
-            android:textSize="50sp"
-            android:text="@string/strBusiness" />"
+    <com.worldly.view.LogoTextView
+        android:id="@+id/btnBusiness"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.25"
+        android:layout_gravity="center"
+        android:onClick="chooseMode"
+        android:text="@string/strBusiness"
+        android:textColor="@color/logo_text_view"
+        android:textSize="50sp"
+        logo:logo_type="briefcase" />
 
-        <!-- <TextView
+
+    <!--
+    <TextView
             android:id="@+id/lblBusiness"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/strBusiness"
             android:textAppearance="?android:attr/textAppearanceMedium" />
-    </LinearLayout>-->
+    </LinearLayout>
+    -->
+    
+    <com.worldly.view.LogoTextView
+        android:id="@+id/btnCustom"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.25"
+        android:layout_gravity="center"
+        android:onClick="chooseMode"
+        android:text="@string/strCustom"
+        android:textColor="@color/logo_text_view"
+        android:textSize="50sp"
+        logo:logo_type="tags" />
 
 </LinearLayout>

@@ -2,6 +2,7 @@ package com.worldly.activities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import org.json.JSONException;
@@ -9,7 +10,9 @@ import org.json.JSONException;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.ConfigurationInfo;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -20,12 +23,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import com.example.worldly.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -45,12 +45,16 @@ public class MainActivity extends Activity {
 	private Activity self;
 
 	private ArrayList<Country> availableCountries = new ArrayList<Country>();
-	private ArrayList<Country> selectedCountries = new ArrayList<Country>();
+	private List<Country> selectedCountries = new ArrayList<Country>();
+	//private List<String> selectedCountryStrings = new ArrayList<String>();
 	private HashMap<Marker, Country> markerToCountry;
 
 	private EditText countrySearchField;
 	private Button goCompareButton;
-	private Spinner allSelectedCountrySpinner;
+	private Button clearSelectionButton;
+	private Button allSelectedCountriesButton;
+	//private Spinner allSelectedCountrySpinner;
+	private ArrayAdapter<Country> arrayAdapter;
 	private GoogleMap map;
 	
 	@Override
@@ -58,6 +62,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		self = this;
 
 		if (hasGLES20()) {
@@ -65,44 +70,56 @@ public class MainActivity extends Activity {
 			map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 				@Override public void onInfoWindowClick(Marker marker) {
 					Country aCountry = markerToCountry.get(marker);
-					Log.d(getClass().getName(), marker.getTitle() + " code: " + aCountry.getIso2Code());
 					if (selectedCountries.contains(aCountry)) {
 						selectedCountries.remove(aCountry);
 					} else {
 						selectedCountries.add(aCountry);
-						allSelectedCountrySpinner.setSelection(selectedCountries.indexOf(aCountry), true);
 					}
+					arrayAdapter.notifyDataSetChanged();
 					marker.hideInfoWindow();
 				}
 			});
 		}
 		
+		//allSelectedCountrySpinner = (Spinner) findViewById(R.id.countries_selected_spinner);
+		
 		countrySearchField = (EditText) findViewById(R.id.country_search_field);
 		goCompareButton = (Button) findViewById(R.id.compare_button);
-		allSelectedCountrySpinner = (Spinner) findViewById(R.id.countries_selected_spinner);
+		allSelectedCountriesButton = (Button) findViewById(R.id.countries_selected_button);
+		clearSelectionButton = (Button) findViewById(R.id.clear_country_selection_button);
 		
-		ArrayAdapter<Country> arrayAdapter = new ArrayAdapter<Country>(self, android.R.layout.simple_list_item_1, selectedCountries);
-		allSelectedCountrySpinner.setAdapter(arrayAdapter);
-		allSelectedCountrySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-			
-			@Override public void onItemSelected(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				Log.v(getClass().getName(), "SELECTED");
+		this.arrayAdapter = new ArrayAdapter<Country>(self, android.R.layout.simple_spinner_dropdown_item, selectedCountries);
+		allSelectedCountriesButton.setOnClickListener(new OnClickListener() {
+			@Override public void onClick(View v) {
+				new AlertDialog.Builder(self)
+					.setTitle(selectedCountries.size() + " " + getResources().getString(R.string.countries_spinner_prompt))
+					.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+						@Override public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+				}).create().show();
 			}
-			
-			@Override public void onNothingSelected(AdapterView<?> arg0) {
-				Log.v(getClass().getName(), "NOT SELECTED");
-			}
-			
 		});
+		//this.arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//		allSelectedCountrySpinner.setAdapter(this.arrayAdapter);
+//		allSelectedCountrySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+//			
+//			@Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//				//Log.v(getClass().getName(), "SELECTED");
+//				parent.setSelection(0);
+//			}
+//			
+//			@Override public void onNothingSelected(AdapterView<?> parent) {
+//				//Log.v(getClass().getName(), "NOT SELECTED");
+//			}
+//			
+//		});
 		
 		countrySearchField.addTextChangedListener(new TextWatcher() {
 			@Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
 			@Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-			
 			@Override public void afterTextChanged(Editable s) {
 				String inputString = countrySearchField.getText().toString();
-				Log.d(getClass().getName(), "ATC :" + inputString);
 				if (inputString.length() >= 0) {
 					plotCountriesOnMap();
 				}
@@ -112,12 +129,17 @@ public class MainActivity extends Activity {
 		goCompareButton.setOnClickListener(new OnClickListener() {
 			@Override public void onClick(View v) {
 				if (selectedCountries.size() > 0) {
-					Log.d(getClass().getName(), "Go Compare These Countries!");
 					WorldlyController appController = WorldlyController.getInstance();
 					appController.setCurrentSelectedCountries(selectedCountries);
 					
 					// TODO: Transition to Country Compare Activity
 				}
+			}
+		});
+		
+		clearSelectionButton.setOnClickListener(new OnClickListener() {
+			@Override public void onClick(View v) {
+				selectedCountries.clear();
 			}
 		});
 
@@ -180,7 +202,6 @@ public class MainActivity extends Activity {
 				lastMarker = null;
 			} else {
 				map.moveCamera(CameraUpdateFactory.zoomTo(1));
-				//map.animateCamera(CameraUpdateFactory.zoomTo(2000), 0, null);
 			}
 		}
 	}

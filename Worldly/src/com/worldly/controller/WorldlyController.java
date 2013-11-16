@@ -1,6 +1,6 @@
 package com.worldly.controller;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.worldly.data_models.Country;
 
@@ -26,7 +26,7 @@ public class WorldlyController {
 	public static final String CUSTOM_MOVE = "CUSTOM_MOVE_KEY";
 	
 	private String currentMoveStatus;
-	private ArrayList<Country> currentSelectedCountries;
+	private List<Country> currentSelectedCountries;
 	
 	protected WorldlyController() {
 		super();
@@ -53,12 +53,11 @@ public class WorldlyController {
 		this.currentMoveStatus = currentMoveStatus;
 	}
 
-	public ArrayList<Country> getCurrentSelectedCountries() {
+	public List<Country> getCurrentSelectedCountries() {
 		return currentSelectedCountries;
 	}
 
-	public void setCurrentSelectedCountries(
-			ArrayList<Country> currentSelectedCountries) {
+	public void setCurrentSelectedCountries(List<Country> currentSelectedCountries) {
 		this.currentSelectedCountries = currentSelectedCountries;
 	}
 	
