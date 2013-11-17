@@ -92,6 +92,6 @@ public class SelectionActivity extends Activity {
 		editor.commit();
 
 		// Creates a new Intent object for the transition to another activity
-		startActivity(new Intent(this, MainActivity.class));
+		startActivity(new Intent(this, MapActivity.class));
 	}
 }

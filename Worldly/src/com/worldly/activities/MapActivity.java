@@ -13,6 +13,7 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -40,13 +41,12 @@ import com.worldly.data_models.Country;
 
 
 @SuppressLint("NewApi")
-public class MainActivity extends Activity {
+public class MapActivity extends Activity {
 
 	private Activity self;
 
 	private ArrayList<Country> availableCountries = new ArrayList<Country>();
 	private List<Country> selectedCountries = new ArrayList<Country>();
-	//private List<String> selectedCountryStrings = new ArrayList<String>();
 	private HashMap<Marker, Country> markerToCountry;
 
 	private EditText countrySearchField;
@@ -60,10 +60,15 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_map);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		self = this;
+		
+		WorldlyController appController = WorldlyController.getInstance();
+		if (appController.getCurrentSelectedCountries() != null) {
+			this.selectedCountries = appController.getCurrentSelectedCountries();
+		}
 
 		if (hasGLES20()) {
 			map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -132,7 +137,7 @@ public class MainActivity extends Activity {
 					WorldlyController appController = WorldlyController.getInstance();
 					appController.setCurrentSelectedCountries(selectedCountries);
 					
-					// TODO: Transition to Country Compare Activity
+					startActivity(new Intent(self, CompareActivity.class));
 				}
 			}
 		});
