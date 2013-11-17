@@ -11,6 +11,8 @@
     <string name="countries_spinner_prompt">Selected Countries</string>
     <string name="strCustom">Custom Search</string>
     <string name="clear_string">Clear Selection</string>
-    <string name="title_activity_categories">CategoriesActivity</string>
+    <string name="title_activity_categories">Compare Countries</string>
+    <string name="title_activity_map">Select Countries</string>
+    <string name="title_activity_selection">Welcome to Worldly</string>
 
 </resources>
