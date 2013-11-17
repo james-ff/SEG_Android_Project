@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,11 +14,11 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.Toast;
-
 import com.example.worldly.R;
 import com.worldly.view.CategoriesListAdapter;
 
-public class CategoriesActivity extends Activity implements
+@SuppressLint("NewApi")
+public class CompareCategoriesActivity extends Activity implements
 		OnChildClickListener, OnGroupExpandListener, OnGroupCollapseListener
 {
 	ExpandableListView elvCategories;
@@ -29,11 +29,12 @@ public class CategoriesActivity extends Activity implements
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_categories);
+		setContentView(R.layout.activity_compare_categories);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		prepareListData();
 
-		// Initialising the ExpandableListView object
+		// Initializing the ExpandableListView object
 		elvCategories = (ExpandableListView) findViewById(R.id.elvCategories);
 		elvCategories
 				.setAdapter(new CategoriesListAdapter(this, groups, childs));

@@ -137,7 +137,7 @@ public class MapActivity extends Activity {
 					WorldlyController appController = WorldlyController.getInstance();
 					appController.setCurrentSelectedCountries(selectedCountries);
 					
-					startActivity(new Intent(self, CompareActivity.class));
+					startActivity(new Intent(self, CompareCategoriesActivity.class));
 				}
 			}
 		});
