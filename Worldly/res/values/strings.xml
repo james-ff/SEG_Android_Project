@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Worldly</string>
     <string name="strFamily">Moving with your family</string>
     <string name="strNewLife">Starting a new life</string>
@@ -10,4 +11,6 @@
     <string name="countries_spinner_prompt">Selected Countries</string>
     <string name="strCustom">Custom Search</string>
     <string name="clear_string">Clear Selection</string>
+    <string name="title_activity_categories">CategoriesActivity</string>
+
 </resources>

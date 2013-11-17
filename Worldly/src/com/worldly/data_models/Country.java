@@ -71,10 +71,17 @@ public class Country {
 		}
 	}
 	
+	/**
+	 * Constructs a new Country object with the specified line from the cache file.
+	 * @param cacheLine
+	 */
 	public Country(String cacheLine) {
 		super();
 	
+		// Places the country data into a String array
 		String[] countryParts = cacheLine.split(", ");
+		
+		// Attempts to parse the country data
 		try {
 			this.name = countryParts[1];
 			this.id = countryParts[0];

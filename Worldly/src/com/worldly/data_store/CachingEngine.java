@@ -37,8 +37,7 @@ public class CachingEngine
 	/**
 	 * Constant representing the separator used whilst writing to files.
 	 */
-	private static final String SEPARATOR = ", ";
-	private static final String NEWLINE = "\n";
+	private static final String SEPARATOR = ", ", NEWLINE = "\n";
 
 	/**
 	 * Static method which writes the entire data of all countries from an
@@ -80,8 +79,9 @@ public class CachingEngine
 				// Writes the country's data to the file
 				os.write(data.getBytes());
 			}
-			
-			Log.d("CachingEngine", "Written " + allCountries.size() + " countries to file");
+
+			Log.d("CachingEngine", "Written " + allCountries.size()
+					+ " countries to file");
 
 			// Flushes and closes the OutputStream object
 			os.flush();
@@ -100,8 +100,10 @@ public class CachingEngine
 	}
 
 	/**
+	 * Static method which reads the entire data of all countries from a file in
+	 * the device's external storage and populates an ArrayList with the data.
 	 * 
-	 * @return
+	 * @return An ArrayList containing the entire data of all countries.
 	 */
 	public static ArrayList<Country> getCachedCountries()
 	{
@@ -135,6 +137,7 @@ public class CachingEngine
 					Log.i("CacheEngine", "Read " + cachedCountries.size()
 							+ " countries from cache");
 				}
+				// If the cached data is out of date
 				else
 				{
 					// Adds an entry to LogCat describing the current status
@@ -152,6 +155,7 @@ public class CachingEngine
 			// or whilst reading the file
 			catch (IOException ex)
 			{
+				Log.d("CachingEngine", "Unable to read data from cache.");
 				return new ArrayList<Country>();
 			}
 		}
