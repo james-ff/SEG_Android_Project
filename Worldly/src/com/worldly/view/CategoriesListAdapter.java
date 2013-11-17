@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.worldly.view;
 
 import java.util.List;
@@ -115,7 +112,6 @@ public class CategoriesListAdapter extends BaseExpandableListAdapter
 	@Override
 	public boolean hasStableIds()
 	{
-		// TODO Auto-generated method stub
 		return false;
 	}
 
