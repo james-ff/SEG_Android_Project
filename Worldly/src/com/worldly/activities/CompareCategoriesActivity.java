@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
@@ -14,8 +15,9 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.Toast;
+
 import com.example.worldly.R;
-import com.worldly.view.CategoriesListAdapter;
+import com.worldly.custom_adapter.CompareExpandableListAdapter;
 
 @SuppressLint("NewApi")
 public class CompareCategoriesActivity extends Activity implements
@@ -36,8 +38,8 @@ public class CompareCategoriesActivity extends Activity implements
 
 		// Initializing the ExpandableListView object
 		elvCategories = (ExpandableListView) findViewById(R.id.elvCategories);
-		elvCategories
-				.setAdapter(new CategoriesListAdapter(this, groups, childs));
+		elvCategories.setAdapter(new CompareExpandableListAdapter(this, groups,
+				childs));
 		elvCategories.setOnChildClickListener(this);
 		elvCategories.setOnGroupExpandListener(this);
 		elvCategories.setOnGroupCollapseListener(this);
@@ -117,7 +119,7 @@ public class CompareCategoriesActivity extends Activity implements
 		String msg = groups.get(groupPosition) + " Collapsed";
 		displayMessage(msg);
 	}
-	
+
 	private void displayMessage(String msg)
 	{
 		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
