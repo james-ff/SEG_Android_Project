@@ -49,7 +49,7 @@ public class CompareCategoriesActivity extends Activity implements
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.categories, menu);
+		getMenuInflater().inflate(R.menu.selection, menu);
 		return true;
 	}
 

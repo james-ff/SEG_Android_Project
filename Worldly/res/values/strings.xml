@@ -19,6 +19,11 @@
     <string name="title_activity_categories">Compare Countries</string>
     <string name="title_activity_map">Select Countries</string>
     <string name="title_activity_selection">Welcome to Worldly</string>
+
+	<string name="action_about">About</string>
+    <string name="title_activity_about">About Worldly</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="usafdesc">USAF Logo</string>
     
     <string-array name="subCategoriesBusiness">
         <item name="gdp">GDP</item>
@@ -38,6 +43,30 @@
         <item name="co2_emissions">CO2 Emissions</item>
         <item name="methane_emissions">Methan Emissions</item>
         <item name="other_emissions">Other Emissions</item>
+    </string-array>
+    
+    <string-array name="subCategoriesDemographics">
+        <item name=""></item>
+    </string-array>
+    
+    <string-array name="subCategoriesEducation">
+        <item name=""></item>
+    </string-array>
+    
+    <string-array name="subCategoriesEmploymentProspects">
+        <item name=""></item>
+    </string-array>
+    
+    <string-array name="subCategoriesFinance">
+        <item name=""></item>
+    </string-array>
+    
+    <string-array name="subCategoriesQualityOfLife">
+        <item name=""></item>
+    </string-array>
+    
+    <string-array name="subCategoriesRuralLife">
+        <item name=""></item>
     </string-array>
     
 </resources>
