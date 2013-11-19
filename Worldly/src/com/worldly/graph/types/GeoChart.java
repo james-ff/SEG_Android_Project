@@ -23,7 +23,7 @@ public class GeoChart extends Chart
 	 */
 	public GeoChart(GraphData data)
 	{
-		this.data = data;
+		super(data);
 	}
 	
 	/**
@@ -36,7 +36,7 @@ public class GeoChart extends Chart
 	 */
 	public GeoChart(GraphDataColumn names, GraphDataColumn values) throws CannotBeNullException
 	{
-		this.data = new GraphData(names, values);
+		super(names, values);
 	}
 	
 	/**
@@ -49,7 +49,7 @@ public class GeoChart extends Chart
 	 */
 	public GeoChart(GraphDataRow names, GraphDataRow values) throws GraphDataSizeMismatchException
 	{
-		this.data = new GraphData(names, values);
+		super(names, values);
 	}
 		
 	/* (non-Javadoc)

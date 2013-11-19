@@ -17,6 +17,42 @@ import com.worldly.graph.listener.GraphDataChangeListener;
 public abstract class Chart
 {	
 	/**
+	 * Basic constructor which uses the fully prepared data (table)
+	 * to create the graph.
+	 * 
+	 * @param data Already formatted data for the graph.
+	 */
+	public Chart(GraphData data)
+	{
+		this.data = data;
+	}
+	
+	/**
+	 * Constructor which uses one Column as the initial data.
+	 * 
+	 * @param names Column of row names.
+	 * @param values Column of data to be included in the data table.
+	 * @throws CannotBeNullException Thrown if some value in the column is NULL
+	 * or if the column itself is NULL.
+	 */
+	public Chart(GraphDataColumn names, GraphDataColumn values) throws CannotBeNullException
+	{
+		this.data = new GraphData(names, values);
+	}
+	
+	/**
+	 * Constructor with two rows - names and values.
+	 * 
+	 * @param names Row with names.
+	 * @param values Row with values.
+	 * @throws GraphDataSizeMismatchException If length of names and values does not match.
+	 */
+	public Chart(GraphDataRow names, GraphDataRow values) throws GraphDataSizeMismatchException
+	{
+		this.data = new GraphData(names, values);
+	}
+	
+	/**
 	 * Listener which automatically updates the graph with new data,
 	 * each time the data is changed.
 	 */

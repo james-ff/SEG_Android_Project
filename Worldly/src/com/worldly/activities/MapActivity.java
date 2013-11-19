@@ -7,7 +7,6 @@ import java.util.Locale;
 
 import org.json.JSONException;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
@@ -16,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -27,21 +27,20 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.worldly.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
-import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.worldly.controller.WorldlyController;
 import com.worldly.data_models.Country;
 
-
-@SuppressLint("NewApi")
-public class MapActivity extends Activity {
+public class MapActivity extends FragmentActivity {
 
 	private Activity self;
 
@@ -61,7 +60,7 @@ public class MapActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		//getActionBar().setDisplayHomeAsUpEnabled(true); //removed to support lower API - version 8
 		
 		self = this;
 		
@@ -71,7 +70,7 @@ public class MapActivity extends Activity {
 		}
 
 		if (hasGLES20()) {
-			map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+			map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 			map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 				@Override public void onInfoWindowClick(Marker marker) {
 					Country aCountry = markerToCountry.get(marker);
@@ -139,6 +138,8 @@ public class MapActivity extends Activity {
 					
 					startActivity(new Intent(self, CompareCategoriesActivity.class));
 				}
+				else
+					Toast.makeText(self, getString(R.string.empty_list_countries), Toast.LENGTH_LONG).show();
 			}
 		});
 		
@@ -194,7 +195,7 @@ public class MapActivity extends Activity {
 					LatLng aLocation = new LatLng(aCountry.getLatitude(), aCountry.getLongitude());
 					if (map != null) {
 						String title = aCountry.getName() + " - " + aCountry.getCapitalCity();
-						MarkerOptions aMarkerOption = new MarkerOptions().title(title).snippet("Tap to Add / Remove").position(aLocation);
+						MarkerOptions aMarkerOption = new MarkerOptions().title(title).snippet(getString(R.string.tap_to_add_or_remove)).position(aLocation);
 						Marker aMarker = map.addMarker(aMarkerOption);
 						markerToCountry.put(aMarker, aCountry);
 						lastMarker = aMarker;
@@ -211,6 +212,9 @@ public class MapActivity extends Activity {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -222,6 +226,9 @@ public class MapActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

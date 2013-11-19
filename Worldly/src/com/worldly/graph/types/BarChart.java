@@ -16,15 +16,14 @@ import com.worldly.graph.exception.GraphDataSizeMismatchException;
  */
 public class BarChart extends Chart
 {	
-	/**
-	 * Basic constructor which uses the fully prepared data (table)
+    /** Basic constructor which uses the fully prepared data (table)
 	 * to create the graph.
 	 * 
 	 * @param data Already formatted data for the graph.
 	 */
-	public BarChart(GraphData data)
+	public BarChart(GraphData data) 
 	{
-		this.data = data;
+		super(data);
 	}
 	
 	/**
@@ -37,7 +36,7 @@ public class BarChart extends Chart
 	 */
 	public BarChart(GraphDataColumn names, GraphDataColumn values) throws CannotBeNullException
 	{
-		this.data = new GraphData(names, values);
+		super(names,values);
 	}
 	
 	/**
@@ -49,7 +48,7 @@ public class BarChart extends Chart
 	 */
 	public BarChart(GraphDataRow names, GraphDataRow values) throws GraphDataSizeMismatchException
 	{
-		this.data = new GraphData(names, values);
+		super(names, values);
 	}
 	
 	/* (non-Javadoc)
