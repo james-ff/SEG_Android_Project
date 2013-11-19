@@ -8,13 +8,14 @@ import java.util.Map;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
-import android.widget.Toast;
 
 import com.example.worldly.R;
 import com.worldly.custom_adapter.CompareExpandableListAdapter;
@@ -23,10 +24,10 @@ import com.worldly.custom_adapter.CompareExpandableListAdapter;
 public class CompareCategoriesActivity extends Activity implements
 		OnChildClickListener, OnGroupExpandListener, OnGroupCollapseListener
 {
-	ExpandableListView elvCategories;
-	List<String> groups;
-	Map<String, List<String>> childs;
-
+	private ExpandableListView elvCategories;
+	private List<String> groups;
+	private Map<String, List<String>> childs;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -38,8 +39,7 @@ public class CompareCategoriesActivity extends Activity implements
 
 		// Initializing the ExpandableListView object
 		elvCategories = (ExpandableListView) findViewById(R.id.elvCategories);
-		elvCategories.setAdapter(new CompareExpandableListAdapter(this, groups,
-				childs));
+		elvCategories.setAdapter(new CompareExpandableListAdapter(this, groups, childs));
 		elvCategories.setOnChildClickListener(this);
 		elvCategories.setOnGroupExpandListener(this);
 		elvCategories.setOnGroupCollapseListener(this);
@@ -62,38 +62,26 @@ public class CompareCategoriesActivity extends Activity implements
 		childs = new HashMap<String, List<String>>();
 
 		// Adding child data
-		groups.add("Top 250");
-		groups.add("Now Showing");
-		groups.add("Coming Soon..");
+		groups.add("Business");
+		groups.add("City Life");
+		groups.add("Climate");
 
 		// Adding child data
-		List<String> top250 = new ArrayList<String>();
-		top250.add("The Shawshank Redemption");
-		top250.add("The Godfather");
-		top250.add("The Godfather: Part II");
-		top250.add("Pulp Fiction");
-		top250.add("The Good, the Bad and the Ugly");
-		top250.add("The Dark Knight");
-		top250.add("12 Angry Men");
-
-		List<String> nowShowing = new ArrayList<String>();
-		nowShowing.add("The Conjuring");
-		nowShowing.add("Despicable Me 2");
-		nowShowing.add("Turbo");
-		nowShowing.add("Grown Ups 2");
-		nowShowing.add("Red 2");
-		nowShowing.add("The Wolverine");
-
-		List<String> comingSoon = new ArrayList<String>();
-		comingSoon.add("2 Guns");
-		comingSoon.add("The Smurfs 2");
-		comingSoon.add("The Spectacular Now");
-		comingSoon.add("The Canyons");
-		comingSoon.add("Europa Report");
-
-		childs.put(groups.get(0), top250); // Header, Child data
-		childs.put(groups.get(1), nowShowing);
-		childs.put(groups.get(2), comingSoon);
+		List<String> business = createListFromResourceArray(getResources().getStringArray(R.array.subCategoriesBusiness));
+		List<String> cityLife = createListFromResourceArray(getResources().getStringArray(R.array.subCategoriesCityLife));
+		List<String> climate = createListFromResourceArray(getResources().getStringArray(R.array.subCategoriesClimate));
+		
+		childs.put(groups.get(0), business);
+		childs.put(groups.get(1), cityLife);
+		childs.put(groups.get(2), climate);
+	}
+	
+	public List<String> createListFromResourceArray(String[] array) {
+		List<String> finalList = new ArrayList<String>();
+		for (String aString : array) {
+			finalList.add(aString);
+		}
+		return finalList;
 	}
 
 	@Override
@@ -122,6 +110,80 @@ public class CompareCategoriesActivity extends Activity implements
 
 	private void displayMessage(String msg)
 	{
-		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+		//Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 	}
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+	
+//	public String[] getBusinessIndicatorTitles() {
+//		if(this.categoriesBusiness == null) {
+//			this.categoriesBusiness = new String[]{"GDP", "Investment", "Import/Export", "Labor Force", "Tax"};
+//		}
+//		return this.categoriesBusiness;
+//	}
+//	
+//	public String[] getCityLifeIndicatorTitles() {
+//		if(this.categoriesCityLife == null) {
+//			this.categoriesCityLife = new String[]{"Population", "Age Distribution", "Life Expectancy"};
+//		}
+//		return this.categoriesCityLife;
+//	}
+//	
+//	public String[] getClimateIndicatorTitles() {
+//		if(this.categoriesClimate == null) {
+//			this.categoriesClimate = new String[]{"CO2 Emissions", "Methane Emissions"};
+//		}
+//		return this.categoriesClimate;
+//	}
+//	
+//	public String[] getDemographicsIndicatorTitles() {
+//		if(this.categoriesDemographics == null) {
+//			this.categoriesDemographics = new String[]{};
+//		}
+//		return this.categoriesDemographics;
+//	}
+//	
+//	public String[] getEducationIndicatorTitles() {
+//		if(this.categoriesEducation == null) {
+//			this.categoriesEducation = new String[]{};
+//		}
+//		return this.categoriesEducation;
+//	}
+//	
+//	public String[] getEmploymentProspectsIndicatorTitles() {
+//		if(this.categoriesEmploymentProspects == null) {
+//			this.categoriesEmploymentProspects = new String[]{};
+//		}
+//		return this.categoriesEmploymentProspects;
+//	}
+//	
+//	public String[] getFinanceIndicatorTitles() {
+//		if(this.categoriesFinance == null) {
+//			this.categoriesFinance = new String[]{};
+//		}
+//		return this.categoriesFinance;
+//	}
+//	
+//	public String[] getQualityOfLifeIndicatorTitles() {
+//		if(this.categoriesQualityOfLife == null) {
+//			this.categoriesQualityOfLife = new String[]{};
+//		}
+//		return this.categoriesQualityOfLife;
+//	}
+//	
+//	public String[] getRuralLifeIndicatorTitles() {
+//		if(this.categoriesRuralLife == null) {
+//			this.categoriesRuralLife = new String[]{};
+//		}
+//		return this.categoriesRuralLife;
+//	}
 }
