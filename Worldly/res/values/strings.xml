@@ -15,5 +15,9 @@
     <string name="title_activity_categories">Compare Countries</string>
     <string name="title_activity_map">Select Countries</string>
     <string name="title_activity_selection">Welcome to Worldly</string>
+    <string name="action_about">About</string>
+    <string name="title_activity_about">About Worldly</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="usafdesc">USAF Logo</string>
 
 </resources>
