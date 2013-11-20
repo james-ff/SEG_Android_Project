@@ -1,21 +1,21 @@
 package com.worldly.activities;
 
-import com.example.worldly.R;
-import com.example.worldly.R.layout;
-import com.example.worldly.R.menu;
-
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
 import android.widget.ImageView;
 
+import com.example.worldly.R;
+
 public class AboutActivity extends Activity {
 
+	private ImageView logo;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
-		ImageView logo = (ImageView) findViewById(R.id.usaf_logo);
+		logo = (ImageView) findViewById(R.id.usaf_logo);
 	}
 
 	@Override
