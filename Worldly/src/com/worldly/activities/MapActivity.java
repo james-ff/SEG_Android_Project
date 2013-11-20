@@ -161,7 +161,7 @@ public class MapActivity extends Activity {
 		});
 		aThread.start();
 	}
-
+	
 	public boolean hasGLES20() {
 		ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		ConfigurationInfo info = am.getDeviceConfigurationInfo();
@@ -214,10 +214,12 @@ public class MapActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		// Respond to the action bar's Up/Home button
-		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
+		    case R.id.action_about: // Take user to secret classified About Page     
+		        startActivity(new Intent(this, AboutActivity.class));
+		        break; 	
+			case android.R.id.home: // Respond to the action bar's Up/Home button
+				NavUtils.navigateUpFromSameTask(this);
+				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}

@@ -23,6 +23,7 @@ public class Indicator {
 	private String id;
 	private String name;
 	private String sourceName;
+	private String category;
 	private int sourceID;
 	
 	/**
@@ -30,18 +31,20 @@ public class Indicator {
 	 * 
 	 * @param rawArray: A JSONArray containing raw data about an Indicator.
 	 */
-	public Indicator(JSONArray rawArray) {
+	public Indicator(String category, JSONArray rawArray) {
 		super();
-				
+			
+		this.setCategory(category); // Sets a category that we can use to retrieve from for each specific subheading / different type of activity
+		
 		try { // Attempts to parse rawData
 			JSONObject rawData = rawArray.getJSONArray(1).getJSONObject(0);
 			this.name = rawData.getString(READABLE_NAME);
 			this.id = rawData.getString(ID);
 			this.sourceName = rawData.getJSONObject(SOURCE_KEY).getString(SOURCE_NAME);
-			this.sourceID = Integer.parseInt(rawData.getJSONObject(SOURCE_KEY).getString(ID));
-			
+			this.sourceID = Integer.parseInt(rawData.getJSONObject(SOURCE_KEY).getString(ID));		
 		} 
 		catch (JSONException e) {
+			this.setCategory("broken");
 			e.printStackTrace();
 		}
 	}
@@ -105,4 +108,18 @@ public class Indicator {
 	 *            : An int containing the source ID of the Indicator object.
 	 */
 	public void setSourceID(int sourceID) { this.sourceID = sourceID; }
+
+	/**
+	 * Retrieves the category of the Indicator object.
+	 * 
+	 * @return A String containing the category of the Indicator object.
+	 */
+	public String getCategory() { return category; }
+
+	/**
+	 * Assigns a category to the Indicator object.
+	 * 
+	 * @param sourceID: A String containing the category of the Indicator object.
+	 */
+	public void setCategory(String category) { this.category = category; }
 }

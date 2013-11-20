@@ -1,8 +1,6 @@
 package com.worldly.activities;
 
 import com.example.worldly.R;
-import com.example.worldly.R.layout;
-import com.example.worldly.R.menu;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -16,6 +14,7 @@ public class AboutActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
 		ImageView logo = (ImageView) findViewById(R.id.usaf_logo);
+		logo.setScaleX(0.50f); logo.setScaleY(0.50f);
 	}
 
 	@Override

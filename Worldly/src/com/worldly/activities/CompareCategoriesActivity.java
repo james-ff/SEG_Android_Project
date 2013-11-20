@@ -1,12 +1,12 @@
 package com.worldly.activities;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -19,6 +19,7 @@ import android.widget.ExpandableListView.OnGroupExpandListener;
 
 import com.example.worldly.R;
 import com.worldly.custom_adapter.CompareExpandableListAdapter;
+import com.worldly.data_store.ListOfIndicators;
 
 @SuppressLint("NewApi")
 public class CompareCategoriesActivity extends Activity implements
@@ -34,7 +35,7 @@ public class CompareCategoriesActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_compare_categories);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-
+		
 		prepareListData();
 
 		// Initializing the ExpandableListView object
@@ -46,43 +47,38 @@ public class CompareCategoriesActivity extends Activity implements
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
+	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.selection, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		    case R.id.action_about: // Take user to secret classified About Page     
+		        startActivity(new Intent(this, AboutActivity.class));
+		        break; 	
+			case android.R.id.home: // Respond to the action bar's Up/Home button
+				NavUtils.navigateUpFromSameTask(this);
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	/*
 	 * Preparing the list data
 	 */
-	private void prepareListData()
-	{
-		groups = new ArrayList<String>();
+	private void prepareListData() {
+		groups = ListOfIndicators.getCategories();
 		childs = new HashMap<String, List<String>>();
 
 		// Adding child data
-		groups.add("Business");
-		groups.add("City Life");
-		groups.add("Climate");
-
-		// Adding child data
-		List<String> business = createListFromResourceArray(getResources().getStringArray(R.array.subCategoriesBusiness));
-		List<String> cityLife = createListFromResourceArray(getResources().getStringArray(R.array.subCategoriesCityLife));
-		List<String> climate = createListFromResourceArray(getResources().getStringArray(R.array.subCategoriesClimate));
-		
-		childs.put(groups.get(0), business);
-		childs.put(groups.get(1), cityLife);
-		childs.put(groups.get(2), climate);
-	}
-	
-	public List<String> createListFromResourceArray(String[] array) {
-		List<String> finalList = new ArrayList<String>();
-		for (String aString : array) {
-			finalList.add(aString);
+		for (int i = 0; i < groups.size(); i++) {
+			childs.put(groups.get(i), ListOfIndicators.getReadableNamesOfIndicatorsInCategory(groups.get(i)));
 		}
-		return finalList;
 	}
+
 
 	@Override
 	public boolean onChildClick(ExpandableListView parent, View v,
@@ -95,10 +91,10 @@ public class CompareCategoriesActivity extends Activity implements
 	}
 
 	@Override
-	public void onGroupExpand(int groupPosition)
-	{
+	public void onGroupExpand(int groupPosition) {
 		String msg = groups.get(groupPosition) + " Expanded";
 		displayMessage(msg);
+		ListOfIndicators.loadIndicatorsForCategory(groups.get(groupPosition));
 	}
 
 	@Override
@@ -112,17 +108,6 @@ public class CompareCategoriesActivity extends Activity implements
 	{
 		//Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 	}
-	
-	@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case android.R.id.home:
-            NavUtils.navigateUpFromSameTask(this);
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-    }
 	
 //	public String[] getBusinessIndicatorTitles() {
 //		if(this.categoriesBusiness == null) {
