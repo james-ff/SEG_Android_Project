@@ -10,7 +10,7 @@ public class QuerySystem {
 	private final static String INDICATOR_BASE_URL = "http://api.worldbank.org/indicators/";
 	
 	public static String getAllCountriesData() {		
-		String url = GET_ALL_COUNTRIES_URL + "?" + "per_page=" + 500 + "&" + FORMAT_APPEND;
+		String url = GET_ALL_COUNTRIES_URL + "?" + "per_page=500&" + FORMAT_APPEND;
 		return JSONCore.readData(url);
 	}
 	

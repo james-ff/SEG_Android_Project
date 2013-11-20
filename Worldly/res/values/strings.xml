@@ -69,4 +69,8 @@
         <item name=""></item>
     </string-array>
     
+    <string-array name="subCategoriesMilitary">
+        <item name="military_expenditure">Military Expenditure</item>
+    </string-array>
+    
 </resources>

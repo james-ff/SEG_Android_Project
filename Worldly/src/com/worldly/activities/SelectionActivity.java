@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.example.worldly.R;
 import com.worldly.controller.WorldlyController;
+import com.worldly.data_store.ListOfIndicators;
 
 /**
  * This activity lets the user pick the desired mode of search within the
@@ -36,13 +37,21 @@ public class SelectionActivity extends Activity {
 	 * across this application's activities.
 	 */
 	public static final String PREFS_NAME = "GLOBAL_PREFS";
+	
+	/**
+	 * Constant across all activities, it holds all indicators that are loaded into
+	 * memory.
+	 * 
+	 */
+	public static ListOfIndicators mainIndicators;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mainIndicators = new ListOfIndicators();		
 		setContentView(R.layout.activity_selection);
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

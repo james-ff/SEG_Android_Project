@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.worldly.data_models.Country;
 
@@ -20,13 +21,11 @@ import android.util.Log;
  * @author Annie the Eagle & Team
  * 
  */
-public class CachingEngine
-{
+public class CachingEngine {
 	/**
 	 * Constant representing the directory where the data will be cached.
 	 */
-	private static final File WORKING_DIRECTORY = new File(
-			Environment.getExternalStorageDirectory() + "/Worldly/");
+	private static final File WORKING_DIRECTORY = new File(Environment.getExternalStorageDirectory() + "/Worldly/");
 
 	/**
 	 * Constant representing the name of the file where the data of all
@@ -38,6 +37,8 @@ public class CachingEngine
 	 * Constant representing the separator used whilst writing to files.
 	 */
 	private static final String SEPARATOR = ", ", NEWLINE = "\n";
+	
+	public static HashMap<String, String> indicatorJSONResponses = new HashMap<String, String>();
 
 	/**
 	 * Static method which writes the entire data of all countries from an
