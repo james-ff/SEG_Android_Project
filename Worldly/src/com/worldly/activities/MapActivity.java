@@ -75,7 +75,14 @@ public class MapActivity extends Activity {
 			map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 				@Override public void onInfoWindowClick(Marker marker) {
 					Country aCountry = markerToCountry.get(marker);
-					if (selectedCountries.contains(aCountry)) {
+					boolean alreadySelected = false;
+					for (Country existingCountry : selectedCountries) {
+						if (existingCountry.getIso2Code().equals(aCountry.getIso2Code())) {
+							alreadySelected = true;
+							break;
+						}
+					}
+					if (alreadySelected) {
 						selectedCountries.remove(aCountry);
 					} else {
 						selectedCountries.add(aCountry);
@@ -103,6 +110,7 @@ public class MapActivity extends Activity {
 							dialog.dismiss();
 						}
 				}).create().show();
+				
 			}
 		});
 		//this.arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
