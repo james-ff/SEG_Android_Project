@@ -1,6 +1,7 @@
 package com.worldly.data_models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +36,7 @@ public class Country {
 	private String capitalCity;
 	private Double longitude;
 	private Double latitude;
+	private HashMap<Indicator, Object> countryValues = new HashMap<Indicator, Object>();
 
 	/**
 	 * Constructs a new Country object with the specified JSON raw data.
@@ -261,4 +263,12 @@ public class Country {
 	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
+	
+	public void addDataElement(Indicator regarding, Object value) { countryValues.put(regarding, value); }
+	public void editDataElement(Indicator regarding, Object newValue) { 
+		countryValues.remove(regarding); 
+		countryValues.put(regarding, newValue); 
+	}
+	public void deleteDataElement(Indicator regarding) { countryValues.remove(regarding); }
+	public Object getDataElement(Indicator regarding) { return countryValues.get(regarding); }
 }

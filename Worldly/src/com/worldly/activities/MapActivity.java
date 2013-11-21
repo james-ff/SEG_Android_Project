@@ -74,7 +74,14 @@ public class MapActivity extends FragmentActivity {
 			map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 				@Override public void onInfoWindowClick(Marker marker) {
 					Country aCountry = markerToCountry.get(marker);
-					if (selectedCountries.contains(aCountry)) {
+					boolean alreadySelected = false;
+					for (Country existingCountry : selectedCountries) {
+						if (existingCountry.getIso2Code().equals(aCountry.getIso2Code())) {
+							alreadySelected = true;
+							break;
+						}
+					}
+					if (alreadySelected) {
 						selectedCountries.remove(aCountry);
 						Toast.makeText(self, aCountry+" removed!", Toast.LENGTH_SHORT).show();
 					} else {
@@ -104,6 +111,7 @@ public class MapActivity extends FragmentActivity {
 							dialog.dismiss();
 						}
 				}).create().show();
+				
 			}
 		});
 		//this.arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -164,7 +172,7 @@ public class MapActivity extends FragmentActivity {
 		});
 		aThread.start();
 	}
-
+	
 	public boolean hasGLES20() {
 		ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		ConfigurationInfo info = am.getDeviceConfigurationInfo();
@@ -220,10 +228,12 @@ public class MapActivity extends FragmentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		// Respond to the action bar's Up/Home button
-		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
+		    case R.id.action_about: // Take user to secret classified About Page     
+		        startActivity(new Intent(this, AboutActivity.class));
+		        break; 	
+			case android.R.id.home: // Respond to the action bar's Up/Home button
+				NavUtils.navigateUpFromSameTask(this);
+				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -234,7 +244,7 @@ public class MapActivity extends FragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.selection, menu);
 		return true;
 	}
 
