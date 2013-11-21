@@ -21,30 +21,50 @@ import com.worldly.network.QuerySystem;
  * 
  */
 public class ListOfIndicators {
+	
+	public static final String CATEGORY_BUSINESS = "Business";
+	public static final String CATEGORY_CITY_LIFE = "City Life";
+	public static final String CATEGORY_CLIMATE = "Climate";
+	public static final String CATEGORY_DEMOGRAPHICS = "Demographics";
+	public static final String CATEGORY_EDUCATION = "Education";
+	public static final String CATEGORY_EMPLOYMENT_PROSPECTS = "Employment Prospects";
+	public static final String CATEGORY_FINANCE = "Finance";
+	public static final String CATEGORY_QUALITY_OF_LIFE = "Quality of Life";
+	public static final String CATEGORY_RURAL_LIFE = "Rural Life";
+	
 	private static ArrayList<Indicator> loadedIndicators = new ArrayList<Indicator>();
 	private static HashMap<String, ArrayList<UnloadedIndicatorDescription>> droneStrikes = new HashMap<String, ArrayList<UnloadedIndicatorDescription>>();
 	
 	public ListOfIndicators() {
 		// Category Setup -- These categories will be the headings of the expandable groups (use droneStrikes.keySet())
-		droneStrikes.put("Demographics", new ArrayList<UnloadedIndicatorDescription>());
-		droneStrikes.put("Business", new ArrayList<UnloadedIndicatorDescription>());
-		droneStrikes.put("City Life", new ArrayList<UnloadedIndicatorDescription>());
-		droneStrikes.put("Climate", new ArrayList<UnloadedIndicatorDescription>());
+		droneStrikes.put(CATEGORY_BUSINESS, new ArrayList<UnloadedIndicatorDescription>());
+		droneStrikes.put(CATEGORY_CITY_LIFE, new ArrayList<UnloadedIndicatorDescription>());
+		droneStrikes.put(CATEGORY_CLIMATE, new ArrayList<UnloadedIndicatorDescription>());
+		droneStrikes.put(CATEGORY_DEMOGRAPHICS, new ArrayList<UnloadedIndicatorDescription>());
+		droneStrikes.put(CATEGORY_EDUCATION, new ArrayList<UnloadedIndicatorDescription>());
+		droneStrikes.put(CATEGORY_EMPLOYMENT_PROSPECTS, new ArrayList<UnloadedIndicatorDescription>());
+		droneStrikes.put(CATEGORY_FINANCE, new ArrayList<UnloadedIndicatorDescription>());
+		droneStrikes.put(CATEGORY_QUALITY_OF_LIFE, new ArrayList<UnloadedIndicatorDescription>());
+		droneStrikes.put(CATEGORY_RURAL_LIFE, new ArrayList<UnloadedIndicatorDescription>());
+		
+		// TODO: Remove
 		droneStrikes.put("Military", new ArrayList<UnloadedIndicatorDescription>());
 		
 		/* -- Indicators Setup -- Here we add the known codes of indicators we are interested in. -- */ 
-		ArrayList<UnloadedIndicatorDescription> reference = droneStrikes.get("Demographics");
-		reference.add(new UnloadedIndicatorDescription("Total Population", "SP.POP.TOTL"));
-		reference.add(new UnloadedIndicatorDescription("Net migration", "SM.POP.NETM"));
-		reference = droneStrikes.get("Business");
+		ArrayList<UnloadedIndicatorDescription> reference = droneStrikes.get(CATEGORY_BUSINESS);
 		reference.add(new UnloadedIndicatorDescription("GDP growth (Annual %)", "NY.GDP.MKTP.KD.ZG")); 
 		reference.add(new UnloadedIndicatorDescription("Listed domestic companies", "CM.MKT.LDOM.NO"));
-		reference = droneStrikes.get("City Life");
+		reference = droneStrikes.get(CATEGORY_CITY_LIFE);
 		reference.add(new UnloadedIndicatorDescription("Health expendiure per capita (US$)", "SH.XPD.PCAP"));
 		reference.add(new UnloadedIndicatorDescription("% of urban populating with access to improved water", "SH.H2O.SAFE.UR.ZS"));
-		reference = droneStrikes.get("Climate");
+		reference = droneStrikes.get(CATEGORY_CLIMATE);
 		reference.add(new UnloadedIndicatorDescription("CO2 emissions in kilotons", "EN.ATM.CO2E.KT"));
 		reference.add(new UnloadedIndicatorDescription("Methane emissions in kilotons of CO2 equivalent", "EN.ATM.METH.KT.CE"));
+		reference = droneStrikes.get(CATEGORY_DEMOGRAPHICS);
+		reference.add(new UnloadedIndicatorDescription("Total Population", "SP.POP.TOTL"));
+		reference.add(new UnloadedIndicatorDescription("Net migration", "SM.POP.NETM"));
+		
+		// TODO: Remove
 		reference = droneStrikes.get("Military");
 		reference.add(new UnloadedIndicatorDescription("Military expenditure (% of GDP)", "MS.MIL.XPND.GD.ZS"));
 	}

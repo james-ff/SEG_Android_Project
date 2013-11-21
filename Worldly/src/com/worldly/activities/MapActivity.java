@@ -108,9 +108,11 @@ public class MapActivity extends Activity {
 					.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
 						@Override public void onClick(DialogInterface dialog, int which) {
 							dialog.dismiss();
+							Country aCountry = selectedCountries.get(which);
+							LatLng aMarker = new LatLng(aCountry.getLatitude(), aCountry.getLongitude());
+							map.moveCamera(CameraUpdateFactory.newLatLngZoom(aMarker, 4));
 						}
 				}).create().show();
-				
 			}
 		});
 		//this.arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -144,7 +146,6 @@ public class MapActivity extends Activity {
 				if (selectedCountries.size() > 0) {
 					WorldlyController appController = WorldlyController.getInstance();
 					appController.setCurrentSelectedCountries(selectedCountries);
-					
 					startActivity(new Intent(self, CompareCategoriesActivity.class));
 				}
 			}
@@ -152,7 +153,29 @@ public class MapActivity extends Activity {
 		
 		clearSelectionButton.setOnClickListener(new OnClickListener() {
 			@Override public void onClick(View v) {
-				selectedCountries.clear();
+								
+				DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+					@Override public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						switch (which) {
+				        case DialogInterface.BUTTON_POSITIVE:
+							selectedCountries.clear();
+				            break;
+
+				        case DialogInterface.BUTTON_NEGATIVE:
+				        	// No Action
+				            break;
+				        }
+					}
+				};
+				
+				AlertDialog.Builder builder = new AlertDialog.Builder(self);
+				builder.setTitle(selectedCountries.size() + " " + getResources().getString(R.string.countries_spinner_prompt))
+					.setAdapter(arrayAdapter, dialogClickListener)
+					.setMessage("Are you sure you wish to clear your selection of countries?")
+					.setPositiveButton("Yes", dialogClickListener)
+					.setNegativeButton("No", dialogClickListener)
+					.create().show();
 			}
 		});
 

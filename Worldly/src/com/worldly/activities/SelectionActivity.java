@@ -1,12 +1,18 @@
 package com.worldly.activities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.worldly.R;
 import com.worldly.controller.WorldlyController;
@@ -21,6 +27,9 @@ import com.worldly.data_store.ListOfIndicators;
  * 
  */
 public class SelectionActivity extends Activity {
+	
+	private Activity self = this;
+	
 	/**
 	 * Constant representing the mode selected by the user.
 	 */
@@ -87,24 +96,55 @@ public class SelectionActivity extends Activity {
 		// Creates an editor object to update the shared preferences
 		SharedPreferences.Editor editor = sharedPref.edit();
 
-		WorldlyController appController = WorldlyController.getInstance();
+		final WorldlyController appController = WorldlyController.getInstance();
 		
 		// Detects which button the user has pressed
 		switch (v.getId()) {
 		case R.id.btnFamily : case R.id.lblFamily:
 			option = FAMILY;
-			appController.setCurrentMoveStatus(WorldlyController.FAMILY_MOVE);
+			appController.setCurrentMoveStatus(WorldlyController.FAMILY_MOVE, null);
 			break;
 		case R.id.btnNewLife : case R.id.lblNewLife:
 			option = NEW_LIFE;
-			appController.setCurrentMoveStatus(WorldlyController.PERSONAL_MOVE);
+			appController.setCurrentMoveStatus(WorldlyController.PERSONAL_MOVE, null);
 			break;
 		case R.id.btnBusiness: case R.id.lblBusiness:
 			option = BUSINESS;
-			appController.setCurrentMoveStatus(WorldlyController.BUSINESS_MOVE);
+			appController.setCurrentMoveStatus(WorldlyController.BUSINESS_MOVE, null);
 			break;
-		default:
-			appController.setCurrentMoveStatus(WorldlyController.CUSTOM_MOVE);
+		case R.id.btnCustom: case R.id.lblCustom:
+			
+			final List<String> selectedItems = new ArrayList<String>();
+			
+		    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		    builder.setTitle("Select categories of interest")
+		    		// TODO: Set actual selection
+		           .setMultiChoiceItems(new String[]{"One", "Two", "Three"}, null, new DialogInterface.OnMultiChoiceClickListener() {
+		               @Override
+		               public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+		                   if (isChecked) {
+		                       // If the user checked the item, add it to the selected items
+		                	   // TODO: Set actual selection
+		                       selectedItems.add("Selection");
+		                   } else if (selectedItems.contains(which)) {
+		                       // Else, if the item is already in the array, remove it 
+		                       selectedItems.remove(Integer.valueOf(which));
+		                   }
+		               }
+		           })
+		           .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
+		               @Override
+		               public void onClick(DialogInterface dialog, int id) {
+		            	   appController.setCurrentMoveStatus(WorldlyController.CUSTOM_MOVE, selectedItems);
+		               }
+		           })
+		           .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+		               @Override
+		               public void onClick(DialogInterface dialog, int id) {
+		            	   Toast.makeText(self, "Custom Search Cancelled", Toast.LENGTH_SHORT).show();
+		               }
+		           });
+		    builder.create();
 			break;
 		}
 
@@ -114,5 +154,5 @@ public class SelectionActivity extends Activity {
 
 		// Creates a new Intent object for the transition to another activity
 		startActivity(new Intent(this, MapActivity.class));
-	}
+	} 
 }

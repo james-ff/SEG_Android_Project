@@ -9,8 +9,9 @@
     <string name="strBusiness">Expanding business</string>
     <string name="strCustom">Custom Search</string>
     
-    
     <string name="search_hint">Search by Country or ISO</string>
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
     
     <string name="countries_spinner_prompt">Selected Countries</string>
     <string name="clear_string">Clear Selection</string>
