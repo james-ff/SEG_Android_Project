@@ -7,6 +7,10 @@
     <string name="strFamily">Moving with family</string>
     <string name="strNewLife">Starting a new life</string>
     <string name="strBusiness">Expanding business</string>
+    <string name="strCustom">Customise your Own</string>
+    <string name="action_settings">Settings</string>
+
+	<!-- ActivityName -->
     <string name="strCustom">Custom Search</string>
     
     <string name="search_hint">Search by Country or ISO</string>
@@ -20,6 +24,20 @@
     <string name="title_activity_categories">Compare Countries</string>
     <string name="title_activity_map">Select Countries</string>
     <string name="title_activity_selection">Welcome to Worldly</string>
+    
+    <!-- SelectionActivity -->
+    <string name="strFamily">Moving with your family</string>
+    <string name="strNewLife">Starting a new life</string>
+    <string name="strBusiness">Expanding your business</string>
+    <string name="strCustom">Custom Search</string>
+    
+    <!-- MapActivity -->
+    <string name="empty_list_countries">Please add at least one country.</string>
+    <string name="search_hint">Search by Country or ISO</string>
+    <string name="compare_string">Go Compare</string>
+    <string name="countries_spinner_prompt">Selected Countries</string>
+    <string name="clear_string">Clear Selection</string>
+    <string name="tap_to_add_or_remove">Tap to Add / Remove</string>
 
 	<string name="action_about">About</string>
     <string name="title_activity_about">About Worldly</string>
@@ -72,6 +90,5 @@
     
     <string-array name="subCategoriesMilitary">
         <item name="military_expenditure">Military Expenditure</item>
-    </string-array>
-    
+    </string-array>    
 </resources>

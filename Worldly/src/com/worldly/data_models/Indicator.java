@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 /**
  * This class represents an indicator, a data value for an arbitrary country,
  * it represents a single property for a country. It contains the building blocks
@@ -34,6 +36,8 @@ public class Indicator {
 	public Indicator(String category, JSONArray rawArray) {
 		super();
 			
+		Log.e("DEBUG", rawArray.toString());
+		
 		this.setCategory(category); // Sets a category that we can use to retrieve from for each specific subheading / different type of activity
 		
 		try { // Attempts to parse rawData

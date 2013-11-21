@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,12 +15,13 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.Toast;
 
 import com.example.worldly.R;
 import com.worldly.custom_adapter.CompareExpandableListAdapter;
 import com.worldly.data_store.ListOfIndicators;
+import com.worldly.graph.GraphTestActivity;
 
-@SuppressLint("NewApi")
 public class CompareCategoriesActivity extends Activity implements
 		OnChildClickListener, OnGroupExpandListener, OnGroupCollapseListener
 {
@@ -34,8 +34,6 @@ public class CompareCategoriesActivity extends Activity implements
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_compare_categories);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		
 		prepareListData();
 
 		// Initializing the ExpandableListView object
@@ -84,17 +82,20 @@ public class CompareCategoriesActivity extends Activity implements
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id)
 	{
-		String msg = groups.get(groupPosition) + " : ";
-		msg += childs.get(groups.get(groupPosition)).get(childPosition);
+		String msg = ListOfIndicators.getAllLoadedIndicatorsFromCategory(groups.get(groupPosition)).get(0).getId();
 		displayMessage(msg);
+		
+		//String msg = groups.get(groupPosition) + " : ";
+		//msg += childs.get(groups.get(groupPosition)).get(childPosition);
+		//displayMessage(msg);
 		return true;
 	}
 
 	@Override
 	public void onGroupExpand(int groupPosition) {
-		String msg = groups.get(groupPosition) + " Expanded";
-		displayMessage(msg);
+		//String msg = groups.get(groupPosition) + " Expanded";
 		ListOfIndicators.loadIndicatorsForCategory(groups.get(groupPosition));
+
 	}
 
 	@Override
@@ -106,9 +107,15 @@ public class CompareCategoriesActivity extends Activity implements
 
 	private void displayMessage(String msg)
 	{
-		//Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 	}
 	
+	public void showGraph(View v)
+	{
+		Intent i = new Intent(CompareCategoriesActivity.this, GraphTestActivity.class);
+		startActivity(i);
+		onStop();
+	}
 //	public String[] getBusinessIndicatorTitles() {
 //		if(this.categoriesBusiness == null) {
 //			this.categoriesBusiness = new String[]{"GDP", "Investment", "Import/Export", "Labor Force", "Tax"};

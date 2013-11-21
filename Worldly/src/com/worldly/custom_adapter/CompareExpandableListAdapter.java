@@ -73,9 +73,10 @@ public class CompareExpandableListAdapter extends BaseExpandableListAdapter
 		}
 
 		// Creates and initialises a TextView object to display the child title
-		TextView tvListChild = (TextView) convertView
-				.findViewById(R.id.tvListChild);
+		TextView tvListChild = (TextView) convertView.findViewById(R.id.tvListChild);
 		tvListChild.setText(childTitle);
+		
+		
 
 		return convertView;
 	}

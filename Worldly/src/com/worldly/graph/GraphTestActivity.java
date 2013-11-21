@@ -27,7 +27,7 @@ public class GraphTestActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_graph_test);
 		
-		GraphView geoChart = (GraphView) findViewById(R.id.graphView1);
+		GraphView chartView = (GraphView) findViewById(R.id.graphView1);
 		
 		if (savedInstanceState == null)
 		{	
@@ -61,12 +61,8 @@ public class GraphTestActivity extends Activity {
 			data.addRow(values2);
 			data.addRow(values3);
 			data.addRow(values4);
-			data.addColumn(column);
+			//data.addColumn(column);
 			//data.addColumn(column2);
-			
-			
-			Log.i("DEBUG", "rows = "+data.getNumberOfRows());
-			Log.i("DEBUG", "columns = "+data.getNumberOfColumns());
 			
 			}catch (CannotBeNullException e){e.printStackTrace();}
 			catch(GraphDataSizeMismatchException e){e.printStackTrace();}
@@ -115,12 +111,22 @@ public class GraphTestActivity extends Activity {
 		{
 			@Override
 			public void onClick(View v) {
-				chart.removeRow(chart.getNumberOfRows()-1);
+				//chart.removeRow(chart.getNumberOfRows()-1);
+				chart.setChartTitle("Cauu Marek");
 			}
 		});
 			
-		chart = new BarChart(data);
-		geoChart.loadGraph(chart);
+		chart = new BarChart(data, this);
+		
+		Log.e("DEBUG", "title "+chart.getChartTitle());
+		Log.e("DEBUG", "vAxis "+chart.getVerticalAxisTitle());
+		Log.e("DEBUG", "hAxis "+chart.getHorizontalAxisTitle());
+		
+		chart.setChartTitle("Ahoj Marek");
+		chart.setVerticalAxisTitle("vertical");
+		chart.setHorizontalAxisTitle("horizontal");
+		
+		chartView.loadGraph(chart);
 	}
 	
 	@Override

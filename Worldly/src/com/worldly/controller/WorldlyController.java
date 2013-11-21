@@ -22,12 +22,12 @@ public class WorldlyController {
 
 	private static WorldlyController instance = null;
 	
-	public static final String PERSONAL_MOVE = "PERSONAL_MOVE_KEY";
-	public static final String FAMILY_MOVE = "FAMILY_MOVE_KEY";
-	public static final String BUSINESS_MOVE = "BUSINESS_MOVE_KEY";
-	public static final String CUSTOM_MOVE = "CUSTOM_MOVE_KEY";
+	/**
+	 * Constant representing the mode selected by the user.
+	 */
+	public static final int FAMILY_MOVE = 0, PERSONAL_MOVE = 1, BUSINESS_MOVE = 2, CUSTOM_MOVE = 3;
 	
-	private String currentMoveStatus;
+	private int currentMoveStatus;
 	private List<Country> currentSelectedCountries;
 	private List<String> compareCategories;
 	
@@ -48,37 +48,36 @@ public class WorldlyController {
 	// TODO: Create method to store Controller state on file
 	// TODO: Create method to retrieve Controller state from file
 	
-	public String getCurrentMoveStatus() {
+	public int getCurrentMoveStatus() {
 		return currentMoveStatus;
 	}
 
-	public void setCurrentMoveStatus(String currentMoveStatus, List<String> customList) {
-		
+	public void setCurrentMoveStatus(int currentMoveStatus, List<String> customList) {
 		this.currentMoveStatus = currentMoveStatus;
 		this.compareCategories = new ArrayList<String>();
 		
-		if (currentMoveStatus.equals(BUSINESS_MOVE)) {
+		if (currentMoveStatus == BUSINESS_MOVE) {
 			compareCategories.add(ListOfIndicators.CATEGORY_BUSINESS);
 			compareCategories.add(ListOfIndicators.CATEGORY_CITY_LIFE);
 			compareCategories.add(ListOfIndicators.CATEGORY_DEMOGRAPHICS);
 			compareCategories.add(ListOfIndicators.CATEGORY_EMPLOYMENT_PROSPECTS);
 			compareCategories.add(ListOfIndicators.CATEGORY_FINANCE);
 			compareCategories.add(ListOfIndicators.CATEGORY_QUALITY_OF_LIFE);
-		} else if (currentMoveStatus.equals(FAMILY_MOVE)) {
+		} else if (currentMoveStatus == FAMILY_MOVE) {
 			compareCategories.add(ListOfIndicators.CATEGORY_CITY_LIFE);
 			compareCategories.add(ListOfIndicators.CATEGORY_CLIMATE);
 			compareCategories.add(ListOfIndicators.CATEGORY_DEMOGRAPHICS);
 			compareCategories.add(ListOfIndicators.CATEGORY_EDUCATION);
 			compareCategories.add(ListOfIndicators.CATEGORY_QUALITY_OF_LIFE);
 			compareCategories.add(ListOfIndicators.CATEGORY_RURAL_LIFE);
-		} else if (currentMoveStatus.equals(PERSONAL_MOVE)) {
+		} else if (currentMoveStatus == PERSONAL_MOVE) {
 			compareCategories.add(ListOfIndicators.CATEGORY_CITY_LIFE);
 			compareCategories.add(ListOfIndicators.CATEGORY_CLIMATE);
 			compareCategories.add(ListOfIndicators.CATEGORY_DEMOGRAPHICS);
 			compareCategories.add(ListOfIndicators.CATEGORY_EMPLOYMENT_PROSPECTS);
 			compareCategories.add(ListOfIndicators.CATEGORY_QUALITY_OF_LIFE);
 			compareCategories.add(ListOfIndicators.CATEGORY_RURAL_LIFE);
-		} else if (currentMoveStatus.equals(CUSTOM_MOVE)) {
+		} else if (currentMoveStatus == CUSTOM_MOVE) {
 			compareCategories.addAll(customList);
 		}
 	}

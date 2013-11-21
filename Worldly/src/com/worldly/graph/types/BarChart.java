@@ -1,5 +1,7 @@
 package com.worldly.graph.types;
 
+import android.content.Context;
+
 import com.worldly.graph.Chart;
 import com.worldly.graph.data.GraphData;
 import com.worldly.graph.data.GraphDataColumn;
@@ -16,15 +18,15 @@ import com.worldly.graph.exception.GraphDataSizeMismatchException;
  */
 public class BarChart extends Chart
 {	
-	/**
-	 * Basic constructor which uses the fully prepared data (table)
+    /** Basic constructor which uses the fully prepared data (table)
 	 * to create the graph.
 	 * 
 	 * @param data Already formatted data for the graph.
+	 * @param context Context of the current Activity.
 	 */
-	public BarChart(GraphData data)
+	public BarChart(GraphData data, Context context) 
 	{
-		this.data = data;
+		super(data, context);
 	}
 	
 	/**
@@ -32,12 +34,13 @@ public class BarChart extends Chart
 	 * 
 	 * @param names Column of row names.
 	 * @param values Column of data to be included in the data table.
+	 * @param context Context of the current Activity.
 	 * @throws CannotBeNullException Thrown if some value in the column is NULL
 	 * or if the column itself is NULL.
 	 */
-	public BarChart(GraphDataColumn names, GraphDataColumn values) throws CannotBeNullException
+	public BarChart(GraphDataColumn names, GraphDataColumn values, Context context) throws CannotBeNullException
 	{
-		this.data = new GraphData(names, values);
+		super(names, values, context);
 	}
 	
 	/**
@@ -45,11 +48,12 @@ public class BarChart extends Chart
 	 * 
 	 * @param names Row with names.
 	 * @param values Row with values.
+	 * @param context Context of the current Activity.
 	 * @throws GraphDataSizeMismatchException If length of names and values does not match.
 	 */
-	public BarChart(GraphDataRow names, GraphDataRow values) throws GraphDataSizeMismatchException
+	public BarChart(GraphDataRow names, GraphDataRow values, Context context) throws GraphDataSizeMismatchException
 	{
-		this.data = new GraphData(names, values);
+		super(names, values, context);
 	}
 	
 	/* (non-Javadoc)
@@ -66,60 +70,20 @@ public class BarChart extends Chart
 	                + "      google.setOnLoadCallback(drawChart);"
 	                + "      function drawChart() {"
 	                + "        var data = google.visualization.arrayToDataTable("
-	                + 			data.toString()
-	                + ");"
+	                + 			getGraphData().toString()+");"
 	                + "        var options = {"
-	                + "          title: 'Performance',"
-	                + "          hAxis: {title: 'Year', titleTextStyle: {color: 'red'}}"
-	                + "        };"
+	                + "          title: '"+getChartTitle()+"',"
+	                + " 	     width: "+getChartWidth()+", height: "+getChartHeight()+","
+	                + "          hAxis: {title: '"+getHorizontalAxisTitle()+"'},"
+	                + "			 vAxis: {title: '"+getVerticalAxisTitle()+"'}};"
+	               // + "			 +"};"
 	                + "        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));"
-	                + "        chart.draw(data, options);"
-	                + "      }"
+	                + "        chart.draw(data, options);}"
 	                + "    </script>"
 	                + "  </head>"
 	                + "  <body>"
-	                + "    <div id=\"chart_div\" style=\"width: 500px; height: 300px;\"></div>"
+	                + "    <div id=\"chart_div\" style=\"width: "+getChartWidth()+"px; height: "+getChartHeight()+"px;\"></div>"
 	                + "  </body>"
 	                + "</html>";
-	}
-
-	/* (non-Javadoc)
-	 * @see com.worldly.graph.Chart#addColumn(com.worldly.graph.data.GraphDataColumn)
-	 */
-	@Override
-	public void addColumn(GraphDataColumn column) throws CannotBeNullException, GraphDataSizeMismatchException 
-	{
-		this.data.addColumn(column);
-		listener.onGraphDataChanged(this);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.worldly.graph.Chart#addRow(com.worldly.graph.data.GraphDataRow)
-	 */
-	@Override
-	public void addRow(GraphDataRow row) throws CannotBeNullException, GraphDataSizeMismatchException 
-	{
-		this.data.addRow(row);
-		listener.onGraphDataChanged(this);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.example.seg_graph.graph.Chart#removeRow(int)
-	 */
-	@Override
-	public void removeRow(int index) 
-	{
-		this.data.removeRow(index);
-		listener.onGraphDataChanged(this);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.example.seg_graph.graph.Chart#removeColumn(int)
-	 */
-	@Override
-	public void removeColumn(int index)
-	{
-		this.data.removeColumn(index);
-		listener.onGraphDataChanged(this);
 	}
 }
