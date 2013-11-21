@@ -51,7 +51,7 @@ public class ListOfIndicators {
 	
 	public static boolean addIndicator(String category, String code) {
 		try { 
-			String data = QuerySystem.getIndicatorData(code);
+			String data = QuerySystem.getIndicatorDescription(code);
 			loadedIndicators.add(new Indicator(category, new JSONArray(data)));
 			return true; 
 		}
@@ -83,7 +83,7 @@ public class ListOfIndicators {
 	public static ArrayList<Indicator> getAllLoadedIndicatorsFromCategory(String category) {
 		ArrayList<Indicator> returns = new ArrayList<Indicator>();
 		for (int i = 0; i < loadedIndicators.size(); i++) {
-			if (loadedIndicators.get(i).getCategory() == category) {
+			if (loadedIndicators.get(i).getCategory().equals(category)) {
 				returns.add(loadedIndicators.get(i));
 			}
 		}

@@ -15,11 +15,12 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.Toast;
 
 import com.example.worldly.R;
 import com.worldly.custom_adapter.CompareExpandableListAdapter;
-import com.worldly.graph.GraphTestActivity;
 import com.worldly.data_store.ListOfIndicators;
+import com.worldly.graph.GraphTestActivity;
 
 public class CompareCategoriesActivity extends Activity implements
 		OnChildClickListener, OnGroupExpandListener, OnGroupCollapseListener
@@ -81,17 +82,20 @@ public class CompareCategoriesActivity extends Activity implements
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id)
 	{
-		String msg = groups.get(groupPosition) + " : ";
-		msg += childs.get(groups.get(groupPosition)).get(childPosition);
+		String msg = ListOfIndicators.getAllLoadedIndicatorsFromCategory(groups.get(groupPosition)).get(0).getId();
 		displayMessage(msg);
+		
+		//String msg = groups.get(groupPosition) + " : ";
+		//msg += childs.get(groups.get(groupPosition)).get(childPosition);
+		//displayMessage(msg);
 		return true;
 	}
 
 	@Override
 	public void onGroupExpand(int groupPosition) {
-		String msg = groups.get(groupPosition) + " Expanded";
-		displayMessage(msg);
+		//String msg = groups.get(groupPosition) + " Expanded";
 		ListOfIndicators.loadIndicatorsForCategory(groups.get(groupPosition));
+
 	}
 
 	@Override
@@ -103,7 +107,7 @@ public class CompareCategoriesActivity extends Activity implements
 
 	private void displayMessage(String msg)
 	{
-		//Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 	}
 	
 	public void showGraph(View v)
