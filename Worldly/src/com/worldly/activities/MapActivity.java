@@ -76,8 +76,10 @@ public class MapActivity extends FragmentActivity {
 					Country aCountry = markerToCountry.get(marker);
 					if (selectedCountries.contains(aCountry)) {
 						selectedCountries.remove(aCountry);
+						Toast.makeText(self, aCountry+" removed!", Toast.LENGTH_SHORT).show();
 					} else {
 						selectedCountries.add(aCountry);
+						Toast.makeText(self, aCountry+" added!", Toast.LENGTH_SHORT).show();
 					}
 					arrayAdapter.notifyDataSetChanged();
 					marker.hideInfoWindow();

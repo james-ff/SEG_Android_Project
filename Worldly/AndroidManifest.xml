@@ -61,6 +61,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.worldly.activities.MapActivity" /> <!-- -->
         </activity>
+        <activity
+            android:name="com.worldly.graph.GraphTestActivity"
+            android:label="@string/title_activity_map" >
+        </activity>
     </application>
     
 </manifest>

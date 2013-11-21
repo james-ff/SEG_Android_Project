@@ -2,6 +2,10 @@
 <resources>
 
     <string name="app_name">Worldly</string>
+    <string name="strFamily">Moving with family</string>
+    <string name="strNewLife">Starting a new life</string>
+    <string name="strBusiness">Expanding business</string>
+    <string name="strCustom">Customise your Own</string>
     <string name="action_settings">Settings</string>
 
 	<!-- ActivityName -->

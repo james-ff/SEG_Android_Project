@@ -70,15 +70,15 @@ public class SelectionActivity extends Activity {
 		
 		// Detects which button the user has pressed
 		switch (v.getId()) {
-		case R.id.btnFamily:
+		case R.id.btnFamily : case R.id.lblFamily:
 			option = FAMILY;
 			appController.setCurrentMoveStatus(WorldlyController.FAMILY_MOVE);
 			break;
-		case R.id.btnNewLife:
+		case R.id.btnNewLife : case R.id.lblNewLife:
 			option = NEW_LIFE;
 			appController.setCurrentMoveStatus(WorldlyController.PERSONAL_MOVE);
 			break;
-		case R.id.btnBusiness:
+		case R.id.btnBusiness: case R.id.lblBusiness:
 			option = BUSINESS;
 			appController.setCurrentMoveStatus(WorldlyController.BUSINESS_MOVE);
 			break;

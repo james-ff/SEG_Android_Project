@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -16,7 +17,8 @@ import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.Toast;
 
 import com.example.worldly.R;
-import com.worldly.view.CategoriesListAdapter;
+import com.worldly.custom_adapter.CompareExpandableListAdapter;
+import com.worldly.graph.GraphTestActivity;
 
 public class CompareCategoriesActivity extends Activity implements
 		OnChildClickListener, OnGroupExpandListener, OnGroupCollapseListener
@@ -36,7 +38,7 @@ public class CompareCategoriesActivity extends Activity implements
 
 		// Initializing the ExpandableListView object
 		elvCategories = (ExpandableListView) findViewById(R.id.elvCategories);
-		elvCategories.setAdapter(new CategoriesListAdapter(this, groups, childs));
+		elvCategories.setAdapter(new CompareExpandableListAdapter(this, groups, childs));
 		elvCategories.setOnChildClickListener(this);
 		elvCategories.setOnGroupExpandListener(this);
 		elvCategories.setOnGroupCollapseListener(this);
@@ -116,9 +118,16 @@ public class CompareCategoriesActivity extends Activity implements
 		String msg = groups.get(groupPosition) + " Collapsed";
 		displayMessage(msg);
 	}
-	
+
 	private void displayMessage(String msg)
 	{
 		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+	}
+	
+	public void showGraph(View v)
+	{
+		Intent i = new Intent(CompareCategoriesActivity.this, GraphTestActivity.class);
+		startActivity(i);
+		onStop();
 	}
 }
