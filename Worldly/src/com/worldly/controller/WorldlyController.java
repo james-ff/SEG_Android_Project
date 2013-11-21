@@ -20,12 +20,12 @@ public class WorldlyController {
 
 	private static WorldlyController instance = null;
 	
-	public static final String PERSONAL_MOVE = "PERSONAL_MOVE_KEY";
-	public static final String FAMILY_MOVE = "FAMILY_MOVE_KEY";
-	public static final String BUSINESS_MOVE = "BUSINESS_MOVE_KEY";
-	public static final String CUSTOM_MOVE = "CUSTOM_MOVE_KEY";
+	/**
+	 * Constant representing the mode selected by the user.
+	 */
+	public static final int FAMILY_MOVE = 0, PERSONAL_MOVE = 1, BUSINESS_MOVE = 2, CUSTOM_MOVE = 3;
 	
-	private String currentMoveStatus;
+	private int currentMoveStatus;
 	private List<Country> currentSelectedCountries;
 	
 	protected WorldlyController() {
@@ -45,11 +45,11 @@ public class WorldlyController {
 	// TODO: Create method to store Controller state on file
 	// TODO: Create method to retrieve Controller state from file
 	
-	public String getCurrentMoveStatus() {
+	public int getCurrentMoveStatus() {
 		return currentMoveStatus;
 	}
 
-	public void setCurrentMoveStatus(String currentMoveStatus) {
+	public void setCurrentMoveStatus(int currentMoveStatus) {
 		this.currentMoveStatus = currentMoveStatus;
 	}
 

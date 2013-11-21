@@ -9,10 +9,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.worldly.data_models.Country;
-
 import android.os.Environment;
 import android.util.Log;
+
+import com.worldly.data_models.Country;
 
 /**
  * This class handles the caching of data to disk and also the procedure to read
@@ -21,23 +21,34 @@ import android.util.Log;
  * @author Annie the Eagle & Team
  * 
  */
-public class CachingEngine {
+public class CachingEngine
+{
+
+	/**
+	 * Global Constant representing the four move status.
+	 */
+	public static final String FAMILY_MOVE = "FAMILY_MOVE_KEY",
+			PERSONAL_MOVE = "PERSONAL_MOVE_KEY",
+			BUSINESS_MOVE = "BUSINESS_MOVE_KEY",
+			CUSTOM_MOVE = "CUSTOM_MOVE_KEY";
+
 	/**
 	 * Constant representing the directory where the data will be cached.
 	 */
-	private static final File WORKING_DIRECTORY = new File(Environment.getExternalStorageDirectory() + "/Worldly/");
+	private static final File WORKING_DIRECTORY = new File(
+			Environment.getExternalStorageDirectory() + "/Worldly/");
 
 	/**
-	 * Constant representing the name of the file where the data of all
-	 * countries will be saved to.
+	 * Constant representing the name of the file where the data will be saved
 	 */
-	private static final String COUNTRIES_FILENAME = "/countries.dat";
+	private static final String COUNTRIES_FILENAME = "/countries.dat",
+			MOVE_STATUS_FILENAME = "/movestatus.dat";
 
 	/**
 	 * Constant representing the separator used whilst writing to files.
 	 */
 	private static final String SEPARATOR = ", ", NEWLINE = "\n";
-	
+
 	public static HashMap<String, String> indicatorJSONResponses = new HashMap<String, String>();
 
 	/**
@@ -161,5 +172,91 @@ public class CachingEngine {
 			}
 		}
 		return new ArrayList<Country>();
+	}
+
+	/**
+	 * Static method which writes the current move status to a cache file in the
+	 * device's external storage.
+	 * 
+	 * @param MoveStatus
+	 *            : One of the four constants representing the move status.
+	 * @return TRUE if the operation has been successful, FALSE otherwise.
+	 */
+	public static boolean writeMoveStatusCache(String MoveStatus)
+	{
+		// Tries to save the data to a file in the device's external storage
+		try
+		{
+			// Creates the directory in which the file will be stored
+			WORKING_DIRECTORY.mkdirs();
+
+			// Creates the file and opens an OutputStream to begin writing to it
+			File cacheFile = new File(WORKING_DIRECTORY + MOVE_STATUS_FILENAME);
+			FileOutputStream os = new FileOutputStream(cacheFile);
+
+			// Writes the country's data to the file
+			os.write(MoveStatus.getBytes());
+
+			Log.d("CachingEngine", "Move status " + MoveStatus
+					+ " saved to file.");
+
+			// Flushes and closes the OutputStream object
+			os.flush();
+			os.close();
+
+			return true;
+		}
+		// If the system encountered a problem whilst creating the Working
+		// Directory or whilst writing the data to the file
+		catch (IOException ex)
+		{
+			Log.d("CachingEngine", "Not Writing to File");
+			ex.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * Static method which reads the move status from a file in the device's
+	 * external storage and returns it.
+	 * 
+	 * @return One of the four constants representing the move status.
+	 */
+	public static String getCachedMoveStatus()
+	{
+		// Creates and initialises a File object to store the countries data
+		File cacheFile = new File(WORKING_DIRECTORY + MOVE_STATUS_FILENAME);
+
+		if (cacheFile.exists())
+		{
+			// Tries to read the countries data from the cache file
+			try
+			{
+				// Prepares the objects to read the contents of cacheFile
+				FileInputStream is = new FileInputStream(cacheFile);
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(is));
+
+				String moveStatus = reader.readLine();
+
+				// Adds an entry to LogCat describing the current status
+				Log.i("CacheEngine", "Move status " + moveStatus
+						+ " read from file.");
+
+				// Closes the BufferedReader and InputStream objects
+				reader.close();
+				is.close();
+
+				return moveStatus;
+			}
+			// If the system encountered a problem whilst opening the cache file
+			// or whilst reading the file
+			catch (IOException ex)
+			{
+				Log.d("CachingEngine", "Unable to read data from cache.");
+				return null;
+			}
+		}
+		return null;
 	}
 }

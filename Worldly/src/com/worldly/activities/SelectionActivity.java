@@ -24,7 +24,7 @@ public class SelectionActivity extends Activity {
 	/**
 	 * Constant representing the mode selected by the user.
 	 */
-	public static final int FAMILY = 0, NEW_LIFE = 1, BUSINESS = 2, CUSTOM = 3;
+	public static final int FAMILY_MOVE = 0, PERSONAL_MOVE = 1, BUSINESS_MOVE = 2, CUSTOM_MOVE = 3;
 
 	/**
 	 * Constant representing the key used to store the selected mode in the
@@ -48,7 +48,7 @@ public class SelectionActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mainIndicators = new ListOfIndicators();		
+		mainIndicators = new ListOfIndicators();
 		setContentView(R.layout.activity_selection);
 	}
 	
@@ -92,15 +92,15 @@ public class SelectionActivity extends Activity {
 		// Detects which button the user has pressed
 		switch (v.getId()) {
 		case R.id.btnFamily : case R.id.lblFamily:
-			option = FAMILY;
+			option = FAMILY_MOVE;
 			appController.setCurrentMoveStatus(WorldlyController.FAMILY_MOVE);
 			break;
 		case R.id.btnNewLife : case R.id.lblNewLife:
-			option = NEW_LIFE;
+			option = PERSONAL_MOVE;
 			appController.setCurrentMoveStatus(WorldlyController.PERSONAL_MOVE);
 			break;
 		case R.id.btnBusiness: case R.id.lblBusiness:
-			option = BUSINESS;
+			option = BUSINESS_MOVE;
 			appController.setCurrentMoveStatus(WorldlyController.BUSINESS_MOVE);
 			break;
 		default:
