@@ -53,12 +53,16 @@ public class SelectionActivity extends Activity {
 	 * 
 	 */
 	public static ListOfIndicators mainIndicators;
+	
+	private String[] customCategories;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mainIndicators = new ListOfIndicators();
 		setContentView(R.layout.activity_selection);
+		
+		mainIndicators = new ListOfIndicators();
+		customCategories = ListOfIndicators.getCategoriesAsArray();
 	}
 	
 	@Override
@@ -94,65 +98,73 @@ public class SelectionActivity extends Activity {
 		SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
 
 		// Creates an editor object to update the shared preferences
-		SharedPreferences.Editor editor = sharedPref.edit();
+		final SharedPreferences.Editor editor = sharedPref.edit();
 
 		final WorldlyController appController = WorldlyController.getInstance();
 		
+		boolean isCustom = false;
+		
 		// Detects which button the user has pressed
 		switch (v.getId()) {
-		case R.id.btnFamily : case R.id.lblFamily:
-			option = FAMILY_MOVE;
-			appController.setCurrentMoveStatus(WorldlyController.FAMILY_MOVE, null);
-			break;
-		case R.id.btnNewLife : case R.id.lblNewLife:
-			option = PERSONAL_MOVE;
-			appController.setCurrentMoveStatus(WorldlyController.PERSONAL_MOVE, null);
-			break;
-		case R.id.btnBusiness: case R.id.lblBusiness:
-			option = BUSINESS_MOVE;
-			appController.setCurrentMoveStatus(WorldlyController.BUSINESS_MOVE, null);
-			break;
-		case R.id.btnCustom: case R.id.lblCustom:
-			
-			final List<String> selectedItems = new ArrayList<String>();
-			
-		    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		    builder.setTitle("Select categories of interest")
-		    		// TODO: Set actual selection
-		           .setMultiChoiceItems(new String[]{"One", "Two", "Three"}, null, new DialogInterface.OnMultiChoiceClickListener() {
-		               @Override
-		               public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-		                   if (isChecked) {
-		                       // If the user checked the item, add it to the selected items
-		                	   // TODO: Set actual selection
-		                       selectedItems.add("Selection");
-		                   } else if (selectedItems.contains(which)) {
-		                       // Else, if the item is already in the array, remove it 
-		                       selectedItems.remove(Integer.valueOf(which));
-		                   }
-		               }
-		           })
-		           .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
-		               @Override
-		               public void onClick(DialogInterface dialog, int id) {
-		            	   appController.setCurrentMoveStatus(WorldlyController.CUSTOM_MOVE, selectedItems);
-		               }
-		           })
-		           .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-		               @Override
-		               public void onClick(DialogInterface dialog, int id) {
-		            	   Toast.makeText(self, "Custom Search Cancelled", Toast.LENGTH_SHORT).show();
-		               }
-		           });
-		    builder.create();
-			break;
+			case R.id.btnFamily : case R.id.lblFamily:
+				option = FAMILY_MOVE;
+				appController.setCurrentMoveStatus(WorldlyController.FAMILY_MOVE, null);
+				break;
+			case R.id.btnNewLife : case R.id.lblNewLife:
+				option = PERSONAL_MOVE;
+				appController.setCurrentMoveStatus(WorldlyController.PERSONAL_MOVE, null);
+				break;
+			case R.id.btnBusiness: case R.id.lblBusiness:
+				option = BUSINESS_MOVE;
+				appController.setCurrentMoveStatus(WorldlyController.BUSINESS_MOVE, null);
+				break;
+			case R.id.btnCustom: case R.id.lblCustom:
+				isCustom = true;
+				option = CUSTOM_MOVE;
+				final List<String> selectedItems = new ArrayList<String>();
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle("Select categories of interest")
+		           	   .setMultiChoiceItems(customCategories, null, new DialogInterface.OnMultiChoiceClickListener() {
+		           		   @Override
+		           		   public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+		           			   if (isChecked) {
+		           				   // If the user checked the item, add it to the selected items
+		           				   selectedItems.add(customCategories[which]);
+		           			   } else if (selectedItems.contains(which)) {
+		           				   // Else, if the item is already in the array, remove it 
+		           				   selectedItems.remove(Integer.valueOf(which));
+		           			   }
+		           		   }
+		           	   })
+		           	   .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
+		           		   @Override
+		           		   public void onClick(DialogInterface dialog, int id) {
+		           			   appController.setCurrentMoveStatus(WorldlyController.CUSTOM_MOVE, selectedItems);
+		           			   // Saves the mode selected by the user onto the shared preferences file
+		           			   editor.putInt(MODE, CUSTOM_MOVE);
+		           			   editor.commit();
+		           			   
+		           			   // Creates a new Intent object for the transition to another activity
+		           			   startActivity(new Intent(self, MapActivity.class));
+		           		   }	
+		           	   })
+		           	   .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+		           		   @Override
+		           		   public void onClick(DialogInterface dialog, int id) {
+		           			   Toast.makeText(self, "Custom Search Cancelled", Toast.LENGTH_SHORT).show();
+		           		   }
+		           	   });
+				builder.create().show();
+				break;
 		}
+		
+		if (isCustom == false) {
+			// Saves the mode selected by the user onto the shared preferences file
+			editor.putInt(MODE, option);
+			editor.commit();
 
-		// Saves the mode selected by the user onto the shared preferences file
-		editor.putInt(MODE, option);
-		editor.commit();
-
-		// Creates a new Intent object for the transition to another activity
-		startActivity(new Intent(this, MapActivity.class));
+			// Creates a new Intent object for the transition to another activity
+			startActivity(new Intent(this, MapActivity.class));
+		}
 	} 
 }

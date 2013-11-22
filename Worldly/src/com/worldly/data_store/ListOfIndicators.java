@@ -48,7 +48,7 @@ public class ListOfIndicators {
 		droneStrikes.put(CATEGORY_RURAL_LIFE, new ArrayList<UnloadedIndicatorDescription>());
 		
 		// TODO: Remove
-		droneStrikes.put("Military", new ArrayList<UnloadedIndicatorDescription>());
+		//droneStrikes.put("Military", new ArrayList<UnloadedIndicatorDescription>());
 		
 		/* -- Indicators Setup -- Here we add the known codes of indicators we are interested in. -- */ 
 		ArrayList<UnloadedIndicatorDescription> reference = droneStrikes.get(CATEGORY_BUSINESS);
@@ -65,8 +65,8 @@ public class ListOfIndicators {
 		reference.add(new UnloadedIndicatorDescription("Net migration", "SM.POP.NETM"));
 		
 		// TODO: Remove
-		reference = droneStrikes.get("Military");
-		reference.add(new UnloadedIndicatorDescription("Military expenditure (% of GDP)", "MS.MIL.XPND.GD.ZS"));
+		//reference = droneStrikes.get("Military");
+		//reference.add(new UnloadedIndicatorDescription("Military expenditure (% of GDP)", "MS.MIL.XPND.GD.ZS"));
 	}
 	
 	public static boolean addIndicator(String category, String code) {
@@ -113,6 +113,14 @@ public class ListOfIndicators {
 	
 	public static ArrayList<String> getCategories() {
 		return new ArrayList<String>(droneStrikes.keySet());
+	}
+	
+	public static String[] getCategoriesAsArray() {
+		return new String[]{CATEGORY_BUSINESS, CATEGORY_CITY_LIFE, 
+							CATEGORY_CLIMATE, CATEGORY_DEMOGRAPHICS, 
+							CATEGORY_EDUCATION, CATEGORY_EMPLOYMENT_PROSPECTS,
+							CATEGORY_FINANCE, CATEGORY_QUALITY_OF_LIFE,
+							CATEGORY_RURAL_LIFE};
 	}
 	
 	public static ArrayList<String> getReadableNamesOfIndicatorsInCategory(String category) {
