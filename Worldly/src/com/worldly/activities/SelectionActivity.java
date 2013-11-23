@@ -26,14 +26,13 @@ import com.worldly.data_store.ListOfIndicators;
  * @author Rafael da Silva Costa & Team
  * 
  */
-public class SelectionActivity extends Activity {
-	
+public class SelectionActivity extends Activity
+{
+
+	private final WorldlyController appController = WorldlyController
+			.getInstance();
+	private String[] customCategories;
 	private Activity self = this;
-	
-	/**
-	 * Constant representing the mode selected by the user.
-	 */
-	public static final int FAMILY_MOVE = 0, PERSONAL_MOVE = 1, BUSINESS_MOVE = 2, CUSTOM_MOVE = 3;
 
 	/**
 	 * Constant representing the key used to store the selected mode in the
@@ -46,41 +45,42 @@ public class SelectionActivity extends Activity {
 	 * across this application's activities.
 	 */
 	public static final String PREFS_NAME = "GLOBAL_PREFS";
-	
+
 	/**
-	 * Constant across all activities, it holds all indicators that are loaded into
-	 * memory.
-	 * 
+	 * Constant across all activities, it holds all indicators that are loaded
+	 * into memory.
 	 */
 	public static ListOfIndicators mainIndicators;
-	
-	private String[] customCategories;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_selection);
-		
+
 		mainIndicators = new ListOfIndicators();
 		customCategories = ListOfIndicators.getCategoriesAsArray();
 	}
-	
+
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.selection, menu);
 		return true;
 	}
-	
+
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
-	    switch (item.getItemId()) {
-		    case R.id.action_about:            
-		        startActivity(new Intent(this, AboutActivity.class));
-		        break; 
-	    }
-	    return super.onOptionsItemSelected(item);
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		// Handle item selection
+		switch (item.getItemId())
+		{
+			case R.id.action_about:
+				startActivity(new Intent(this, AboutActivity.class));
+				break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	/**
@@ -91,80 +91,119 @@ public class SelectionActivity extends Activity {
 	 * @param v
 	 *            : The View object which the user interacted with.
 	 */
-	public void chooseMode(View v) {
+	public void chooseMode(View v)
+	{
 		int option = 0;
 
+		// Detects which button the user has pressed
+		switch (v.getId())
+		{
+			case R.id.ltvFamily:
+			case R.id.btnFamily:
+				option = WorldlyController.FAMILY_MOVE;
+				break;
+			case R.id.ltvNewLife:
+			case R.id.btnNewLife:
+				option = WorldlyController.PERSONAL_MOVE;
+				break;
+			case R.id.ltvBusiness:
+			case R.id.btnBusiness:
+				option = WorldlyController.BUSINESS_MOVE;
+				break;
+			case R.id.ltvCustom:
+			case R.id.btnCustom:
+				option = WorldlyController.CUSTOM_MOVE;
+				showIndicatorsDialog();
+				break;
+		}
+
+		// If the user has not selected the custom option
+		if (option != WorldlyController.CUSTOM_MOVE)
+		{
+			saveSharedPreferences(option);
+
+			// Updates the Worldly Controller status and starts map activity
+			appController.setCurrentMoveStatus(option, null);
+			startActivity(new Intent(this, MapActivity.class));
+		}
+	}
+
+	/**
+	 * Saves the selected move status to the shared preferences.
+	 * 
+	 * @param option
+	 *            : One of the four constants representing the move status.
+	 */
+	protected void saveSharedPreferences(int option)
+	{
 		// Creates and instantiates a shared preferences object
 		SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
 
 		// Creates an editor object to update the shared preferences
 		final SharedPreferences.Editor editor = sharedPref.edit();
 
-		final WorldlyController appController = WorldlyController.getInstance();
-		
-		boolean isCustom = false;
-		
-		// Detects which button the user has pressed
-		switch (v.getId()) {
-			case R.id.btnFamily : case R.id.lblFamily:
-				option = FAMILY_MOVE;
-				appController.setCurrentMoveStatus(WorldlyController.FAMILY_MOVE, null);
-				break;
-			case R.id.btnNewLife : case R.id.lblNewLife:
-				option = PERSONAL_MOVE;
-				appController.setCurrentMoveStatus(WorldlyController.PERSONAL_MOVE, null);
-				break;
-			case R.id.btnBusiness: case R.id.lblBusiness:
-				option = BUSINESS_MOVE;
-				appController.setCurrentMoveStatus(WorldlyController.BUSINESS_MOVE, null);
-				break;
-			case R.id.btnCustom: case R.id.lblCustom:
-				isCustom = true;
-				option = CUSTOM_MOVE;
-				final List<String> selectedItems = new ArrayList<String>();
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle("Select categories of interest")
-		           	   .setMultiChoiceItems(customCategories, null, new DialogInterface.OnMultiChoiceClickListener() {
-		           		   @Override
-		           		   public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-		           			   if (isChecked) {
-		           				   // If the user checked the item, add it to the selected items
-		           				   selectedItems.add(customCategories[which]);
-		           			   } else if (selectedItems.contains(which)) {
-		           				   // Else, if the item is already in the array, remove it 
-		           				   selectedItems.remove(Integer.valueOf(which));
-		           			   }
-		           		   }
-		           	   })
-		           	   .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
-		           		   @Override
-		           		   public void onClick(DialogInterface dialog, int id) {
-		           			   appController.setCurrentMoveStatus(WorldlyController.CUSTOM_MOVE, selectedItems);
-		           			   // Saves the mode selected by the user onto the shared preferences file
-		           			   editor.putInt(MODE, CUSTOM_MOVE);
-		           			   editor.commit();
-		           			   
-		           			   // Creates a new Intent object for the transition to another activity
-		           			   startActivity(new Intent(self, MapActivity.class));
-		           		   }	
-		           	   })
-		           	   .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-		           		   @Override
-		           		   public void onClick(DialogInterface dialog, int id) {
-		           			   Toast.makeText(self, "Custom Search Cancelled", Toast.LENGTH_SHORT).show();
-		           		   }
-		           	   });
-				builder.create().show();
-				break;
-		}
-		
-		if (isCustom == false) {
-			// Saves the mode selected by the user onto the shared preferences file
-			editor.putInt(MODE, option);
-			editor.commit();
+		// Saves the mode selected by the user onto the shared preferences file
+		editor.putInt(MODE, option);
+		editor.commit();
+	}
 
-			// Creates a new Intent object for the transition to another activity
-			startActivity(new Intent(this, MapActivity.class));
-		}
-	} 
+	/**
+	 * Displays a dialog for the user to select the custom indicators to be used
+	 * in the application lifecycle.
+	 */
+	private void showIndicatorsDialog()
+	{
+		final List<String> selectedItems = new ArrayList<String>();
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Select categories of interest")
+				.setMultiChoiceItems(customCategories, null,
+						new DialogInterface.OnMultiChoiceClickListener()
+						{
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which, boolean isChecked)
+							{
+								if (isChecked)
+								{
+									// If the user checked the item, add it to
+									// the selected items
+									selectedItems.add(customCategories[which]);
+								}
+								else if (selectedItems.contains(which))
+								{
+									// Else, if the item is already in the
+									// array, remove it
+									selectedItems.remove(Integer.valueOf(which));
+								}
+							}
+						})
+				.setPositiveButton(R.string.done,
+						new DialogInterface.OnClickListener()
+						{
+							@Override
+							public void onClick(DialogInterface dialog, int id)
+							{
+								// Saves the move status
+								appController.setCurrentMoveStatus(
+										WorldlyController.CUSTOM_MOVE,
+										selectedItems);
+								saveSharedPreferences(WorldlyController.CUSTOM_MOVE);
+
+								// Starts the map activity
+								startActivity(new Intent(self,
+										MapActivity.class));
+							}
+						})
+				.setNegativeButton(R.string.cancel,
+						new DialogInterface.OnClickListener()
+						{
+							@Override
+							public void onClick(DialogInterface dialog, int id)
+							{
+								Toast.makeText(self, "Custom Search Cancelled",
+										Toast.LENGTH_SHORT).show();
+							}
+						});
+		builder.create().show();
+	}
 }
