@@ -17,26 +17,25 @@
         android:orientation="horizontal" >
 
         <com.worldly.view.LogoTextView
-            android:id="@+id/btnFamily"
+            android:id="@+id/ltvFamily"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:onClick="chooseMode"
+            android:paddingRight="10dp"
             android:text="@string/strFamily"
             android:textColor="@color/logo_text_view"
             android:textSize="50sp"
             logo:logo_type="home" />
 
-        <TextView
-            android:id="@+id/lblFamily"
+        <Button
+            android:id="@+id/btnFamily"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:clickable="true"
+            android:background="@color/dark_gray"
             android:onClick="chooseMode"
-            android:paddingLeft="10dp"
             android:text="@string/strFamily"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -47,26 +46,25 @@
         android:orientation="horizontal" >
 
         <com.worldly.view.LogoTextView
-            android:id="@+id/btnNewLife"
+            android:id="@+id/ltvNewLife"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:onClick="chooseMode"
+            android:paddingRight="10dp"
             android:text="@string/strNewLife"
             android:textColor="@color/logo_text_view"
             android:textSize="50sp"
             logo:logo_type="road" />
 
-        <TextView
-            android:id="@+id/lblNewLife"
+        <Button
+            android:id="@+id/btnNewLife"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:clickable="true"
+            android:background="@color/dark_gray"
             android:onClick="chooseMode"
-            android:paddingLeft="10dp"
             android:text="@string/strNewLife"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -77,26 +75,25 @@
         android:orientation="horizontal" >
 
         <com.worldly.view.LogoTextView
-            android:id="@+id/btnBusiness"
+            android:id="@+id/ltvBusiness"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:onClick="chooseMode"
+            android:paddingRight="10dp"
             android:text="@string/strBusiness"
             android:textColor="@color/logo_text_view"
             android:textSize="50sp"
             logo:logo_type="briefcase" />
 
-        <TextView
-            android:id="@+id/lblBusiness"
+        <Button
+            android:id="@+id/btnBusiness"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:clickable="true"
+            android:background="@color/dark_gray"
             android:onClick="chooseMode"
-            android:paddingLeft="10dp"
             android:text="@string/strBusiness"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -107,26 +104,25 @@
         android:orientation="horizontal" >
 
         <com.worldly.view.LogoTextView
-            android:id="@+id/btnCustom"
+            android:id="@+id/ltvCustom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:onClick="chooseMode"
+            android:paddingRight="10dp"
             android:text="@string/strCustom"
             android:textColor="@color/logo_text_view"
             android:textSize="50sp"
             logo:logo_type="tags" />
 
-        <TextView
-            android:id="@+id/lblCustom"
+        <Button
+            android:id="@+id/btnCustom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:clickable="true"
+            android:background="@color/dark_gray"
             android:onClick="chooseMode"
-            android:paddingLeft="10dp"
             android:text="@string/strCustom"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold" />
     </LinearLayout>
 
