@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.json.JSONException;
 
@@ -46,7 +47,7 @@ public class MapActivity extends FragmentActivity {
 
 	private List<Country> availableCountries = new ArrayList<Country>();
 	private List<Country> selectedCountries = new ArrayList<Country>();
-	private HashMap<Marker, Country> markerToCountry;
+	private Map<Marker, Country> markerToCountry;
 
 	private EditText countrySearchField;
 	private Button goCompareButton;

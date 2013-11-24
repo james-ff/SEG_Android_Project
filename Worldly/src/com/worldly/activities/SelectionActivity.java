@@ -183,15 +183,22 @@ public class SelectionActivity extends Activity
 							@Override
 							public void onClick(DialogInterface dialog, int id)
 							{
-								// Saves the move status
-								appController.setCurrentMoveStatus(
-										WorldlyController.CUSTOM_MOVE,
-										selectedItems);
-								saveSharedPreferences(WorldlyController.CUSTOM_MOVE);
+								// If the user has made a selection
+								if (selectedItems.size() > 0)
+								{
+									// Saves the move status
+									appController.setCurrentMoveStatus(
+											WorldlyController.CUSTOM_MOVE,
+											selectedItems);
+									saveSharedPreferences(WorldlyController.CUSTOM_MOVE);
 
-								// Starts the map activity
-								startActivity(new Intent(self,
-										MapActivity.class));
+									// Starts the map activity
+									startActivity(new Intent(self,
+											MapActivity.class));
+								}
+								
+								Toast.makeText(self, "Please make a selection",
+										Toast.LENGTH_SHORT).show();
 							}
 						})
 				.setNegativeButton(R.string.cancel,

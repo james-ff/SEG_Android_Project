@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.worldly.R;
+import com.worldly.controller.WorldlyController;
 import com.worldly.custom_adapter.CompareExpandableListAdapter;
 import com.worldly.data_store.ListOfIndicators;
 import com.worldly.graph.Chart;
@@ -38,6 +39,7 @@ public class CompareCategoriesActivity extends Activity implements
 {
 	private Context context;
 	private List<String> groups;
+	private WorldlyController controller;
 	private Map<String, List<String>> childs;
 	
 	@Override
@@ -46,6 +48,8 @@ public class CompareCategoriesActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_compare_categories);
 		context = this;
+		controller = WorldlyController.getInstance();
+		
 		
 		//if in landscape
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
@@ -81,7 +85,7 @@ public class CompareCategoriesActivity extends Activity implements
 	 * Preparing the list data
 	 */
 	private void prepareListData() {
-		groups = ListOfIndicators.getCategories();
+		groups = controller.getCategories();
 		childs = new HashMap<String, List<String>>();
 
 		// Adding child data
@@ -200,7 +204,7 @@ public class CompareCategoriesActivity extends Activity implements
 		Spinner categories = (Spinner)findViewById(R.id.categoriesSelectSpinner);
 		categories.setAdapter(new com.worldly.custom_adapter.SpinnerAdapter(this, 
 				android.R.layout.simple_spinner_item, 
-				ListOfIndicators.getCategories()));
+				controller.getCategories()));
 		
 		try {
 			Chart chart = new BarChart(new GraphDataRow("countries", "Population", true), new GraphDataRow("Slovakia", 12346, false), this);
