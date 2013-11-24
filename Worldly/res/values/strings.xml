@@ -13,7 +13,7 @@
 	<!-- ActivityName -->
     <string name="strCustom">Custom Search</string>
     
-    <string name="search_hint">Search by Country or ISO</string>
+    <string name="search_hint">Search by Country or ISO</string> 
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
     
@@ -43,6 +43,8 @@
     <string name="title_activity_about">About Worldly</string>
     <string name="hello_world">Hello world!</string>
     <string name="usafdesc">USAF Logo</string>
+    
+    <string name="category">Category</string>
     
     <string-array name="subCategoriesBusiness">
         <item name="gdp">GDP</item>

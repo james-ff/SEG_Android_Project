@@ -234,7 +234,7 @@ public abstract class Chart
 		
 		//based on the orientation
 		if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-			return (int)((metrics.heightPixels/metrics.density)*0.75);
+			return (int)((metrics.heightPixels/metrics.density)*0.65);
 		else
 			return (int)(metrics.heightPixels/metrics.density/4);
 	}
