@@ -1,14 +1,15 @@
 package com.worldly.data_models;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.worldly.data_store.CachingEngine;
 import android.util.Log;
+
+import com.worldly.data_store.CachingEngine;
 import com.worldly.network.QuerySystem;
 
 /**
@@ -110,9 +111,9 @@ public class Country {
 	 * @throws JSONException
 	 *             If there was a problem whilst parsing queryData.
 	 */
-	public static ArrayList<Country> getAllCountries() throws JSONException {
+	public static List<Country> getAllCountries() throws JSONException {
 		// Fetching the data from the World Bank feed
-		ArrayList<Country> countries = CachingEngine.getCachedCountries();
+		List<Country> countries = CachingEngine.getCachedCountries();
 		//ArrayList<Country> countries = new ArrayList<Country>();
 		
 		if (countries.size() == 0) {

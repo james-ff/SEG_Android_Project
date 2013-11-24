@@ -44,7 +44,7 @@ public class MapActivity extends FragmentActivity {
 
 	private Activity self;
 
-	private ArrayList<Country> availableCountries = new ArrayList<Country>();
+	private List<Country> availableCountries = new ArrayList<Country>();
 	private List<Country> selectedCountries = new ArrayList<Country>();
 	private HashMap<Marker, Country> markerToCountry;
 
