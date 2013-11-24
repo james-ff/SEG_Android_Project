@@ -109,6 +109,7 @@ public class MapActivity extends FragmentActivity {
 					.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
 						@Override public void onClick(DialogInterface dialog, int which) {
 							dialog.dismiss();
+							countrySearchField.setText("");
 							Country aCountry = selectedCountries.get(which);
 							LatLng aMarker = new LatLng(aCountry.getLatitude(), aCountry.getLongitude());
 							map.moveCamera(CameraUpdateFactory.newLatLngZoom(aMarker, 4));

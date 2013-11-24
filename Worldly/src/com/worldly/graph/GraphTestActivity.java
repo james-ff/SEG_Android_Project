@@ -15,6 +15,7 @@ import com.worldly.graph.exception.CannotBeNullException;
 import com.worldly.graph.exception.GraphDataSizeMismatchException;
 import com.worldly.graph.types.BarChart;
 import com.worldly.graph.view.GraphView;
+import com.worldly.network.QuerySystem;
 
 public class GraphTestActivity extends Activity {
 
@@ -118,15 +119,19 @@ public class GraphTestActivity extends Activity {
 			
 		chart = new BarChart(data, this);
 		
-		Log.e("DEBUG", "title "+chart.getChartTitle());
-		Log.e("DEBUG", "vAxis "+chart.getVerticalAxisTitle());
-		Log.e("DEBUG", "hAxis "+chart.getHorizontalAxisTitle());
-		
 		chart.setChartTitle("Ahoj Marek");
 		chart.setVerticalAxisTitle("vertical");
 		chart.setHorizontalAxisTitle("horizontal");
 		
 		chartView.loadGraph(chart);
+		
+		Thread aThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Log.e("DEBUG", QuerySystem.getIndicatorData("SK", "NY.GDP.MKTP.KD.ZG"));
+			}
+		});
+		aThread.start();
 	}
 	
 	@Override
