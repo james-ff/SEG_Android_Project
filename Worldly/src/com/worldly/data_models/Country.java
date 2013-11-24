@@ -37,7 +37,7 @@ public class Country {
 	private String capitalCity;
 	private Double longitude;
 	private Double latitude;
-	private HashMap<Indicator, Object> countryValues = new HashMap<Indicator, Object>();
+	private HashMap<Indicator, IndicatorDataBlock> countryValues = new HashMap<Indicator, IndicatorDataBlock>();
 
 	/**
 	 * Constructs a new Country object with the specified JSON raw data.
@@ -265,11 +265,8 @@ public class Country {
 		this.latitude = latitude;
 	}
 	
-	public void addDataElement(Indicator regarding, Object value) { countryValues.put(regarding, value); }
-	public void editDataElement(Indicator regarding, Object newValue) { 
-		countryValues.remove(regarding); 
-		countryValues.put(regarding, newValue); 
-	}
-	public void deleteDataElement(Indicator regarding) { countryValues.remove(regarding); }
-	public Object getDataElement(Indicator regarding) { return countryValues.get(regarding); }
+	public void addDataElementByYear(Indicator regarding, int year, Object data) { countryValues.get(regarding).addDataByYear(year, data); }
+	public void editDataElementByYear(Indicator regarding, int year, Object newValue) { countryValues.get(regarding).modifyDataInYear(year, newValue); }
+	public void deleteDataElementByYear(Indicator regarding, int year) { countryValues.get(regarding).removeDataByYear(year); }
+	public Object getDataElementByYear(Indicator regarding, int year) { return countryValues.get(regarding).getDataByYear(year); }
 }

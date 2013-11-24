@@ -3,6 +3,11 @@ package com.worldly.activities;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +15,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +29,8 @@ import android.widget.Toast;
 import com.example.worldly.R;
 import com.worldly.controller.WorldlyController;
 import com.worldly.custom_adapter.CompareExpandableListAdapter;
+import com.worldly.data_models.Indicator;
+import com.worldly.data_models.IndicatorDataBlock;
 import com.worldly.data_store.ListOfIndicators;
 import com.worldly.graph.Chart;
 import com.worldly.graph.GraphTestActivity;
@@ -31,6 +39,7 @@ import com.worldly.graph.exception.CannotBeNullException;
 import com.worldly.graph.exception.GraphDataSizeMismatchException;
 import com.worldly.graph.types.BarChart;
 import com.worldly.graph.view.GraphView;
+import com.worldly.network.QuerySystem;
 import com.worldly.swipe.SwipeDetector;
 import com.worldly.swipe.SwipeListener;
 
@@ -96,11 +105,43 @@ public class CompareCategoriesActivity extends Activity implements
 
 
 	@Override
-	public boolean onChildClick(ExpandableListView parent, View v,
-			int groupPosition, int childPosition, long id)
-	{
-		String msg = ListOfIndicators.getAllLoadedIndicatorsFromCategory(groups.get(groupPosition)).get(0).getId();
+	public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+		final Indicator i = ListOfIndicators.getAllLoadedIndicatorsFromCategory(groups.get(groupPosition)).get(childPosition);
+		String msg = i.getId();
+		
+		// How to build an Indicator Data Block
+		final CountDownLatch latch = new CountDownLatch(1);
+		new Thread(new Runnable() {
+			@Override
+			public void run(){
+				try {
+					JSONArray res = new JSONArray(QuerySystem.getIndicatorData("DE", i.getId())).getJSONArray(1);
+					Log.i("ARR", "Array is length " + res.length());
+					IndicatorDataBlock idb = new IndicatorDataBlock(i);
+					for (int a = 0; a < res.length(); a++) {
+						JSONObject o = res.getJSONObject(a);
+						idb.addDataByYear(o.getInt("date"), o.get("value"));
+					}
+					latch.countDown();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					latch.countDown();
+				}
+				
+			}
+		}).start();
+		
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// -- Link with a country and then use getDataByYear to build graphs
 		displayMessage(msg);
+		
+		
 		
 		//String msg = groups.get(groupPosition) + " : ";
 		//msg += childs.get(groups.get(groupPosition)).get(childPosition);

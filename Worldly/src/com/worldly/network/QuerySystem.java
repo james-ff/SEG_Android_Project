@@ -19,9 +19,8 @@ public class QuerySystem {
 		return JSONCore.readData(url);
 	}
 	
-	public static String getIndicatorData(String countryCode, String indicatorCode)
-	{
-		String url = GET_ALL_COUNTRIES_URL+"/"+countryCode+"/indicators/"+indicatorCode+"?per_page=100&date=2000:2013&format=json";
+	public static String getIndicatorData(String countryCode, String indicatorCode) {
+		String url = GET_ALL_COUNTRIES_URL + "/" + countryCode + "/indicators/" + indicatorCode + "?per_page=100&date=2000:2013&format=json";
 		return JSONCore.readData(url);
 	}
 	
