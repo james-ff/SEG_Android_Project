@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+import com.worldly.controller.WorldlyController;
 import com.worldly.data_models.Country;
 import com.worldly.data_models.Indicator;
 import com.worldly.data_models.IndicatorDataBlock;
@@ -37,20 +38,41 @@ public class GraphDataFactory
 		}catch(GraphDataSizeMismatchException e){e.printStackTrace(); return null;}
 	}
 	
-	public static void createDataFromCountry(Country country)
+	public static GraphData createDataFromCountry()
 	{	
-		ListOfIndicators.loadIndicatorsForCategory(ListOfIndicators.CATEGORY_CLIMATE);
-		List<Indicator> list = ListOfIndicators.getAllLoadedIndicatorsFromCategory(ListOfIndicators.CATEGORY_CLIMATE);
+		String category = ListOfIndicators.CATEGORY_CLIMATE;
 		
-		for (int i = 0; i < list.size(); i++)
+		if (ListOfIndicators.getNumberOfLoadedIndicatorsFromCategory(category) == 0)
+			loadIndicatorsForCategory(category);
+		
+		List<Indicator> list = ListOfIndicators.getAllLoadedIndicatorsFromCategory(category);
+		
+		List<GraphDataRow> rows = new LinkedList<GraphDataRow>();
+		
+		//create first row
+		GraphDataRow names = new GraphDataRow("country", list.get(0).getName(), true);
+		for (int i = 1; i < list.size(); i++)
+			names.addRowData(list.get(i).getName());		
+		rows.add(names);
+		
+		//create other rows
+		for (Country country : WorldlyController.getInstance().getCurrentSelectedCountries())
 		{
-			Log.e("DEBUG", ""+list.get(i));
-			Log.e("DEBUG", ""+country);
-			IndicatorDataBlock idb = new IndicatorDataBlock(list.get(i));
-			loadIndicatorDataBlock(idb, country);
-			country.addDataElement(list.get(i), idb);
-			Log.e("DEBUG", ""+country.getDataElementByYear(list.get(i), 2000));
+			List<Object> temp = new LinkedList<Object>();
+			temp.add(country.getName());
+			for (int i = 0; i < list.size(); i++)
+			{
+				IndicatorDataBlock idb = new IndicatorDataBlock(list.get(i));
+				loadIndicatorDataBlock(idb, country);
+				country.addDataElement(list.get(i), idb);
+				temp.add(getLastValidData(country, list.get(i)));
+			}
+			rows.add(new GraphDataRow(temp, false));
 		}
+		
+		try {
+			return new GraphData(rows);
+		} catch (GraphDataSizeMismatchException e) {e.printStackTrace(); return null;}
 	}
 	
 	private static void loadIndicatorDataBlock(final IndicatorDataBlock idb, final Country country)
@@ -79,5 +101,43 @@ public class GraphDataFactory
 			latch.await();
 		} catch (InterruptedException e) {e.printStackTrace();}
 	}
+	
+	private static void loadIndicatorsForCategory(final String category)
+	{
+		final CountDownLatch latch = new CountDownLatch(1);
+		Thread t = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				ListOfIndicators.loadIndicatorsForCategory(category);	
+				latch.countDown();
+			}
+		});
+		t.start();
+		
+		try {
+			latch.await();
+		} catch (InterruptedException e) {e.printStackTrace();}
+	}
 
+	private static Object getLastValidData(Country country, Indicator in)
+	{
+		int year = MAX_YEAR;
+		while (country.getDataElementByYear(in, year).toString().equals("null") && year >= MIN_YEAR)
+			year--;
+		
+		if (year < MIN_YEAR)
+			return 0;
+		
+		return country.getDataElementByYear(in, year);
+			
+	}
+	
+	public static GraphData removeIndicator(GraphData data, Indicator indicator)
+	{
+		Log.e("DEBUG", "index = "+data.getIndexOfColumnByName(indicator.getName()));
+		data.removeColumn(data.getIndexOfColumnByName(indicator.getName()));
+		Log.e("DEBUG", data.getData());
+		return data;
+	}
 }

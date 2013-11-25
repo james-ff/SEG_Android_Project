@@ -89,13 +89,14 @@ public class ListOfIndicators {
 			return false;
 		}
 		else {
-			Thread aThread = new Thread(new Runnable() {
-				@Override
-				public void run() {
+			
+				//Thread aThread = new Thread(new Runnable() {
+				//@Override
+				//public void run() { 
 					for (int i = 0; i < codes.size(); i++) { addIndicator(category, codes.get(i).getCode()); }
-				}
-			});
-			aThread.start();
+				//}
+			//});
+			//aThread.start();
 			return true;
 		}
 	}
@@ -109,6 +110,15 @@ public class ListOfIndicators {
 		}
 		if (returns.size() == 0) { Log.w("IndicatorGrab", "Found no indicators with category: " + category); }
 		return returns;
+	}
+	
+	public static int getNumberOfLoadedIndicatorsFromCategory(String category)
+	{
+		int count = 0;
+		for (int i = 0; i < loadedIndicators.size(); i++)
+			if (loadedIndicators.get(i).getCategory().equals(category))
+				count++;
+		return count;
 	}
 	
 	public static ArrayList<String> getCategories() {

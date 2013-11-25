@@ -192,7 +192,10 @@ public class GraphData implements Serializable
 	 */
 	public void removeRow(int index)
 	{
-		if (index > 1 && index < getNumberOfRows())
+		if (getNumberOfRows() == 2 && index <= 1)
+			return;
+		
+		if (index >= 1 && index < getNumberOfRows())
 			data.remove(index);
 	}
 	
@@ -206,8 +209,26 @@ public class GraphData implements Serializable
 	 */
 	public void removeColumn(int index)
 	{
-		if (index > 1 && index < getNumberOfColumns())
+		if (getNumberOfColumns() == 2 && index <= 1)
+			return;
+				
+		if (index >= 1 && index < getNumberOfColumns())
 			for (int i = 0; i < data.size(); i++)
 				data.get(i).removeRowData(index);
+	}
+	
+	/**
+	 * Returns index of column with the name equal to <i>name</i>.
+	 * 
+	 * @param name Name of the column.
+	 * @return Index of the column or -1 if nothing found.
+	 */
+	public int getIndexOfColumnByName(String name)
+	{
+		List<Object> names = data.get(0).getData();
+		for (int i = 0; i < names.size(); i++)
+			if (names.get(i).equals(name))
+				return i;
+		return -1;
 	}
 }

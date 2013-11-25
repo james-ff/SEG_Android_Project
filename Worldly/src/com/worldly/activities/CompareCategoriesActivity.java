@@ -19,6 +19,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
@@ -34,13 +36,10 @@ import com.worldly.data_models.Country;
 import com.worldly.data_models.Indicator;
 import com.worldly.data_models.IndicatorDataBlock;
 import com.worldly.data_store.ListOfIndicators;
-import com.worldly.graph.Chart;
 import com.worldly.graph.GraphTestActivity;
 import com.worldly.graph.data.GraphData;
 import com.worldly.graph.data.GraphDataFactory;
-import com.worldly.graph.data.GraphDataRow;
 import com.worldly.graph.exception.CannotBeNullException;
-import com.worldly.graph.exception.GraphDataSizeMismatchException;
 import com.worldly.graph.types.BarChart;
 import com.worldly.graph.view.GraphView;
 import com.worldly.network.QuerySystem;
@@ -69,10 +68,7 @@ public class CompareCategoriesActivity extends Activity implements
 			
 		//if in landscape
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-		{
 			setupLandscape();
-			//GraphDataFactory.createDataFromCountry(currentCountry);
-		}
 		else
 		{
 			prepareListData();
@@ -142,7 +138,8 @@ public class CompareCategoriesActivity extends Activity implements
 	@Override
 	public void onGroupExpand(int groupPosition) {
 		//String msg = groups.get(groupPosition) + " Expanded";
-		ListOfIndicators.loadIndicatorsForCategory(groups.get(groupPosition));
+		if (ListOfIndicators.getNumberOfLoadedIndicatorsFromCategory(groups.get(groupPosition)) == 0)
+			ListOfIndicators.loadIndicatorsForCategory(groups.get(groupPosition));
 
 	}
 
@@ -227,6 +224,9 @@ public class CompareCategoriesActivity extends Activity implements
 //		return this.categoriesRuralLife;
 //	}
 	
+	
+	GraphData data = null;
+	GraphView graph = null;
 	/**
 	 * Loads the screen in landscape.
 	 */
@@ -237,14 +237,23 @@ public class CompareCategoriesActivity extends Activity implements
 				android.R.layout.simple_spinner_item, 
 				controller.getCategories()));
 		
-		try {
-			Chart chart = new BarChart(new GraphDataRow("countries", "Population", true), new GraphDataRow("Slovakia", 12346, false), this);
-			GraphView graph = (GraphView)findViewById(R.id.landscapeGraphView);
-			graph.loadGraph(chart);
-		} catch (CannotBeNullException e) {e.printStackTrace();} 
-		catch (GraphDataSizeMismatchException e) {e.printStackTrace();}
 		
-		GraphDataFactory.createDataFromCountry(currentCountry);
+		try {
+			graph = (GraphView)findViewById(R.id.landscapeGraphView);
+			data = GraphDataFactory.createDataFromCountry();
+			graph.loadGraph(new BarChart(data, context));
+		} catch (CannotBeNullException e) {e.printStackTrace();}
+		
+		Button remove = (Button)findViewById(R.id.remove);
+		remove.setOnClickListener(new OnClickListener() 
+		{
+			@Override
+			public void onClick(View v) {
+				Log.e("DEBUG", ListOfIndicators.getAllLoadedIndicatorsFromCategory(ListOfIndicators.CATEGORY_CLIMATE).get(0).toString());
+				data = GraphDataFactory.removeIndicator(data, ListOfIndicators.getAllLoadedIndicatorsFromCategory(ListOfIndicators.CATEGORY_CLIMATE).get(0));
+				graph.loadGraph(new BarChart(data, context));
+			}
+		});
 	}
 	
 	/**
