@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.Spinner;
@@ -29,11 +30,14 @@ import android.widget.Toast;
 import com.example.worldly.R;
 import com.worldly.controller.WorldlyController;
 import com.worldly.custom_adapter.CompareExpandableListAdapter;
+import com.worldly.data_models.Country;
 import com.worldly.data_models.Indicator;
 import com.worldly.data_models.IndicatorDataBlock;
 import com.worldly.data_store.ListOfIndicators;
 import com.worldly.graph.Chart;
 import com.worldly.graph.GraphTestActivity;
+import com.worldly.graph.data.GraphData;
+import com.worldly.graph.data.GraphDataFactory;
 import com.worldly.graph.data.GraphDataRow;
 import com.worldly.graph.exception.CannotBeNullException;
 import com.worldly.graph.exception.GraphDataSizeMismatchException;
@@ -44,12 +48,15 @@ import com.worldly.swipe.SwipeDetector;
 import com.worldly.swipe.SwipeListener;
 
 public class CompareCategoriesActivity extends Activity implements
-		OnChildClickListener, OnGroupExpandListener, OnGroupCollapseListener
+		OnChildClickListener, OnGroupExpandListener, OnGroupCollapseListener, OnGroupClickListener
 {
 	private Context context;
 	private List<String> groups;
 	private WorldlyController controller;
 	private Map<String, List<String>> childs;
+	private Country currentCountry;
+	private ExpandableListView elvCategories;
+	private CompareExpandableListAdapter adapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -58,11 +65,14 @@ public class CompareCategoriesActivity extends Activity implements
 		setContentView(R.layout.activity_compare_categories);
 		context = this;
 		controller = WorldlyController.getInstance();
-		
-		
+		currentCountry = controller.getCurrentSelectedCountries().get(0);
+			
 		//if in landscape
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+		{
 			setupLandscape();
+			//GraphDataFactory.createDataFromCountry(currentCountry);
+		}
 		else
 		{
 			prepareListData();
@@ -90,7 +100,7 @@ public class CompareCategoriesActivity extends Activity implements
 		return super.onOptionsItemSelected(item);
 	}
 
-	/*
+	/**
 	 * Preparing the list data
 	 */
 	private void prepareListData() {
@@ -105,50 +115,30 @@ public class CompareCategoriesActivity extends Activity implements
 
 
 	@Override
-	public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-		final Indicator i = ListOfIndicators.getAllLoadedIndicatorsFromCategory(groups.get(groupPosition)).get(childPosition);
-		String msg = i.getId();
+	public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) 
+	{
+		Log.e("DEBUG", "click");
+		Indicator i = ListOfIndicators.getAllLoadedIndicatorsFromCategory(groups.get(groupPosition)).get(childPosition);
 		
-		// How to build an Indicator Data Block
-		final CountDownLatch latch = new CountDownLatch(1);
-		new Thread(new Runnable() {
-			@Override
-			public void run(){
-				try {
-					JSONArray res = new JSONArray(QuerySystem.getIndicatorData("DE", i.getId())).getJSONArray(1);
-					Log.i("ARR", "Array is length " + res.length());
-					IndicatorDataBlock idb = new IndicatorDataBlock(i);
-					for (int a = 0; a < res.length(); a++) {
-						JSONObject o = res.getJSONObject(a);
-						idb.addDataByYear(o.getInt("date"), o.get("value"));
-					}
-					latch.countDown();
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					latch.countDown();
-				}
-				
-			}
-		}).start();
+		IndicatorDataBlock idb = new IndicatorDataBlock(i);
 		
-		try {
-			latch.await();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// -- Link with a country and then use getDataByYear to build graphs
-		displayMessage(msg);
+		loadIndicatorDataBlock(idb);
 		
+		GraphData data = GraphDataFactory.createDataFromIndicator(idb);
 		
+		Log.e("DEBUG", data.getData().toString());
 		
-		//String msg = groups.get(groupPosition) + " : ";
-		//msg += childs.get(groups.get(groupPosition)).get(childPosition);
-		//displayMessage(msg);
+		adapter.addGraphData(adapter.getChildId(groupPosition, childPosition), data);	
+
 		return true;
 	}
 
+	@Override
+	public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) 
+	{
+		return false;
+	}
+	
 	@Override
 	public void onGroupExpand(int groupPosition) {
 		//String msg = groups.get(groupPosition) + " Expanded";
@@ -158,7 +148,7 @@ public class CompareCategoriesActivity extends Activity implements
 
 	@Override
 	public void onGroupCollapse(int groupPosition)
-	{
+	{			
 		String msg = groups.get(groupPosition) + " Collapsed";
 		displayMessage(msg);
 	}
@@ -254,7 +244,7 @@ public class CompareCategoriesActivity extends Activity implements
 		} catch (CannotBeNullException e) {e.printStackTrace();} 
 		catch (GraphDataSizeMismatchException e) {e.printStackTrace();}
 		
-		
+		GraphDataFactory.createDataFromCountry(currentCountry);
 	}
 	
 	/**
@@ -263,8 +253,9 @@ public class CompareCategoriesActivity extends Activity implements
 	private void initializeELV()
 	{
 		// Initializing the ExpandableListView object
-		ExpandableListView elvCategories = (ExpandableListView) findViewById(R.id.elvCategories);
-		elvCategories.setAdapter(new CompareExpandableListAdapter(this, groups, childs));
+		elvCategories = (ExpandableListView) findViewById(R.id.elvCategories);
+		adapter = new CompareExpandableListAdapter(this, groups, childs);
+		elvCategories.setAdapter(adapter);
 		elvCategories.setOnChildClickListener(this);
 		elvCategories.setOnGroupExpandListener(this);
 		elvCategories.setOnGroupCollapseListener(this);
@@ -296,5 +287,32 @@ public class CompareCategoriesActivity extends Activity implements
 				return false;
 			}
 		}));
+	}
+	
+	private void loadIndicatorDataBlock(final IndicatorDataBlock idb)
+	{
+		final CountDownLatch latch = new CountDownLatch(1);
+		new Thread(new Runnable() {
+			@Override
+			public void run(){
+				try {
+					JSONArray res = new JSONArray(QuerySystem.getIndicatorData(currentCountry.getIso2Code(), 
+																			   idb.getIndicatorReferenced().getId())).getJSONArray(1);
+					for (int a = 0; a < res.length(); a++) {
+						JSONObject o = res.getJSONObject(a);
+						idb.addDataByYear(o.getInt("date"), o.get("value"));
+					}
+					latch.countDown();
+				} catch (JSONException e) {
+					e.printStackTrace();
+					latch.countDown();
+				}
+				
+			}
+		}).start();
+		
+		try {
+			latch.await();
+		} catch (InterruptedException e) {e.printStackTrace();}
 	}
 }
