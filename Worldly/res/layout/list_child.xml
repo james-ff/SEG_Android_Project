@@ -13,5 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+    
+    <com.worldly.graph.view.GraphView 
+        android:id="@+id/graphListChild"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="?android:attr/expandableListPreferredChildIndicatorLeft"/>
 
 </LinearLayout>

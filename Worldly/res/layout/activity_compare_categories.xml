@@ -11,14 +11,8 @@
 
     <ExpandableListView
         android:id="@+id/elvCategories"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
     </ExpandableListView>
-    
-    <Button 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Graph"
-        android:onClick="showGraph"/>
 
 </LinearLayout>

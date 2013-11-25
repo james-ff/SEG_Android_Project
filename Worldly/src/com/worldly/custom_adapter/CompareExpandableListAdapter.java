@@ -1,5 +1,6 @@
 package com.worldly.custom_adapter;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,9 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.example.worldly.R;
+import com.worldly.graph.data.GraphData;
+import com.worldly.graph.types.BarChart;
+import com.worldly.graph.view.GraphView;
 
 /**
  * This class represents the adapter used by the ExpandableList in the
@@ -25,6 +29,7 @@ public class CompareExpandableListAdapter extends BaseExpandableListAdapter
 	private Context context;
 	private List<String> groups;
 	private Map<String, List<String>> childs;
+	private Map<Long, GraphData> childData;
 
 	/**
 	 * Constructs the Adapter object with the specified data.
@@ -36,13 +41,13 @@ public class CompareExpandableListAdapter extends BaseExpandableListAdapter
 	 * @param childs
 	 *            : The child elements of the expandable list.
 	 */
-	public CompareExpandableListAdapter(Context context, List<String> groups,
-			Map<String, List<String>> childs)
+	public CompareExpandableListAdapter(Context context, List<String> groups, Map<String, List<String>> childs)
 	{
 		super();
 		this.context = context;
 		this.groups = groups;
 		this.childs = childs;
+		this.childData = new HashMap<Long, GraphData>();
 	}
 
 	@Override
@@ -54,12 +59,11 @@ public class CompareExpandableListAdapter extends BaseExpandableListAdapter
 	@Override
 	public long getChildId(int groupPosition, int childPosition)
 	{
-		return childPosition;
+		return groupPosition*100+childPosition;
 	}
 
 	@Override
-	public View getChildView(int groupPosition, int childPosition,
-			boolean isLastChild, View convertView, ViewGroup parent)
+	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
 	{
 		String childTitle = getChild(groupPosition, childPosition).toString();
 
@@ -76,8 +80,15 @@ public class CompareExpandableListAdapter extends BaseExpandableListAdapter
 		TextView tvListChild = (TextView) convertView.findViewById(R.id.tvListChild);
 		tvListChild.setText(childTitle);
 		
+		GraphView graph = (GraphView) convertView.findViewById(R.id.graphListChild);
+		if (childData.get(getChildId(groupPosition, childPosition)) != null)
+		{
+			graph.loadGraph(new BarChart(childData.get(getChildId(groupPosition, childPosition)), context));
+			graph.setVisibility(View.VISIBLE);
+		}
+		else
+			graph.setVisibility(View.GONE);
 		
-
 		return convertView;
 	}
 
@@ -124,7 +135,7 @@ public class CompareExpandableListAdapter extends BaseExpandableListAdapter
 		TextView tvGroup = (TextView) convertView.findViewById(R.id.tvGroup);
 		tvGroup.setTypeface(null, Typeface.BOLD);
 		tvGroup.setText(groupTitle);
-
+		
 		return convertView;
 	}
 
@@ -138,5 +149,11 @@ public class CompareExpandableListAdapter extends BaseExpandableListAdapter
 	public boolean isChildSelectable(int groupPosition, int childPosition)
 	{
 		return true;
+	}
+	
+	public void addGraphData(Long childrenPosition, GraphData data)
+	{
+		this.childData.put(childrenPosition, data);
+		notifyDataSetChanged();
 	}
 }
