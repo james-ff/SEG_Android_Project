@@ -8,6 +8,8 @@
 	        <enum name="briefcase" value="1" />  
 	        <enum name="road" value="2" />
 	        <enum name="tags" value="3" />
+	        <enum name="arrow_left" value="4" />
+	        <enum name="arrow_right" value="5" />
 	    </attr>
     </declare-styleable>
 </resources>
