@@ -53,11 +53,11 @@ public class CompareCategoriesActivity extends Activity implements
 		OnChildClickListener, OnGroupExpandListener, OnGroupCollapseListener, OnGroupClickListener {
 	
 	private List<String> groups;
-	private WorldlyController appController;
-	private Map<String, List<String>> childs;
 	private Country currentCountry;
+	private Map<String, List<String>> childs;
 	private ExpandableListView elvCategories;
 	private CompareExpandableListAdapter adapter;
+	private WorldlyController appController = WorldlyController.getInstance();
 	
 	private LogoTextView prevButton;
 	private LogoTextView nextButton;
@@ -69,7 +69,7 @@ public class CompareCategoriesActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_compare_categories);
 
-		appController = WorldlyController.getInstance();
+		
 		appController.setCurrentlySelectedCountryIndex(0);
 		currentCountry = appController.getCurrentlySelectedCountry();
 
@@ -105,13 +105,12 @@ public class CompareCategoriesActivity extends Activity implements
 			updateUIAfterSelection();
 		}
 	}
-
+	
 	@Override
 	protected void onPause()
 	{
 		super.onPause();
 		appController.saveState();
-		Log.e(getClass().getName(), "Resuming.... " + appController.toString());
 	}
 
 	@Override
@@ -119,7 +118,6 @@ public class CompareCategoriesActivity extends Activity implements
 	{
 		super.onResume();
 		appController = WorldlyController.getInstance();
-		Log.e(getClass().getName(), "Pausing.... " + appController.toString());
 	}
 	
 	@Override

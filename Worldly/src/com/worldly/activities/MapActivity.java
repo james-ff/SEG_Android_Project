@@ -237,7 +237,6 @@ public class MapActivity extends FragmentActivity {
 	{
 		super.onPause();
 		appController.saveState();
-		Log.e(getClass().getName(), "Pausing.... " + appController.toString());
 	}
 
 	@Override
@@ -245,7 +244,6 @@ public class MapActivity extends FragmentActivity {
 	{
 		super.onResume();
 		appController = WorldlyController.getInstance();
-		Log.i(getClass().getName(), "Resuming.... " + appController.toString());
 	}
 	
 	public boolean hasGLES20() {
