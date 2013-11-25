@@ -10,7 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -19,12 +18,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.worldly.R;
@@ -46,11 +47,11 @@ import com.worldly.graph.view.GraphView;
 import com.worldly.network.QuerySystem;
 import com.worldly.swipe.SwipeDetector;
 import com.worldly.swipe.SwipeListener;
+import com.worldly.view.LogoTextView;
 
 public class CompareCategoriesActivity extends Activity implements
-		OnChildClickListener, OnGroupExpandListener, OnGroupCollapseListener, OnGroupClickListener
-{
-	private Context context;
+		OnChildClickListener, OnGroupExpandListener, OnGroupCollapseListener, OnGroupClickListener {
+	
 	private List<String> groups;
 	private WorldlyController appController;
 	private Map<String, List<String>> childs;
@@ -58,13 +59,21 @@ public class CompareCategoriesActivity extends Activity implements
 	private ExpandableListView elvCategories;
 	private CompareExpandableListAdapter adapter;
 	
+	private LogoTextView prevButton;
+	private LogoTextView nextButton;
+	private TextView countryTitleView;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_compare_categories);
-		context = this;
-		currentCountry = appController.getCurrentSelectedCountries().get(0);
+
+		appController = WorldlyController.getInstance();
+		appController.setCurrentlySelectedCountryIndex(0);
+		currentCountry = appController.getCurrentlySelectedCountry();
+
+		elvCategories = (ExpandableListView) findViewById(R.id.elvCategories);
 			
 		//if in landscape
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
@@ -74,8 +83,26 @@ public class CompareCategoriesActivity extends Activity implements
 		}
 		else
 		{
+			prevButton = (LogoTextView) findViewById(R.id.ltvPrevCountry);
+			nextButton = (LogoTextView) findViewById(R.id.ltvNextCountry);
+			countryTitleView = (TextView) findViewById(R.id.country_title_view);
+			
+			nextButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					selectNextCountry();
+				}
+			});
+			
+			prevButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					selectPreviousCountry();
+				}
+			});
+			
 			prepareListData();
-			initializeELV(); //ELV = Expandable List View
+			updateUIAfterSelection();
 		}
 	}
 
@@ -132,16 +159,16 @@ public class CompareCategoriesActivity extends Activity implements
 	@Override
 	public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) 
 	{
-		Log.e("DEBUG", "click");
+		Log.e(getClass().getName(), "Child View Clicked");
+		
 		Indicator i = ListOfIndicators.getAllLoadedIndicatorsFromCategory(groups.get(groupPosition)).get(childPosition);
 		
 		IndicatorDataBlock idb = new IndicatorDataBlock(i);
-		
-		loadIndicatorDataBlock(idb);
+		this.loadIndicatorDataBlock(idb);
 		
 		GraphData data = GraphDataFactory.createDataFromIndicator(idb);
 		
-		Log.e("DEBUG", data.getData().toString());
+		Log.e(getClass().getName(), data.getData().toString());
 		
 		adapter.addGraphData(adapter.getChildId(groupPosition, childPosition), data);	
 
@@ -149,23 +176,18 @@ public class CompareCategoriesActivity extends Activity implements
 	}
 
 	@Override
-	public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) 
-	{
+	public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
 		return false;
 	}
 	
 	@Override
 	public void onGroupExpand(int groupPosition) {
-		//String msg = groups.get(groupPosition) + " Expanded";
 		ListOfIndicators.loadIndicatorsForCategory(groups.get(groupPosition));
-
 	}
 
 	@Override
-	public void onGroupCollapse(int groupPosition)
-	{			
-		String msg = groups.get(groupPosition) + " Collapsed";
-		displayMessage(msg);
+	public void onGroupCollapse(int groupPosition) {
+		displayMessage(groups.get(groupPosition) + " Collapsed");
 	}
 
 	private void displayMessage(String msg)
@@ -268,7 +290,6 @@ public class CompareCategoriesActivity extends Activity implements
 	private void initializeELV()
 	{
 		// Initializing the ExpandableListView object
-		elvCategories = (ExpandableListView) findViewById(R.id.elvCategories);
 		adapter = new CompareExpandableListAdapter(this, groups, childs);
 		elvCategories.setAdapter(adapter);
 		elvCategories.setOnChildClickListener(this);
@@ -276,32 +297,71 @@ public class CompareCategoriesActivity extends Activity implements
 		elvCategories.setOnGroupCollapseListener(this);
 		elvCategories.setOnTouchListener(new SwipeDetector(this, new SwipeListener() 
 		{	
-			@Override
-			public boolean onTopToBottomSwipe() 
-			{	
-				return false;
-			}
+			@Override public boolean onTopToBottomSwipe() {return false;}
+			@Override public boolean onBottomToTopSwipe() {return false;}
 				
 			@Override
 			public boolean onRightToLeftSwipe() 
 			{
-				Toast.makeText(context, "Next country", Toast.LENGTH_SHORT).show();
+				selectNextCountry();
 				return true;
 			}
 				
 			@Override
 			public boolean onLeftToRightSwipe() 
 			{
-				Toast.makeText(context, "Previous country", Toast.LENGTH_SHORT).show();
+				selectPreviousCountry();
 				return true;
 			}
-			
-			@Override
-			public boolean onBottomToTopSwipe() 
-			{
-				return false;
-			}
 		}));
+	}
+	
+	public boolean selectNextCountry() {
+		if (appController.getCurrentlySelectedCountryIndex() >= this.appController.getCurrentSelectedCountries().size() - 1) {
+			Toast.makeText(this, "There is not a next country", Toast.LENGTH_SHORT).show();
+			return false;
+		} else {
+			//Toast.makeText(this, "Next country", Toast.LENGTH_SHORT).show();
+			appController.incrementSelectedCountryIndex();
+			updateUIAfterSelection();
+			return true;
+		}
+	}
+	
+	public boolean selectPreviousCountry() {
+		if (appController.getCurrentlySelectedCountryIndex() <= 0) {
+			Toast.makeText(this, "There is not a previous country", Toast.LENGTH_SHORT).show();
+			return false;
+		} else {
+			//Toast.makeText(this, "Previous country", Toast.LENGTH_SHORT).show();
+			appController.decrementSelectedCountryIndex();
+			updateUIAfterSelection();
+			return true;
+		}
+	}
+	
+	public void updateUIAfterSelection() {
+		// Checking if previous button should be enabled
+		if (appController.getCurrentlySelectedCountryIndex() <= 0) {
+			// Grey out previous
+			prevButton.setVisibility(View.INVISIBLE);
+		} else {
+			// Button Enabled
+			prevButton.setVisibility(View.VISIBLE);
+		}
+		
+		// Checking if next button should be enabled
+		if (appController.getCurrentlySelectedCountryIndex() >= appController.getCurrentSelectedCountries().size() - 1) {
+			// Grey out next
+			nextButton.setVisibility(View.INVISIBLE);
+		} else {
+			// Button Enabled
+			nextButton.setVisibility(View.VISIBLE);
+		}
+
+		currentCountry = appController.getCurrentlySelectedCountry();
+		countryTitleView.setText(currentCountry.getName());
+		initializeELV();
 	}
 	
 	private void loadIndicatorDataBlock(final IndicatorDataBlock idb)

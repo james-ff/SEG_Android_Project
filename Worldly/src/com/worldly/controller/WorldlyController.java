@@ -30,6 +30,7 @@ public class WorldlyController
 			BUSINESS_MOVE = 2, CUSTOM_MOVE = 3;
 
 	private int currentMoveStatus;
+	private int currentlySelectedCountryIndex;
 	private List<Country> currentSelectedCountries;
 	private List<String> categories;
 
@@ -164,9 +165,24 @@ public class WorldlyController
 	{
 		this.currentSelectedCountries = currentSelectedCountries;
 	}
+	
+	public int getCurrentlySelectedCountryIndex() {
+		return currentlySelectedCountryIndex;
+	}
 
-	public String toString()
-	{
-		return this.getCategories() + "," + this.getCurrentMoveStatus() + "," + this.getCurrentSelectedCountries();
+	public void setCurrentlySelectedCountryIndex(int currentlySelectedCountryIndex) {
+		this.currentlySelectedCountryIndex = currentlySelectedCountryIndex;
+	}
+
+	public Country getCurrentlySelectedCountry() {
+		return getCurrentSelectedCountries().get(getCurrentlySelectedCountryIndex());
+	}
+	
+	public void incrementSelectedCountryIndex() {
+		currentlySelectedCountryIndex++;
+	}
+	
+	public void decrementSelectedCountryIndex() {
+		currentlySelectedCountryIndex--;
 	}
 }
