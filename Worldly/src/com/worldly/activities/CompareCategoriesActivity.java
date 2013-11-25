@@ -52,7 +52,7 @@ public class CompareCategoriesActivity extends Activity implements
 {
 	private Context context;
 	private List<String> groups;
-	private WorldlyController controller;
+	private WorldlyController appController;
 	private Map<String, List<String>> childs;
 	private Country currentCountry;
 	private ExpandableListView elvCategories;
@@ -64,8 +64,7 @@ public class CompareCategoriesActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_compare_categories);
 		context = this;
-		controller = WorldlyController.getInstance();
-		currentCountry = controller.getCurrentSelectedCountries().get(0);
+		currentCountry = appController.getCurrentSelectedCountries().get(0);
 			
 		//if in landscape
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
@@ -80,6 +79,22 @@ public class CompareCategoriesActivity extends Activity implements
 		}
 	}
 
+	@Override
+	protected void onPause()
+	{
+		super.onPause();
+		appController.saveState();
+		Log.e(getClass().getName(), "Resuming.... " + appController.toString());
+	}
+
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		appController = WorldlyController.getInstance();
+		Log.e(getClass().getName(), "Pausing.... " + appController.toString());
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -104,7 +119,7 @@ public class CompareCategoriesActivity extends Activity implements
 	 * Preparing the list data
 	 */
 	private void prepareListData() {
-		groups = controller.getCategories();
+		groups = appController.getCategories();
 		childs = new HashMap<String, List<String>>();
 
 		// Adding child data
@@ -235,7 +250,7 @@ public class CompareCategoriesActivity extends Activity implements
 		Spinner categories = (Spinner)findViewById(R.id.categoriesSelectSpinner);
 		categories.setAdapter(new com.worldly.custom_adapter.SpinnerAdapter(this, 
 				android.R.layout.simple_spinner_item, 
-				controller.getCategories()));
+				appController.getCategories()));
 		
 		try {
 			Chart chart = new BarChart(new GraphDataRow("countries", "Population", true), new GraphDataRow("Slovakia", 12346, false), this);

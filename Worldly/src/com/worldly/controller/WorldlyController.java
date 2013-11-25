@@ -51,7 +51,7 @@ public class WorldlyController
 	/**
 	 * Loads a previous state of this object from a cached file.
 	 */
-	public void loadState()
+	private void loadState()
 	{
 		this.currentMoveStatus = CachingEngine.getCachedCurrentMoveStatus();
 		this.currentSelectedCountries = CachingEngine
@@ -82,6 +82,24 @@ public class WorldlyController
 	public int getCurrentMoveStatus()
 	{
 		return this.currentMoveStatus;
+	}
+
+	/**
+	 * Gets the List of the categories currently selected.
+	 */
+	public List<String> getCategories()
+	{
+		return this.categories;
+	}
+
+	/**
+	 * Gets the current selected countries.
+	 * 
+	 * @return : A List containing the selected Country objects.
+	 */
+	public List<Country> getCurrentSelectedCountries()
+	{
+		return this.currentSelectedCountries;
 	}
 
 	/**
@@ -136,24 +154,6 @@ public class WorldlyController
 	}
 
 	/**
-	 * Gets the List of the categories currently selected.
-	 */
-	public List<String> getCategories()
-	{
-		return this.categories;
-	}
-
-	/**
-	 * Gets the current selected countries.
-	 * 
-	 * @return : A List containing the selected Country objects.
-	 */
-	public List<Country> getCurrentSelectedCountries()
-	{
-		return this.currentSelectedCountries;
-	}
-
-	/**
 	 * Sets the current selected countries.
 	 * 
 	 * @param currentSelectedCountries
@@ -165,4 +165,8 @@ public class WorldlyController
 		this.currentSelectedCountries = currentSelectedCountries;
 	}
 
+	public String toString()
+	{
+		return this.getCategories() + "," + this.getCurrentMoveStatus() + "," + this.getCurrentSelectedCountries();
+	}
 }

@@ -44,6 +44,7 @@ import com.worldly.data_models.Country;
 public class MapActivity extends FragmentActivity {
 
 	private Activity self;
+	private WorldlyController appController = WorldlyController.getInstance();
 
 	private List<Country> availableCountries = new ArrayList<Country>();
 	private List<Country> selectedCountries = new ArrayList<Country>();
@@ -65,7 +66,6 @@ public class MapActivity extends FragmentActivity {
 		
 		self = this;
 		
-		WorldlyController appController = WorldlyController.getInstance();
 		if (appController.getCurrentSelectedCountries() != null) {
 			this.selectedCountries = appController.getCurrentSelectedCountries();
 		}
@@ -198,10 +198,26 @@ public class MapActivity extends FragmentActivity {
 		aThread.start();
 	}
 	
+	@Override
+	protected void onPause()
+	{
+		super.onPause();
+		appController.saveState();
+		Log.e(getClass().getName(), "Pausing.... " + appController.toString());
+	}
+
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		appController = WorldlyController.getInstance();
+		Log.i(getClass().getName(), "Resuming.... " + appController.toString());
+	}
+	
 	public boolean hasGLES20() {
 		ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		ConfigurationInfo info = am.getDeviceConfigurationInfo();
-		Log.d(getClass().getName(), (info.reqGlEsVersion >= 0x20000) ? "Has Open GL 2.0" : "Has not got Open GL 2.0");
+		Log.i(getClass().getName(), (info.reqGlEsVersion >= 0x20000) ? "Has Open GL 2.0" : "Has not got Open GL 2.0");
 		return info.reqGlEsVersion >= 0x20000;
 	}
 
