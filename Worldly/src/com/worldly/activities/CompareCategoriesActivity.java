@@ -52,11 +52,11 @@ public class CompareCategoriesActivity extends Activity implements
 		OnChildClickListener, OnGroupExpandListener, OnGroupCollapseListener, OnGroupClickListener {
 	
 	private List<String> groups;
-	private WorldlyController controller;
-	private Map<String, List<String>> childs;
 	private Country currentCountry;
+	private Map<String, List<String>> childs;
 	private ExpandableListView elvCategories;
 	private CompareExpandableListAdapter adapter;
+	private WorldlyController appController = WorldlyController.getInstance();
 	
 	private LogoTextView prevButton;
 	private LogoTextView nextButton;
@@ -67,10 +67,10 @@ public class CompareCategoriesActivity extends Activity implements
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_compare_categories);
+
 		
-		controller = WorldlyController.getInstance();
-		controller.setCurrentlySelectedCountryIndex(0);
-		currentCountry = controller.getCurrentlySelectedCountry();
+		appController.setCurrentlySelectedCountryIndex(0);
+		currentCountry = appController.getCurrentlySelectedCountry();
 
 		elvCategories = (ExpandableListView) findViewById(R.id.elvCategories);
 			
@@ -101,7 +101,21 @@ public class CompareCategoriesActivity extends Activity implements
 			updateUIAfterSelection();
 		}
 	}
+	
+	@Override
+	protected void onPause()
+	{
+		super.onPause();
+		appController.saveState();
+	}
 
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		appController = WorldlyController.getInstance();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -126,7 +140,7 @@ public class CompareCategoriesActivity extends Activity implements
 	 * Preparing the list data
 	 */
 	private void prepareListData() {
-		groups = controller.getCategories();
+		groups = appController.getCategories();
 		childs = new HashMap<String, List<String>>();
 
 		// Adding child data
@@ -258,7 +272,7 @@ public class CompareCategoriesActivity extends Activity implements
 		Spinner categories = (Spinner)findViewById(R.id.categoriesSelectSpinner);
 		categories.setAdapter(new com.worldly.custom_adapter.SpinnerAdapter(this, 
 				android.R.layout.simple_spinner_item, 
-				controller.getCategories()));
+				appController.getCategories()));
 		
 		
 		try {
@@ -313,24 +327,24 @@ public class CompareCategoriesActivity extends Activity implements
 	}
 	
 	public boolean selectNextCountry() {
-		if (controller.getCurrentlySelectedCountryIndex() >= this.controller.getCurrentSelectedCountries().size() - 1) {
+		if (appController.getCurrentlySelectedCountryIndex() >= this.appController.getCurrentSelectedCountries().size() - 1) {
 			Toast.makeText(this, "There is not a next country", Toast.LENGTH_SHORT).show();
 			return false;
 		} else {
 			//Toast.makeText(this, "Next country", Toast.LENGTH_SHORT).show();
-			controller.incrementSelectedCountryIndex();
+			appController.incrementSelectedCountryIndex();
 			updateUIAfterSelection();
 			return true;
 		}
 	}
 	
 	public boolean selectPreviousCountry() {
-		if (controller.getCurrentlySelectedCountryIndex() <= 0) {
+		if (appController.getCurrentlySelectedCountryIndex() <= 0) {
 			Toast.makeText(this, "There is not a previous country", Toast.LENGTH_SHORT).show();
 			return false;
 		} else {
 			//Toast.makeText(this, "Previous country", Toast.LENGTH_SHORT).show();
-			controller.decrementSelectedCountryIndex();
+			appController.decrementSelectedCountryIndex();
 			updateUIAfterSelection();
 			return true;
 		}
@@ -338,7 +352,7 @@ public class CompareCategoriesActivity extends Activity implements
 	
 	public void updateUIAfterSelection() {
 		// Checking if previous button should be enabled
-		if (controller.getCurrentlySelectedCountryIndex() <= 0) {
+		if (appController.getCurrentlySelectedCountryIndex() <= 0) {
 			// Grey out previous
 			prevButton.setVisibility(View.INVISIBLE);
 		} else {
@@ -347,7 +361,7 @@ public class CompareCategoriesActivity extends Activity implements
 		}
 		
 		// Checking if next button should be enabled
-		if (controller.getCurrentlySelectedCountryIndex() >= controller.getCurrentSelectedCountries().size() - 1) {
+		if (appController.getCurrentlySelectedCountryIndex() >= appController.getCurrentSelectedCountries().size() - 1) {
 			// Grey out next
 			nextButton.setVisibility(View.INVISIBLE);
 		} else {
@@ -355,7 +369,7 @@ public class CompareCategoriesActivity extends Activity implements
 			nextButton.setVisibility(View.VISIBLE);
 		}
 
-		currentCountry = controller.getCurrentlySelectedCountry();
+		currentCountry = appController.getCurrentlySelectedCountry();
 		countryTitleView.setText(currentCountry.getName());
 		initializeELV();
 	}

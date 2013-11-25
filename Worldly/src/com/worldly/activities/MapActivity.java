@@ -66,6 +66,34 @@ public class MapActivity extends FragmentActivity {
 
 		self = this;
 		
+		if (appController.getCurrentSelectedCountries() != null) {
+			this.selectedCountries = appController.getCurrentSelectedCountries();
+		}
+
+		if (hasGLES20()) {
+			map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+			map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+				@Override public void onInfoWindowClick(Marker marker) {
+					Country aCountry = markerToCountry.get(marker);
+					boolean alreadySelected = false;
+					for (Country existingCountry : selectedCountries) {
+						if (existingCountry.getIso2Code().equals(aCountry.getIso2Code())) {
+							alreadySelected = true;
+							break;
+						}
+					}
+					if (alreadySelected) {
+						selectedCountries.remove(aCountry);
+						Toast.makeText(self, aCountry+" removed!", Toast.LENGTH_SHORT).show();
+					} else {
+						selectedCountries.add(aCountry);
+						Toast.makeText(self, aCountry+" added!", Toast.LENGTH_SHORT).show();
+					}
+					arrayAdapter.notifyDataSetChanged();
+					marker.hideInfoWindow();
+				}
+			});
+		}
 		//allSelectedCountrySpinner = (Spinner) findViewById(R.id.countries_selected_spinner);
 		countrySearchField = (EditText) findViewById(R.id.country_search_field);
 		goCompareButton = (Button) findViewById(R.id.compare_button);
@@ -204,10 +232,24 @@ public class MapActivity extends FragmentActivity {
 		});
 	}
 	
+	@Override
+	protected void onPause()
+	{
+		super.onPause();
+		appController.saveState();
+	}
+
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		appController = WorldlyController.getInstance();
+	}
+	
 	public boolean hasGLES20() {
 		ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		ConfigurationInfo info = am.getDeviceConfigurationInfo();
-		Log.d(getClass().getName(), (info.reqGlEsVersion >= 0x20000) ? "Has Open GL 2.0" : "Has not got Open GL 2.0");
+		Log.i(getClass().getName(), (info.reqGlEsVersion >= 0x20000) ? "Has Open GL 2.0" : "Has not got Open GL 2.0");
 		return info.reqGlEsVersion >= 0x20000;
 	}
 	

@@ -1,5 +1,6 @@
 package com.worldly.data_store;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,8 +57,8 @@ public class CachingEngine
 	 */
 	public static boolean writeCountriesCache(List<Country> allCountries)
 	{
-		return writeToFile(COUNTRIES_FILENAME, 24 * 60 * 60 * 1000,
-				allCountries);
+		long expiry = System.currentTimeMillis() + (24 * 60 * 60 * 1000);
+		return writeToFile(COUNTRIES_FILENAME, expiry, allCountries);
 	}
 
 	/**
@@ -180,11 +181,11 @@ public class CachingEngine
 		{
 			// Creates the file and opens an OutputStream to begin writing to it
 			File cacheFile = new File(WORKING_DIRECTORY + filename);
-			FileOutputStream os = new FileOutputStream(cacheFile);
+			FileOutputStream fos = new FileOutputStream(cacheFile);
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
 
 			// Writes the "expiry date" of the data to the header of the file
-			os.write(("" + (System.currentTimeMillis() + expiry + NEWLINE))
-					.getBytes());
+			fos.write(("" + (expiry + NEWLINE)).getBytes());
 
 			String temp = new String();
 
@@ -216,13 +217,13 @@ public class CachingEngine
 				temp += data.get(0).toString() + NEWLINE;
 
 			// Writes the data to the file
-			os.write(temp.getBytes());
-			Log.d("CachingEngine", "Written " + data.size()
+			bos.write(temp.getBytes());
+			Log.i("CachingEngine", "Written " + data.size()
 					+ " entries to file.");
 
 			// Flushes and closes the OutputStream object
-			os.flush();
-			os.close();
+			bos.flush();
+			bos.close();
 
 			return true;
 		}
@@ -231,7 +232,7 @@ public class CachingEngine
 		// Directory or whilst writing the data to the file
 		catch (IOException ex)
 		{
-			Log.d("CachingEngine", "Not Writing to File");
+			Log.e("CachingEngine", "Not Writing to File");
 			ex.printStackTrace();
 			return false;
 		}
@@ -298,8 +299,8 @@ public class CachingEngine
 				else
 				{
 					// Adds an entry to LogCat describing the current status
-					Log.w("CacheEngine",
-							"Cached countries out of date, refreshing...");
+					Log.w("CachingEngine",
+							"Cached file out of date, refreshing...");
 				}
 
 				// Closes the BufferedReader and InputStream objects
@@ -312,7 +313,7 @@ public class CachingEngine
 			// or whilst reading the file
 			catch (IOException ex)
 			{
-				Log.d("CachingEngine", "Unable to read data from cache.");
+				Log.e("CachingEngine", "Unable to read data from cache.");
 				return new ArrayList<E>();
 			}
 		}

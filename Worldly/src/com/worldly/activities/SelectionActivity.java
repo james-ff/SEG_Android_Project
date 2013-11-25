@@ -29,9 +29,7 @@ import com.worldly.data_store.ListOfIndicators;
 public class SelectionActivity extends Activity
 {
 
-	private final WorldlyController appController = WorldlyController
-			.getInstance();
-	private String[] customCategories;
+	private WorldlyController appController;
 	private Activity self = this;
 
 	/**
@@ -57,9 +55,8 @@ public class SelectionActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_selection);
-
+		appController = WorldlyController.getInstance();
 		mainIndicators = new ListOfIndicators();
-		customCategories = ListOfIndicators.getCategoriesAsArray();
 	}
 
 	@Override
@@ -153,7 +150,11 @@ public class SelectionActivity extends Activity
 	 */
 	private void showIndicatorsDialog()
 	{
-		final List<String> selectedItems = new ArrayList<String>();
+		// Creates the objects necessary to display the categories dialog
+		final List<String> selection = new ArrayList<String>();
+		final String[] customCategories = ListOfIndicators
+				.getCategoriesAsArray();
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Select categories of interest")
 				.setMultiChoiceItems(customCategories, null,
@@ -161,19 +162,19 @@ public class SelectionActivity extends Activity
 						{
 							@Override
 							public void onClick(DialogInterface dialog,
-									int which, boolean isChecked)
+									int index, boolean isChecked)
 							{
 								if (isChecked)
 								{
 									// If the user checked the item, add it to
 									// the selected items
-									selectedItems.add(customCategories[which]);
+									selection.add(customCategories[index]);
 								}
-								else if (selectedItems.contains(which))
+								else if (selection.contains(index))
 								{
 									// Else, if the item is already in the
 									// array, remove it
-									selectedItems.remove(Integer.valueOf(which));
+									selection.remove(Integer.valueOf(index));
 								}
 							}
 						})
@@ -184,21 +185,25 @@ public class SelectionActivity extends Activity
 							public void onClick(DialogInterface dialog, int id)
 							{
 								// If the user has made a selection
-								if (selectedItems.size() > 0)
+								if (selection.size() > 0)
 								{
 									// Saves the move status
 									appController.setCurrentMoveStatus(
 											WorldlyController.CUSTOM_MOVE,
-											selectedItems);
+											selection);
 									saveSharedPreferences(WorldlyController.CUSTOM_MOVE);
 
 									// Starts the map activity
 									startActivity(new Intent(self,
 											MapActivity.class));
 								}
-								
-								Toast.makeText(self, "Please make a selection",
-										Toast.LENGTH_SHORT).show();
+
+								else
+								{
+									Toast.makeText(self,
+											"Please make a selection",
+											Toast.LENGTH_SHORT).show();
+								}
 							}
 						})
 				.setNegativeButton(R.string.cancel,
