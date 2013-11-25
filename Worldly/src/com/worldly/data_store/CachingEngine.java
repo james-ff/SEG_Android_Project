@@ -249,6 +249,7 @@ public class CachingEngine
 	 * @see #CURRENT_MOVE_STATUS_FILENAME
 	 * @see #SELECTED_COUNTRIES_FILENAME
 	 */
+	@SuppressWarnings("unchecked")
 	private static <E> List<E> readFromFile(String filename)
 	{
 		// Creates and initialises a File object to store the countries data
