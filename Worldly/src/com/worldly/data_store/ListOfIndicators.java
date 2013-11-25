@@ -2,6 +2,7 @@ package com.worldly.data_store;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.CountDownLatch;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -89,14 +90,18 @@ public class ListOfIndicators {
 			return false;
 		}
 		else {
-			
-				//Thread aThread = new Thread(new Runnable() {
-				//@Override
-				//public void run() { 
+				final CountDownLatch latch = new CountDownLatch(1);
+				Thread aThread = new Thread(new Runnable() {
+				@Override
+				public void run() { 
 					for (int i = 0; i < codes.size(); i++) { addIndicator(category, codes.get(i).getCode()); }
-				//}
-			//});
-			//aThread.start();
+					latch.countDown();
+				}
+			});
+			aThread.start();
+			try {
+				latch.await();
+			} catch (InterruptedException e) {e.printStackTrace();}
 			return true;
 		}
 	}
