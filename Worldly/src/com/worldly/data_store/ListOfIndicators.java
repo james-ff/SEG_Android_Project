@@ -2,6 +2,8 @@ package com.worldly.data_store;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import org.json.JSONArray;
@@ -18,7 +20,7 @@ import com.worldly.network.QuerySystem;
  * selecting a country. This should be properly cached and stored so to avoid increased
  * traffic usage.
  * 
- * @author Annie the Eagle & Team
+ * @author Ferdinand Keller & Team
  * 
  */
 public class ListOfIndicators {
@@ -33,8 +35,8 @@ public class ListOfIndicators {
 	public static final String CATEGORY_QUALITY_OF_LIFE = "Quality of Life";
 	public static final String CATEGORY_RURAL_LIFE = "Rural Life";
 	
-	private static ArrayList<Indicator> loadedIndicators = new ArrayList<Indicator>();
-	private static HashMap<String, ArrayList<UnloadedIndicatorDescription>> categories = new HashMap<String, ArrayList<UnloadedIndicatorDescription>>();
+	private static List<Indicator> loadedIndicators = new ArrayList<Indicator>();
+	private static Map<String, ArrayList<UnloadedIndicatorDescription>> categories = new HashMap<String, ArrayList<UnloadedIndicatorDescription>>();
 	
 	public ListOfIndicators() {
 		// Category Setup -- These categories will be the headings of the expandable groups (use droneStrikes.keySet())
@@ -49,7 +51,7 @@ public class ListOfIndicators {
 		categories.put(CATEGORY_RURAL_LIFE, new ArrayList<UnloadedIndicatorDescription>());
 		
 		/* -- Indicators Setup -- Here we add the known codes of indicators we are interested in. -- */ 
-		ArrayList<UnloadedIndicatorDescription> reference = categories.get(CATEGORY_BUSINESS);
+		List<UnloadedIndicatorDescription> reference = categories.get(CATEGORY_BUSINESS);
 		reference.add(new UnloadedIndicatorDescription("GDP growth (Annual %)", "NY.GDP.MKTP.KD.ZG")); 
 		reference.add(new UnloadedIndicatorDescription("Listed domestic companies", "CM.MKT.LDOM.NO"));
 		reference = categories.get(CATEGORY_CITY_LIFE);
@@ -63,7 +65,7 @@ public class ListOfIndicators {
 		reference.add(new UnloadedIndicatorDescription("Net migration", "SM.POP.NETM"));
 	}
 	
-	public static boolean addIndicator(String category, String code) {
+	private static boolean addIndicator(String category, String code) {
 		try { 
 			String data = QuerySystem.getIndicatorDescription(code);
 			loadedIndicators.add(new Indicator(category, new JSONArray(data)));
@@ -99,8 +101,8 @@ public class ListOfIndicators {
 		}
 	}
 	
-	public static ArrayList<Indicator> getAllLoadedIndicatorsFromCategory(String category) {
-		ArrayList<Indicator> returns = new ArrayList<Indicator>();
+	public static List<Indicator> getAllLoadedIndicatorsFromCategory(String category) {
+		List<Indicator> returns = new ArrayList<Indicator>();
 		for (int i = 0; i < loadedIndicators.size(); i++) {
 			if (loadedIndicators.get(i).getCategory().equals(category)) {
 				returns.add(loadedIndicators.get(i));
@@ -119,10 +121,6 @@ public class ListOfIndicators {
 		return count;
 	}
 	
-	public static ArrayList<String> getCategories() {
-		return new ArrayList<String>(categories.keySet());
-	}
-	
 	public static String[] getCategoriesAsArray() {
 		return new String[]{CATEGORY_BUSINESS, CATEGORY_CITY_LIFE, 
 							CATEGORY_CLIMATE, CATEGORY_DEMOGRAPHICS, 
@@ -131,8 +129,8 @@ public class ListOfIndicators {
 							CATEGORY_RURAL_LIFE};
 	}
 	
-	public static ArrayList<String> getReadableNamesOfIndicatorsInCategory(String category) {
-		ArrayList<String> returner = new ArrayList<String>();
+	public static List<String> getReadableNamesOfIndicatorsInCategory(String category) {
+		List<String> returner = new ArrayList<String>();
 		for (int i = 0; i < categories.get(category).size(); i++) {
 			returner.add(categories.get(category).get(i).getName());
 		}

@@ -17,8 +17,8 @@ public class GraphDataRow
 	/**
 	 * First element is the name of the row and the rest is data.
 	 */
-	List<Object> rowData;
-	boolean namesRow = false;
+	private List<Object> rowData;
+	private boolean namesRow = false;
 	
 	/**
 	 * Constructor which directly sets the given List as
@@ -60,7 +60,7 @@ public class GraphDataRow
 	 * @param data Data Object to be added to the row.
 	 * @throws CannotBeNullException If data is NULL exception is thrown.
 	 */
-	public void addRowData(Object data) throws CannotBeNullException
+	void addRowData(Object data) throws CannotBeNullException
 	{
 		if (data == null || data.equals(null))
 			throw new CannotBeNullException();
@@ -72,7 +72,7 @@ public class GraphDataRow
 	 * 
 	 * @param index Index of value to be removed.
 	 */
-	public void removeRowData(int index)
+	void removeRowData(int index)
 	{
 		this.rowData.remove(index);
 	}
@@ -82,7 +82,7 @@ public class GraphDataRow
 	 * 
 	 * @return Formatted data from the row.
 	 */
-	public String getRowData()
+	String getRowData()
 	{
 		if (namesRow)
 			return getNamesRowData();
@@ -106,7 +106,7 @@ public class GraphDataRow
 	 * 
 	 * @return Formatted data from the names (first) row.
 	 */
-	private String getNamesRowData()
+	String getNamesRowData()
 	{
 		String result = "[";
 				
@@ -123,7 +123,7 @@ public class GraphDataRow
 	 * 
 	 * @return Data from the row in an unchanged format.
 	 */
-	public List<Object> getData()
+	List<Object> getData()
 	{
 		return rowData;
 	}
@@ -133,7 +133,7 @@ public class GraphDataRow
 	 * 
 	 * @return Number of elements in the row.
 	 */
-	public int size()
+	int size()
 	{
 		return rowData.size();
 	}
@@ -143,7 +143,7 @@ public class GraphDataRow
 	 * 
 	 * @return Name of the row.
 	 */
-	public String getRowName()
+	String getRowName()
 	{
 		return rowData.get(0).toString();
 	}
@@ -153,7 +153,7 @@ public class GraphDataRow
 	 * 
 	 * @param name Name of the row.
 	 */
-	public void setRowName(String name)
+	void setRowName(String name)
 	{
 		rowData.set(0, name);
 	}
@@ -163,7 +163,7 @@ public class GraphDataRow
 	 * 
 	 * @return TRUE if it is names (first) row, FALSE otherwise.
 	 */
-	public boolean isNamesRow()
+	boolean isNamesRow()
 	{
 		return namesRow;
 	}

@@ -45,5 +45,4 @@ public class AboutActivity extends Activity {
 		getMenuInflater().inflate(R.menu.about, menu);
 		return true;
 	}
-
 }

@@ -178,19 +178,6 @@ public class GraphDataFactory
 	}
 	
 	/**
-	 * Removes a given indicator from a given GraphData.
-	 * 
-	 * @param data Initial data.
-	 * @param indicator Indicator to be removed.
-	 * @return New data without the given Indicator.
-	 */
-	public static GraphData removeIndicator(GraphData data, Indicator indicator)
-	{
-		data.removeColumn(data.getIndexOfColumnByName(indicator.getName()));
-		return data;
-	}
-	
-	/**
 	 * Creates GraphData with values from only subcategory 
 	 * (indicator) for all currently selected countries.
 	 * 

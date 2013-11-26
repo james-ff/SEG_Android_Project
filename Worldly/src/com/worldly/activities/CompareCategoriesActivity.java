@@ -43,13 +43,12 @@ import com.worldly.swipe.SwipeDetector;
 import com.worldly.swipe.SwipeListener;
 import com.worldly.view.LogoTextView;
 
-public class CompareCategoriesActivity extends Activity implements
-		OnChildClickListener, OnGroupExpandListener, OnGroupCollapseListener,
-		OnGroupClickListener {
-
+class CompareCategoriesActivity extends Activity implements
+		OnChildClickListener, OnGroupExpandListener, OnGroupCollapseListener, OnGroupClickListener {
+	
 	private Context context = this;
 	private WorldlyController appController = WorldlyController.getInstance();
-
+	
 	private List<String> groups;
 	private Map<String, List<String>> children;
 
@@ -165,13 +164,7 @@ public class CompareCategoriesActivity extends Activity implements
 	private void displayMessage(String msg) {
 		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 	}
-
-	public void showGraph(View v) {
-		Intent i = new Intent(CompareCategoriesActivity.this, GraphTestActivity.class);
-		startActivity(i);
-		onStop();
-	}
-
+	
 	/**
 	 * Loads the screen in landscape.
 	 */

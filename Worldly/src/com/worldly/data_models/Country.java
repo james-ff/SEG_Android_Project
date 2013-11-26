@@ -162,32 +162,12 @@ public class Country {
 	}
 
 	/**
-	 * Assigns a name to the Country object.
-	 * 
-	 * @param name
-	 *            : A String containing the name of the Country object.
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
 	 * Retrieves the ID of the Country object.
 	 * 
 	 * @return A String containing the ID of the Country object.
 	 */
 	public String getId() {
 		return id;
-	}
-
-	/**
-	 * Assigns an ID to the Country object.
-	 * 
-	 * @param name
-	 *            : A String containing the ID of the Country object.
-	 */
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	/**
@@ -200,32 +180,12 @@ public class Country {
 	}
 
 	/**
-	 * Assigns a country code to the Country object.
-	 * 
-	 * @param name
-	 *            : A String containing the country code of the Country object.
-	 */
-	public void setIso2Code(String iso2Code) {
-		this.iso2Code = iso2Code;
-	}
-
-	/**
 	 * Retrieves the capital city of the Country object.
 	 * 
 	 * @return A String containing the capital city of the Country object.
 	 */
 	public String getCapitalCity() {
 		return capitalCity;
-	}
-
-	/**
-	 * Assigns a capital city to the Country object.
-	 * 
-	 * @param name
-	 *            : A String containing the capital city of the Country object.
-	 */
-	public void setCapitalCity(String capitalCity) {
-		this.capitalCity = capitalCity;
 	}
 
 	/**
@@ -238,16 +198,6 @@ public class Country {
 	}
 
 	/**
-	 * Assigns a longitude to the Country object.
-	 * 
-	 * @param name
-	 *            : A String containing the longitude of the Country object.
-	 */
-	public void setLongitude(Double longitude) {
-		this.longitude = longitude;
-	}
-
-	/**
 	 * Retrieves the latitude of the Country object.
 	 * 
 	 * @return A String containing the latitude of the Country object.
@@ -256,16 +206,6 @@ public class Country {
 		return this.latitude;
 	}
 
-	/**
-	 * Assigns a latitude to the Country object.
-	 * 
-	 * @param name
-	 *            : A String containing the latitude of the Country object.
-	 */
-	public void setLatitude(Double latitude) {
-		this.latitude = latitude;
-	}
-	
 	public void addDataElement(Indicator regarding, IndicatorDataBlock data){ countryValues.put(regarding, data); }
 	public void addDataElementByYear(Indicator regarding, int year, Object data) { countryValues.get(regarding).addDataByYear(year, data); }
 	public void editDataElementByYear(Indicator regarding, int year, Object newValue) { countryValues.get(regarding).modifyDataInYear(year, newValue); }

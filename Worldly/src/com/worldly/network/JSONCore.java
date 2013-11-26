@@ -18,16 +18,13 @@ import android.util.Log;
  * @author Jeroen Keppens
  *
  */
-public class JSONCore {
-	
-	//private final String API_BASE_URL = "http://api.worldbank.org/countries/";
-	
+class JSONCore {
 	/**
 	 * Static method to download a data feed from a given URL.
 	 * @param url : A String object containing the URL of the data feed to be downloaded
 	 * @return A String object containing the data feed.
 	 */
-	public static String readData(String url) {
+	static String readData(String url) {
 	    // Create download objects
 	    HttpClient client = new DefaultHttpClient();
 	    HttpGet get = new HttpGet(url);

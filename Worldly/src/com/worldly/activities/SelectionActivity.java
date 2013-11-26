@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +26,7 @@ import com.example.worldly.R;
  * @author Rafael da Silva Costa & Team
  * 
  */
-public class SelectionActivity extends Activity
+class SelectionActivity extends Activity
 {
 
 	private Activity self = this;
@@ -36,27 +35,27 @@ public class SelectionActivity extends Activity
 	/**
 	 * Constant representing the key used to store the selected mode in the
 	 * shared preferences file.
-	 */
-	public static final String MODE = "MODE";
+	 *//*
+	static final String MODE = "MODE";
 
-	/**
+	*//**
 	 * Constant representing the name of the shared preferences file to be used
 	 * across this application's activities.
-	 */
-	public static final String PREFS_NAME = "GLOBAL_PREFS";
+	 *//*
+	public static final String PREFS_NAME = "GLOBAL_PREFS";*/
 
 	/**
 	 * Constant across all activities, it holds all indicators that are loaded
 	 * into memory.
 	 */
-	public static ListOfIndicators mainIndicators;
+	/*private static ListOfIndicators mainIndicators;*/
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_selection);
-		mainIndicators = new ListOfIndicators();
+		/*mainIndicators = new ListOfIndicators();*/
 	}
 
 	@Override
@@ -117,7 +116,7 @@ public class SelectionActivity extends Activity
 		// If the user has not selected the custom option
 		if (option != WorldlyController.CUSTOM_MOVE)
 		{
-			saveSharedPreferences(option);
+			/*saveSharedPreferences(option);*/
 
 			// Updates the Worldly Controller status and starts map activity
 			appController.setCurrentMoveStatus(option, null);
@@ -131,7 +130,7 @@ public class SelectionActivity extends Activity
 	 * @param option
 	 *            : One of the four constants representing the move status.
 	 */
-	protected void saveSharedPreferences(int option)
+	/*protected void saveSharedPreferences(int option)
 	{
 		// Creates and instantiates a shared preferences object
 		SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
@@ -142,7 +141,7 @@ public class SelectionActivity extends Activity
 		// Saves the mode selected by the user onto the shared preferences file
 		editor.putInt(MODE, option);
 		editor.commit();
-	}
+	}*/
 
 	/**
 	 * Displays a dialog for the user to select the custom indicators to be used
@@ -191,7 +190,7 @@ public class SelectionActivity extends Activity
 									appController.setCurrentMoveStatus(
 											WorldlyController.CUSTOM_MOVE,
 											selection);
-									saveSharedPreferences(WorldlyController.CUSTOM_MOVE);
+									/*saveSharedPreferences(WorldlyController.CUSTOM_MOVE);*/
 
 									// Starts the map activity
 									startActivity(new Intent(self,

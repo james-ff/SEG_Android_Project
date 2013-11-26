@@ -57,28 +57,12 @@ public class Indicator {
 	public String getId() { return id; }
 	
 	/**
-	 * Assigns an ID to the Indicator object.
-	 * 
-	 * @param sourceName
-	 *            : A String containing the ID of the Indicator object.
-	 */
-	public void setId(String id) { this.id = id; }
-
-	/**
 	 * Retrieves the name of the Indicator object.
 	 * 
 	 * @return A String containing the name of the Indicator object.
 	 */
 	public String getName() { return name; }
 	
-	/**
-	 * Assigns a name to the Indicator object.
-	 * 
-	 * @param name
-	 *            : A String containing the name of the Indicator object.
-	 */
-	public void setName(String name) { this.name = name; }
-
 	/**
 	 * Retrieves the source name of the Indicator object.
 	 * 
@@ -87,28 +71,12 @@ public class Indicator {
 	public String getSourceName() { return sourceName; }
 	
 	/**
-	 * Assigns a source name to the Indicator object.
-	 * 
-	 * @param sourceName
-	 *            : A String containing the source name of the Indicator object.
-	 */
-	public void setSourceName(String sourceName) { this.sourceName = sourceName; }
-
-	/**
 	 * Retrieves the source ID of the Indicator object.
 	 * 
 	 * @return An int containing the source ID of the Indicator object.
 	 */
 	public int getSourceID() { return sourceID; }
 	
-	/**
-	 * Assigns a source ID to the Indicator object.
-	 * 
-	 * @param sourceID
-	 *            : An int containing the source ID of the Indicator object.
-	 */
-	public void setSourceID(int sourceID) { this.sourceID = sourceID; }
-
 	/**
 	 * Retrieves the category of the Indicator object.
 	 * 
