@@ -34,40 +34,33 @@ public class ListOfIndicators {
 	public static final String CATEGORY_RURAL_LIFE = "Rural Life";
 	
 	private static ArrayList<Indicator> loadedIndicators = new ArrayList<Indicator>();
-	private static HashMap<String, ArrayList<UnloadedIndicatorDescription>> droneStrikes = new HashMap<String, ArrayList<UnloadedIndicatorDescription>>();
+	private static HashMap<String, ArrayList<UnloadedIndicatorDescription>> categories = new HashMap<String, ArrayList<UnloadedIndicatorDescription>>();
 	
 	public ListOfIndicators() {
 		// Category Setup -- These categories will be the headings of the expandable groups (use droneStrikes.keySet())
-		droneStrikes.put(CATEGORY_BUSINESS, new ArrayList<UnloadedIndicatorDescription>());
-		droneStrikes.put(CATEGORY_CITY_LIFE, new ArrayList<UnloadedIndicatorDescription>());
-		droneStrikes.put(CATEGORY_CLIMATE, new ArrayList<UnloadedIndicatorDescription>());
-		droneStrikes.put(CATEGORY_DEMOGRAPHICS, new ArrayList<UnloadedIndicatorDescription>());
-		droneStrikes.put(CATEGORY_EDUCATION, new ArrayList<UnloadedIndicatorDescription>());
-		droneStrikes.put(CATEGORY_EMPLOYMENT_PROSPECTS, new ArrayList<UnloadedIndicatorDescription>());
-		droneStrikes.put(CATEGORY_FINANCE, new ArrayList<UnloadedIndicatorDescription>());
-		droneStrikes.put(CATEGORY_QUALITY_OF_LIFE, new ArrayList<UnloadedIndicatorDescription>());
-		droneStrikes.put(CATEGORY_RURAL_LIFE, new ArrayList<UnloadedIndicatorDescription>());
-		
-		// TODO: Remove
-		//droneStrikes.put("Military", new ArrayList<UnloadedIndicatorDescription>());
+		categories.put(CATEGORY_BUSINESS, new ArrayList<UnloadedIndicatorDescription>());
+		categories.put(CATEGORY_CITY_LIFE, new ArrayList<UnloadedIndicatorDescription>());
+		categories.put(CATEGORY_CLIMATE, new ArrayList<UnloadedIndicatorDescription>());
+		categories.put(CATEGORY_DEMOGRAPHICS, new ArrayList<UnloadedIndicatorDescription>());
+		categories.put(CATEGORY_EDUCATION, new ArrayList<UnloadedIndicatorDescription>());
+		categories.put(CATEGORY_EMPLOYMENT_PROSPECTS, new ArrayList<UnloadedIndicatorDescription>());
+		categories.put(CATEGORY_FINANCE, new ArrayList<UnloadedIndicatorDescription>());
+		categories.put(CATEGORY_QUALITY_OF_LIFE, new ArrayList<UnloadedIndicatorDescription>());
+		categories.put(CATEGORY_RURAL_LIFE, new ArrayList<UnloadedIndicatorDescription>());
 		
 		/* -- Indicators Setup -- Here we add the known codes of indicators we are interested in. -- */ 
-		ArrayList<UnloadedIndicatorDescription> reference = droneStrikes.get(CATEGORY_BUSINESS);
+		ArrayList<UnloadedIndicatorDescription> reference = categories.get(CATEGORY_BUSINESS);
 		reference.add(new UnloadedIndicatorDescription("GDP growth (Annual %)", "NY.GDP.MKTP.KD.ZG")); 
 		reference.add(new UnloadedIndicatorDescription("Listed domestic companies", "CM.MKT.LDOM.NO"));
-		reference = droneStrikes.get(CATEGORY_CITY_LIFE);
-		reference.add(new UnloadedIndicatorDescription("Health expendiure per capita (US$)", "SH.XPD.PCAP"));
+		reference = categories.get(CATEGORY_CITY_LIFE);
+		reference.add(new UnloadedIndicatorDescription("Health expenditure per capita (current US$)", "SH.XPD.PCAP"));
 		reference.add(new UnloadedIndicatorDescription("% of urban populating with access to improved water", "SH.H2O.SAFE.UR.ZS"));
-		reference = droneStrikes.get(CATEGORY_CLIMATE);
+		reference = categories.get(CATEGORY_CLIMATE);
 		reference.add(new UnloadedIndicatorDescription("CO2 emissions in kilotons", "EN.ATM.CO2E.KT"));
 		reference.add(new UnloadedIndicatorDescription("Methane emissions in kilotons of CO2 equivalent", "EN.ATM.METH.KT.CE"));
-		reference = droneStrikes.get(CATEGORY_DEMOGRAPHICS);
+		reference = categories.get(CATEGORY_DEMOGRAPHICS);
 		reference.add(new UnloadedIndicatorDescription("Total Population", "SP.POP.TOTL"));
 		reference.add(new UnloadedIndicatorDescription("Net migration", "SM.POP.NETM"));
-		
-		// TODO: Remove
-		//reference = droneStrikes.get("Military");
-		//reference.add(new UnloadedIndicatorDescription("Military expenditure (% of GDP)", "MS.MIL.XPND.GD.ZS"));
 	}
 	
 	public static boolean addIndicator(String category, String code) {
@@ -84,7 +77,7 @@ public class ListOfIndicators {
 	}
 	
 	public static boolean loadIndicatorsForCategory(final String category) {
-		final ArrayList<UnloadedIndicatorDescription> codes = droneStrikes.get(category);
+		final ArrayList<UnloadedIndicatorDescription> codes = categories.get(category);
 		if (codes == null || codes.size() == 0) {
 			Log.w("IndicatorLoad", "No indicators are present for category name: " + category);
 			return false;
@@ -127,7 +120,7 @@ public class ListOfIndicators {
 	}
 	
 	public static ArrayList<String> getCategories() {
-		return new ArrayList<String>(droneStrikes.keySet());
+		return new ArrayList<String>(categories.keySet());
 	}
 	
 	public static String[] getCategoriesAsArray() {
@@ -140,9 +133,31 @@ public class ListOfIndicators {
 	
 	public static ArrayList<String> getReadableNamesOfIndicatorsInCategory(String category) {
 		ArrayList<String> returner = new ArrayList<String>();
-		for (int i = 0; i < droneStrikes.get(category).size(); i++) {
-			returner.add(droneStrikes.get(category).get(i).getName());
+		for (int i = 0; i < categories.get(category).size(); i++) {
+			returner.add(categories.get(category).get(i).getName());
 		}
 		return returner;
+	}
+	
+	public static String getIndicatorCodeFromName(String name)
+	{
+		if (name.equals("GDP growth (Annual %"))
+			return "NY.GDP.MKTP.KD.ZG";
+		else if (name.equals("Listed domestic companies"))
+			return "CM.MKT.LDOM.NO";
+		else if (name.equals("Health expenditure per capita (current US$)"))
+			return "SH.XPD.PCAP";
+		else if (name.equals("% of urban populating with access to improved water"))
+			return "SH.H2O.SAFE.UR.ZS";
+		else if (name.equals("CO2 emissions in kilotons"))
+			return "EN.ATM.CO2E.KT";
+		else if (name.equals("Methane emissions in kilotons of CO2 equivalent"))
+			return "EN.ATM.METH.KT.CE";
+		else if (name.equals("Total Population"))
+			return "SP.POP.TOTL";
+		else if (name.equals("Net migration"))
+			return "SM.POP.NETM";
+		else
+			return null;
 	}
 }

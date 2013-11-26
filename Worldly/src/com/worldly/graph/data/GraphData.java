@@ -78,12 +78,19 @@ public class GraphData implements Serializable
 	 * 
 	 * @param data Sets the given List as the source data.
 	 * @throws GraphDataSizeMismatchException If any of the rows does not have the
-	 * same length as the first row exception is thrown.
+	 * same length as the first row or the data does not contain at least 2 rows
+	 * and 2 columns exception is thrown.
 	 */
 	public GraphData(List<GraphDataRow> data) throws GraphDataSizeMismatchException
 	{
+		if (data.size() < 2)
+			throw new GraphDataSizeMismatchException(data.size(), 2);
+		
 		int size = data.get(0).size();
 		
+		if (size < 2)
+			throw new GraphDataSizeMismatchException(size, 2);
+			
 		for (int i = 1; i < data.size(); i++)
 			if (data.get(i).size() != size)
 				throw new GraphDataSizeMismatchException(data.get(i).size(), size);
