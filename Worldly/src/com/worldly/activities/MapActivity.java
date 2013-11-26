@@ -41,7 +41,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.worldly.controller.WorldlyController;
 import com.worldly.data_models.Country;
 
-class MapActivity extends FragmentActivity {
+public class MapActivity extends FragmentActivity {
 
 	private Activity self;
 	private WorldlyController appController = WorldlyController.getInstance();

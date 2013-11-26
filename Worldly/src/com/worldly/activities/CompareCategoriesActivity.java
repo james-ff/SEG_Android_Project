@@ -43,7 +43,7 @@ import com.worldly.swipe.SwipeDetector;
 import com.worldly.swipe.SwipeListener;
 import com.worldly.view.LogoTextView;
 
-class CompareCategoriesActivity extends Activity implements
+public class CompareCategoriesActivity extends Activity implements
 		OnChildClickListener, OnGroupExpandListener, OnGroupCollapseListener, OnGroupClickListener {
 	
 	private Context context = this;
