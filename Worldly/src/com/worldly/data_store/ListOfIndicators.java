@@ -52,17 +52,55 @@ public class ListOfIndicators {
 		
 		/* -- Indicators Setup -- Here we add the known codes of indicators we are interested in. -- */ 
 		List<UnloadedIndicatorDescription> reference = categories.get(CATEGORY_BUSINESS);
-		reference.add(new UnloadedIndicatorDescription("GDP growth (Annual %)", "NY.GDP.MKTP.KD.ZG")); 
+		reference.add(new UnloadedIndicatorDescription("GDP growth (Annual %)", "NY.GDP.MKTP.KD.ZG"));
 		reference.add(new UnloadedIndicatorDescription("Listed domestic companies", "CM.MKT.LDOM.NO"));
+		reference.add(new UnloadedIndicatorDescription("Ease of doing business index (1=easiest)", "IC.BUS.EASE.XQ"));
+		reference.add(new UnloadedIndicatorDescription("Strength of legal rights index (0=weak to 10=strong)", "IC.LGL.CRED.XQ"));
+		reference.add(new UnloadedIndicatorDescription("Labor Force", "SL.TLF.TOTL.IN"));
+		reference.add(new UnloadedIndicatorDescription("Total tax rate (% of commercial profits)", "IC.TAX.TOTL.CP.ZS"));
 		reference = categories.get(CATEGORY_CITY_LIFE);
 		reference.add(new UnloadedIndicatorDescription("Health expenditure per capita (current US$)", "SH.XPD.PCAP"));
-		reference.add(new UnloadedIndicatorDescription("% of urban populating with access to improved water", "SH.H2O.SAFE.UR.ZS"));
+		reference.add(new UnloadedIndicatorDescription("% of urban population with access to improved water source", "SH.H2O.SAFE.UR.ZS"));
+		reference.add(new UnloadedIndicatorDescription("% of urban population with access to improved Sanitation Facilities", "SH.SDA.ACSN.UR"));
+		reference.add(new UnloadedIndicatorDescription("Vehicles per km of road", "IS.VEH.ROAD.K1"));
 		reference = categories.get(CATEGORY_CLIMATE);
 		reference.add(new UnloadedIndicatorDescription("CO2 emissions in kilotons", "EN.ATM.CO2E.KT"));
 		reference.add(new UnloadedIndicatorDescription("Methane emissions in kilotons of CO2 equivalent", "EN.ATM.METH.KT.CE"));
+		reference.add(new UnloadedIndicatorDescription("Nitrous oxide emissions (thousand metric tons of CO2 equivalent)", "EN.ATM.NOXE.KT.CE"));
+		reference.add(new UnloadedIndicatorDescription("Other greenhouse gas emissions (thousand metric tons of CO2 equivalent)", "EN.ATM.GHGO.KT.CE"));
 		reference = categories.get(CATEGORY_DEMOGRAPHICS);
+		reference.add(new UnloadedIndicatorDescription("Rural population (% of total population)", "SP.RUR.TOTL.ZS"));
+		reference.add(new UnloadedIndicatorDescription("Urban population (% of total population)", "SP.URB.TOTL.IN.ZS"));
+		reference.add(new UnloadedIndicatorDescription("Population in the largest city (% of urban population)", "EN.URB.LCTY.UR.ZS"));
+		reference.add(new UnloadedIndicatorDescription("Population growth (annual %)", "SP.POP.GROW"));
 		reference.add(new UnloadedIndicatorDescription("Total Population", "SP.POP.TOTL"));
 		reference.add(new UnloadedIndicatorDescription("Net migration", "SM.POP.NETM"));
+		reference.add(new UnloadedIndicatorDescription("Literacy rate: adult total", "SE.ADT.LITR.ZS"));
+		reference.add(new UnloadedIndicatorDescription("Life expectancy at birth (total: years)", "SP.DYN.LE00.IN"));
+		reference = categories.get(CATEGORY_EDUCATION);
+		reference.add(new UnloadedIndicatorDescription("Public spending on education, total (% of GDP)", "SE.XPD.TOTL.GD.ZS"));
+		reference.add(new UnloadedIndicatorDescription("School enrollment, tertiary (% gross)", "SE.TER.ENRR"));
+		reference = categories.get(CATEGORY_EMPLOYMENT_PROSPECTS);
+		reference.add(new UnloadedIndicatorDescription("Employment in agriculture (% of total employment)", "SL.AGR.EMPL.ZS"));
+		reference.add(new UnloadedIndicatorDescription("Employment in services (% of total employment)", "SL.SRV.EMPL.ZS"));
+		reference.add(new UnloadedIndicatorDescription("Employment in industry (% of total employment)", "SL.IND.EMPL.ZS"));
+		reference.add(new UnloadedIndicatorDescription("Unemployment, total (% of total labor force)", "SL.UEM.TOTL.ZS"));
+		reference.add(new UnloadedIndicatorDescription("Long-term unemployment (% of total unemployment)", "SL.UEM.LTRM.ZS"));
+		reference = categories.get(CATEGORY_FINANCE);
+		reference.add(new UnloadedIndicatorDescription("Real interest rate (%)", "FR.INR.RINR"));
+		reference.add(new UnloadedIndicatorDescription("Lending interest rate (%)", "FR.INR.LEND"));
+		reference = categories.get(CATEGORY_QUALITY_OF_LIFE);
+		reference.add(new UnloadedIndicatorDescription("Roads, paved (% of total roads)", "IS.ROD.PAVE.ZS"));
+		reference.add(new UnloadedIndicatorDescription("Internet users (per 100 people)", "IT.NET.USER.P2"));
+		reference.add(new UnloadedIndicatorDescription("Mobile cellular subscriptions (per 100 people)", "IT.CEL.SETS.P2"));
+		reference.add(new UnloadedIndicatorDescription("Motor vehicles (per 1,000 people)", "IS.VEH.NVEH.P3"));
+		reference.add(new UnloadedIndicatorDescription("Rail lines (total route-km)", "IS.RRS.TOTL.KM"));
+		reference = categories.get(CATEGORY_RURAL_LIFE);
+		reference.add(new UnloadedIndicatorDescription("Improved water source, rural (% of rural population with access)", "SH.H2O.SAFE.RU.ZS"));
+		reference.add(new UnloadedIndicatorDescription("Forest area (% of land area)", "AG.LND.FRST.ZS"));
+		reference.add(new UnloadedIndicatorDescription("Agricultural land (% of land area)", "AG.LND.AGRI.ZS"));
+		reference.add(new UnloadedIndicatorDescription("Arable land (% of land area)", "AG.LND.ARBL.ZS"));
+		reference.add(new UnloadedIndicatorDescription("Permanent cropland (% of land area)", "AG.LND.CROP.ZS"));
 	}
 	
 	private static boolean addIndicator(String category, String code) {
