@@ -54,7 +54,6 @@ public class MapActivity extends FragmentActivity {
 	private Button goCompareButton;
 	private Button clearSelectionButton;
 	private Button allSelectedCountriesButton;
-	// private Spinner allSelectedCountrySpinner;
 	private ArrayAdapter<Country> arrayAdapter;
 	private GoogleMap map;
 
@@ -62,15 +61,19 @@ public class MapActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
-		// getActionBar().setDisplayHomeAsUpEnabled(true); //removed to support
-		// lower API - version 8
 
 		self = this;
 
+		countrySearchField = (EditText) findViewById(R.id.country_search_field);
+		goCompareButton = (Button) findViewById(R.id.compare_button);
+		allSelectedCountriesButton = (Button) findViewById(R.id.countries_selected_button);
+		clearSelectionButton = (Button) findViewById(R.id.clear_country_selection_button);
+
 		if (appController.getCurrentSelectedCountries() != null) {
 			this.selectedCountries = appController.getCurrentSelectedCountries();
+			updateUIButtons();
 		}
-		
+
 		if (hasGLES20()) {
 			map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 			map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
@@ -97,16 +100,6 @@ public class MapActivity extends FragmentActivity {
 			});
 		}
 
-		countrySearchField = (EditText) findViewById(R.id.country_search_field);
-		goCompareButton = (Button) findViewById(R.id.compare_button);
-		allSelectedCountriesButton = (Button) findViewById(R.id.countries_selected_button);
-		clearSelectionButton = (Button) findViewById(R.id.clear_country_selection_button);
-
-		if (appController.getCurrentSelectedCountries() != null) {
-			this.selectedCountries = appController.getCurrentSelectedCountries();
-			updateUIButtons();
-		}
-
 		// Fetches and displays all Countries on the map
 
 		Thread aThread = new Thread(new Runnable() {
@@ -122,49 +115,24 @@ public class MapActivity extends FragmentActivity {
 		});
 		aThread.start();
 
-		this.arrayAdapter = new ArrayAdapter<Country>(self,
-				android.R.layout.simple_spinner_dropdown_item,
-				selectedCountries);
+		this.arrayAdapter = new ArrayAdapter<Country>(self, android.R.layout.simple_spinner_dropdown_item, selectedCountries);
 		allSelectedCountriesButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new AlertDialog.Builder(self)
-						.setTitle(selectedCountries.size() + " " + getResources().getString(
-								R.string.countries_spinner_prompt)).setAdapter(arrayAdapter,
-								new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
-										dialog.dismiss();
-										countrySearchField.setText("");
-										Country aCountry = selectedCountries
-												.get(which);
-										LatLng aMarker = new LatLng(aCountry
-												.getLatitude(), aCountry
-												.getLongitude());
-										map.moveCamera(CameraUpdateFactory
-												.newLatLngZoom(aMarker, 4));
-									}
-								}).create().show();
+				new AlertDialog.Builder(self).setTitle(selectedCountries.size()
+						+ " "
+						+ getResources().getString(R.string.countries_spinner_prompt)).setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						countrySearchField.setText("");
+						Country aCountry = selectedCountries.get(which);
+						LatLng aMarker = new LatLng(aCountry.getLatitude(), aCountry.getLongitude());
+						map.moveCamera(CameraUpdateFactory.newLatLngZoom(aMarker, 4));
+					}
+				}).create().show();
 			}
 		});
-
-		// this.arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		// allSelectedCountrySpinner.setAdapter(this.arrayAdapter);
-		// allSelectedCountrySpinner.setOnItemSelectedListener(new
-		// OnItemSelectedListener() {
-		//
-		// @Override public void onItemSelected(AdapterView<?> parent, View
-		// view, int position, long id) {
-		// //Log.v(getClass().getName(), "SELECTED");
-		// parent.setSelection(0);
-		// }
-		//
-		// @Override public void onNothingSelected(AdapterView<?> parent) {
-		// //Log.v(getClass().getName(), "NOT SELECTED");
-		// }
-		//
-		// });
 
 		countrySearchField.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -190,16 +158,11 @@ public class MapActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				if (selectedCountries.size() > 0) {
-					WorldlyController appController = WorldlyController
-							.getInstance();
-					appController
-							.setCurrentSelectedCountries(selectedCountries);
-					startActivity(new Intent(self,
-							CompareCategoriesActivity.class));
+					WorldlyController appController = WorldlyController.getInstance();
+					appController.setCurrentSelectedCountries(selectedCountries);
+					startActivity(new Intent(self, CompareCategoriesActivity.class));
 				} else {
-					Toast.makeText(self,
-							getString(R.string.empty_list_countries),
-							Toast.LENGTH_LONG).show();
+					Toast.makeText(self, getString(R.string.empty_list_countries), Toast.LENGTH_LONG).show();
 				}
 			}
 		});
@@ -220,16 +183,14 @@ public class MapActivity extends FragmentActivity {
 					}
 				};
 				AlertDialog.Builder builder = new AlertDialog.Builder(self);
-				builder.setTitle(
-						selectedCountries.size()
-								+ " "
-								+ getResources().getString(
-										R.string.countries_spinner_prompt))
+				builder.setTitle(selectedCountries.size()
+						+ " "
+						+ getResources().getString(R.string.countries_spinner_prompt))
 						.setAdapter(arrayAdapter, dialogClickListener)
-						.setMessage(
-								"Are you sure you wish to clear your selection of countries?")
+						.setMessage("Are you sure you wish to clear your selection of countries?")
 						.setPositiveButton("Yes", dialogClickListener)
-						.setNegativeButton("No", null).create().show();
+						.setNegativeButton("No", null)
+						.create().show();
 			}
 		});
 	}
@@ -249,9 +210,8 @@ public class MapActivity extends FragmentActivity {
 	public boolean hasGLES20() {
 		ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		ConfigurationInfo info = am.getDeviceConfigurationInfo();
-		Log.i(getClass().getName(),
-				(info.reqGlEsVersion >= 0x20000) ? "Has Open GL 2.0"
-						: "Has not got Open GL 2.0");
+		Log.i(getClass().getName(), (info.reqGlEsVersion >= 0x20000) ? "Has Open GL 2.0"
+				: "Has not got Open GL 2.0");
 		return info.reqGlEsVersion >= 0x20000;
 	}
 
@@ -279,26 +239,17 @@ public class MapActivity extends FragmentActivity {
 				Marker lastMarker = null;
 				for (Country aCountry : availableCountries) {
 					Locale current = getResources().getConfiguration().locale;
-					String inputString = countrySearchField.getText()
-							.toString().toLowerCase(current);
-					String countryName = aCountry.getName()
-							.toLowerCase(current);
-					String iso2Code = aCountry.getIso2Code().toLowerCase(
-							current);
+					String inputString = countrySearchField.getText().toString().toLowerCase(current);
+					String countryName = aCountry.getName().toLowerCase(current);
+					String iso2Code = aCountry.getIso2Code().toLowerCase(current);
 					if (aCountry.getLatitude() != null
 							&& aCountry.getLongitude() != null
-							&& (countryName.startsWith(inputString) || iso2Code
-									.startsWith(inputString))) {
-						LatLng aLocation = new LatLng(aCountry.getLatitude(),
-								aCountry.getLongitude());
+							&& (countryName.startsWith(inputString) || iso2Code.startsWith(inputString))) {
+						LatLng aLocation = new LatLng(aCountry.getLatitude(), aCountry.getLongitude());
 						if (map != null) {
 							String title = aCountry.getName() + " - "
 									+ aCountry.getCapitalCity();
-							MarkerOptions aMarkerOption = new MarkerOptions()
-									.title(title)
-									.snippet(
-											getString(R.string.tap_to_add_or_remove))
-									.position(aLocation);
+							MarkerOptions aMarkerOption = new MarkerOptions().title(title).snippet(getString(R.string.tap_to_add_or_remove)).position(aLocation);
 							Marker aMarker = map.addMarker(aMarkerOption);
 							markerToCountry.put(aMarker, aCountry);
 							lastMarker = aMarker;
@@ -307,8 +258,7 @@ public class MapActivity extends FragmentActivity {
 					}
 				}
 				if (markerCount == 1) {
-					map.moveCamera(CameraUpdateFactory.newLatLngZoom(
-							lastMarker.getPosition(), 4));
+					map.moveCamera(CameraUpdateFactory.newLatLngZoom(lastMarker.getPosition(), 4));
 					lastMarker = null;
 				} else {
 					map.moveCamera(CameraUpdateFactory.zoomTo(1));
@@ -317,15 +267,10 @@ public class MapActivity extends FragmentActivity {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
-	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_about: // Take user to secret classified About Page
+		case R.id.action_about: // Take user to About Page
 			startActivity(new Intent(this, AboutActivity.class));
 			break;
 		case android.R.id.home: // Respond to the action bar's Up/Home button
@@ -335,11 +280,6 @@ public class MapActivity extends FragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
-	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

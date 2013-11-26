@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.example.worldly.R;
 import com.worldly.graph.data.GraphData;
 import com.worldly.graph.data.GraphDataColumn;
 import com.worldly.graph.data.GraphDataRow;
@@ -16,6 +15,8 @@ import com.worldly.graph.exception.GraphDataSizeMismatchException;
 import com.worldly.graph.types.BarChart;
 import com.worldly.graph.view.GraphView;
 import com.worldly.network.QuerySystem;
+
+import com.example.worldly.R;
 
 public class GraphTestActivity extends Activity {
 

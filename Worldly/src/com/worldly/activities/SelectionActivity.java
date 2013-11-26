@@ -14,9 +14,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.worldly.R;
 import com.worldly.controller.WorldlyController;
 import com.worldly.data_store.ListOfIndicators;
+
+import com.example.worldly.R;
 
 /**
  * This activity lets the user pick the desired mode of search within the
@@ -29,8 +30,8 @@ import com.worldly.data_store.ListOfIndicators;
 public class SelectionActivity extends Activity
 {
 
-	private WorldlyController appController;
 	private Activity self = this;
+	private WorldlyController appController = WorldlyController.getInstance();
 
 	/**
 	 * Constant representing the key used to store the selected mode in the
@@ -55,7 +56,6 @@ public class SelectionActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_selection);
-		appController = WorldlyController.getInstance();
 		mainIndicators = new ListOfIndicators();
 	}
 

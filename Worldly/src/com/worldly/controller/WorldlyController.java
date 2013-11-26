@@ -178,11 +178,27 @@ public class WorldlyController
 		return getCurrentSelectedCountries().get(getCurrentlySelectedCountryIndex());
 	}
 	
+	public boolean hasNextCountrySelection() {
+		return !(currentlySelectedCountryIndex >= currentSelectedCountries.size() - 1);
+	}
+	
+	public boolean hasPreviousCountrySelection() {
+		return !(currentlySelectedCountryIndex <= 0);
+	}
+	
 	public void incrementSelectedCountryIndex() {
 		currentlySelectedCountryIndex++;
 	}
 	
 	public void decrementSelectedCountryIndex() {
 		currentlySelectedCountryIndex--;
+	}
+	
+	public void selectFirstCountry() {
+		currentlySelectedCountryIndex = 0;
+	}
+	
+	public void selectLastCountry() {
+		currentlySelectedCountryIndex = this.currentSelectedCountries.size() - 1;
 	}
 }
