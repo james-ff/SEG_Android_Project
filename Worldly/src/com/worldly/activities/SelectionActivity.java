@@ -31,18 +31,12 @@ public class SelectionActivity extends Activity
 	private Activity self = this;
 	private WorldlyController appController = WorldlyController.getInstance();
 
-	/**
-	 * Constant across all activities, it holds all indicators that are loaded
-	 * into memory.
-	 */
-	private static ListOfIndicators mainIndicators;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_selection);
-		mainIndicators = new ListOfIndicators();
+		new ListOfIndicators();
 	}
 
 	@Override

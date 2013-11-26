@@ -33,7 +33,6 @@ import com.worldly.custom_adapter.SpinnerAdapter;
 import com.worldly.data_models.Indicator;
 import com.worldly.data_models.IndicatorDataBlock;
 import com.worldly.data_store.ListOfIndicators;
-import com.worldly.graph.GraphTestActivity;
 import com.worldly.graph.data.GraphData;
 import com.worldly.graph.data.GraphDataFactory;
 import com.worldly.graph.exception.CannotBeNullException;
