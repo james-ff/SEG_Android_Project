@@ -3,13 +3,9 @@ package com.worldly.activities;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -19,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
@@ -31,20 +29,17 @@ import android.widget.Toast;
 import com.example.worldly.R;
 import com.worldly.controller.WorldlyController;
 import com.worldly.custom_adapter.CompareExpandableListAdapter;
+import com.worldly.custom_adapter.SpinnerAdapter;
 import com.worldly.data_models.Country;
 import com.worldly.data_models.Indicator;
 import com.worldly.data_models.IndicatorDataBlock;
 import com.worldly.data_store.ListOfIndicators;
-import com.worldly.graph.Chart;
 import com.worldly.graph.GraphTestActivity;
 import com.worldly.graph.data.GraphData;
 import com.worldly.graph.data.GraphDataFactory;
-import com.worldly.graph.data.GraphDataRow;
 import com.worldly.graph.exception.CannotBeNullException;
-import com.worldly.graph.exception.GraphDataSizeMismatchException;
 import com.worldly.graph.types.BarChart;
 import com.worldly.graph.view.GraphView;
-import com.worldly.network.QuerySystem;
 import com.worldly.swipe.SwipeDetector;
 import com.worldly.swipe.SwipeListener;
 import com.worldly.view.LogoTextView;
@@ -58,14 +53,14 @@ public class CompareCategoriesActivity extends Activity implements
 	private ExpandableListView elvCategories;
 	private CompareExpandableListAdapter adapter;
 	private WorldlyController appController = WorldlyController.getInstance();
+	private Context context = this;
 	
 	private LogoTextView prevButton;
 	private LogoTextView nextButton;
 	private TextView countryTitleView;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_compare_categories);
 
@@ -77,10 +72,7 @@ public class CompareCategoriesActivity extends Activity implements
 			
 		//if in landscape
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-		{
 			setupLandscape();
-			//GraphDataFactory.createDataFromCountry(currentCountry);
-		}
 		else
 		{
 			prevButton = (LogoTextView) findViewById(R.id.ltvPrevCountry);
@@ -107,8 +99,7 @@ public class CompareCategoriesActivity extends Activity implements
 	}
 	
 	@Override
-	protected void onPause()
-	{
+	protected void onPause() {
 		super.onPause();
 		appController.saveState();
 	}
@@ -162,7 +153,7 @@ public class CompareCategoriesActivity extends Activity implements
 		Indicator i = ListOfIndicators.getAllLoadedIndicatorsFromCategory(groups.get(groupPosition)).get(childPosition);
 		
 		IndicatorDataBlock idb = new IndicatorDataBlock(i);
-		this.loadIndicatorDataBlock(idb);
+		GraphDataFactory.loadIndicatorDataBlock(idb, currentCountry);
 		
 		GraphData data = GraphDataFactory.createDataFromIndicator(idb);
 		
@@ -180,7 +171,10 @@ public class CompareCategoriesActivity extends Activity implements
 	
 	@Override
 	public void onGroupExpand(int groupPosition) {
-		ListOfIndicators.loadIndicatorsForCategory(groups.get(groupPosition));
+		//String msg = groups.get(groupPosition) + " Expanded";
+		if (ListOfIndicators.getNumberOfLoadedIndicatorsFromCategory(groups.get(groupPosition)) == 0)
+			ListOfIndicators.loadIndicatorsForCategory(groups.get(groupPosition));
+
 	}
 
 	@Override
@@ -193,121 +187,82 @@ public class CompareCategoriesActivity extends Activity implements
 		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 	}
 	
-	public void showGraph(View v)
-	{
+	public void showGraph(View v) {
 		Intent i = new Intent(CompareCategoriesActivity.this, GraphTestActivity.class);
 		startActivity(i);
 		onStop();
-	}
-//	public String[] getBusinessIndicatorTitles() {
-//		if(this.categoriesBusiness == null) {
-//			this.categoriesBusiness = new String[]{"GDP", "Investment", "Import/Export", "Labor Force", "Tax"};
-//		}
-//		return this.categoriesBusiness;
-//	}
-//	
-//	public String[] getCityLifeIndicatorTitles() {
-//		if(this.categoriesCityLife == null) {
-//			this.categoriesCityLife = new String[]{"Population", "Age Distribution", "Life Expectancy"};
-//		}
-//		return this.categoriesCityLife;
-//	}
-//	
-//	public String[] getClimateIndicatorTitles() {
-//		if(this.categoriesClimate == null) {
-//			this.categoriesClimate = new String[]{"CO2 Emissions", "Methane Emissions"};
-//		}
-//		return this.categoriesClimate;
-//	}
-//	
-//	public String[] getDemographicsIndicatorTitles() {
-//		if(this.categoriesDemographics == null) {
-//			this.categoriesDemographics = new String[]{};
-//		}
-//		return this.categoriesDemographics;
-//	}
-//	
-//	public String[] getEducationIndicatorTitles() {
-//		if(this.categoriesEducation == null) {
-//			this.categoriesEducation = new String[]{};
-//		}
-//		return this.categoriesEducation;
-//	}
-//	
-//	public String[] getEmploymentProspectsIndicatorTitles() {
-//		if(this.categoriesEmploymentProspects == null) {
-//			this.categoriesEmploymentProspects = new String[]{};
-//		}
-//		return this.categoriesEmploymentProspects;
-//	}
-//	
-//	public String[] getFinanceIndicatorTitles() {
-//		if(this.categoriesFinance == null) {
-//			this.categoriesFinance = new String[]{};
-//		}
-//		return this.categoriesFinance;
-//	}
-//	
-//	public String[] getQualityOfLifeIndicatorTitles() {
-//		if(this.categoriesQualityOfLife == null) {
-//			this.categoriesQualityOfLife = new String[]{};
-//		}
-//		return this.categoriesQualityOfLife;
-//	}
-//	
-//	public String[] getRuralLifeIndicatorTitles() {
-//		if(this.categoriesRuralLife == null) {
-//			this.categoriesRuralLife = new String[]{};
-//		}
-//		return this.categoriesRuralLife;
-//	}
+	}	
 	
+	GraphData data = null;
+	GraphView graph = null;
 	/**
 	 * Loads the screen in landscape.
 	 */
-	private void setupLandscape()
-	{
-		Spinner categories = (Spinner)findViewById(R.id.categoriesSelectSpinner);
-		categories.setAdapter(new com.worldly.custom_adapter.SpinnerAdapter(this, 
-				android.R.layout.simple_spinner_item, 
-				appController.getCategories()));
+	private void setupLandscape() {
+		final Spinner categories = (Spinner)findViewById(R.id.categoriesSelectSpinner);
+		final Spinner subCategories = (Spinner)findViewById(R.id.subCategoriesSelectSpinner);
 		
-		try {
-			Chart chart = new BarChart(new GraphDataRow("countries", "Population", true), new GraphDataRow("Slovakia", 12346, false), this);
-			GraphView graph = (GraphView)findViewById(R.id.landscapeGraphView);
-			graph.loadGraph(chart);
-		} catch (CannotBeNullException e) {e.printStackTrace();} 
-		catch (GraphDataSizeMismatchException e) {e.printStackTrace();}
+		//set categories
+		categories.setAdapter(new SpinnerAdapter(this, 
+							  android.R.layout.simple_spinner_item, 
+							  appController.getCategories()));	
+		categories.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) 
+			{
+				//set subcategories for currently selected category
+				subCategories.setAdapter(new SpinnerAdapter(context, 
+						 android.R.layout.simple_spinner_item,
+						 getSubcategories(categories.getSelectedItem().toString())));
+				subCategories.setSelection(0); //set 1st subcategory selected
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {}
+		});
 		
-		GraphDataFactory.createDataFromCountry(currentCountry);
+		subCategories.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				graph = (GraphView)findViewById(R.id.landscapeGraphView);
+				if (subCategories.getSelectedItemPosition() == 0)
+					data = GraphDataFactory.createDataFromCategory(categories.getSelectedItem().toString());
+				else
+					data = GraphDataFactory.createGraphDataFromSubCategory(categories.getSelectedItem().toString(), 
+																		   subCategories.getSelectedItem().toString());
+				
+				try {
+					graph.loadGraph(new BarChart(data, context));
+				} catch (CannotBeNullException e) {e.printStackTrace();}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {}
+		});
 	}
 	
 	/**
 	 * Initializes ExpandableListView.
 	 */
-	private void initializeELV()
-	{
+	private void initializeELV() {
 		// Initializing the ExpandableListView object
 		adapter = new CompareExpandableListAdapter(this, groups, childs);
 		elvCategories.setAdapter(adapter);
 		elvCategories.setOnChildClickListener(this);
 		elvCategories.setOnGroupExpandListener(this);
 		elvCategories.setOnGroupCollapseListener(this);
-		elvCategories.setOnTouchListener(new SwipeDetector(this, new SwipeListener() 
-		{	
+		elvCategories.setOnTouchListener(new SwipeDetector(this, new SwipeListener() {	
 			@Override public boolean onTopToBottomSwipe() {return false;}
 			@Override public boolean onBottomToTopSwipe() {return false;}
 				
 			@Override
-			public boolean onRightToLeftSwipe() 
-			{
+			public boolean onRightToLeftSwipe() {
 				selectNextCountry();
 				return true;
 			}
 				
 			@Override
-			public boolean onLeftToRightSwipe() 
-			{
+			public boolean onLeftToRightSwipe() {
 				selectPreviousCountry();
 				return true;
 			}
@@ -362,30 +317,10 @@ public class CompareCategoriesActivity extends Activity implements
 		initializeELV();
 	}
 	
-	private void loadIndicatorDataBlock(final IndicatorDataBlock idb)
+	private List<String> getSubcategories(String category)
 	{
-		final CountDownLatch latch = new CountDownLatch(1);
-		new Thread(new Runnable() {
-			@Override
-			public void run(){
-				try {
-					JSONArray res = new JSONArray(QuerySystem.getIndicatorData(currentCountry.getIso2Code(), 
-																			   idb.getIndicatorReferenced().getId())).getJSONArray(1);
-					for (int a = 0; a < res.length(); a++) {
-						JSONObject o = res.getJSONObject(a);
-						idb.addDataByYear(o.getInt("date"), o.get("value"));
-					}
-					latch.countDown();
-				} catch (JSONException e) {
-					e.printStackTrace();
-					latch.countDown();
-				}
-				
-			}
-		}).start();
-		
-		try {
-			latch.await();
-		} catch (InterruptedException e) {e.printStackTrace();}
+		List<String> list = ListOfIndicators.getReadableNamesOfIndicatorsInCategory(category);
+		list.add(0, "All indicators");
+		return list;
 	}
 }

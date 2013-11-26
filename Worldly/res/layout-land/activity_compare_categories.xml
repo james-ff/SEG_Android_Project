@@ -9,39 +9,30 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".CompareCategoriesActivity" >
 
-    <LinearLayout 
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal" >
 
-        <RelativeLayout 
+        <Spinner
+            android:id="@+id/categoriesSelectSpinner"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-            
-	        <TextView
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="@string/category"
-	            android:layout_centerInParent="true" />
-	        
-        </RelativeLayout>
-		
-		<Spinner 
-		    android:id="@+id/categoriesSelectSpinner"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"/>
-	
-	</LinearLayout>
-	
-    <ScrollView 
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id="@+id/subCategoriesSelectSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-		
-	    <com.worldly.graph.view.GraphView 
-	        android:id="@+id/landscapeGraphView"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"/>
-	    
+        android:layout_height="fill_parent" >
+
+        <com.worldly.graph.view.GraphView
+            android:id="@+id/landscapeGraphView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
     </ScrollView>
 
 </LinearLayout>
