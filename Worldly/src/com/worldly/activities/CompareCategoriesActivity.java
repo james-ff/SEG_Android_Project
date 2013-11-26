@@ -60,8 +60,7 @@ public class CompareCategoriesActivity extends Activity implements
 	private TextView countryTitleView;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_compare_categories);
 
@@ -100,8 +99,7 @@ public class CompareCategoriesActivity extends Activity implements
 	}
 	
 	@Override
-	protected void onPause()
-	{
+	protected void onPause() {
 		super.onPause();
 		appController.saveState();
 	}
@@ -189,83 +187,18 @@ public class CompareCategoriesActivity extends Activity implements
 		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 	}
 	
-	public void showGraph(View v)
-	{
+	public void showGraph(View v) {
 		Intent i = new Intent(CompareCategoriesActivity.this, GraphTestActivity.class);
 		startActivity(i);
 		onStop();
-	}
-//	public String[] getBusinessIndicatorTitles() {
-//		if(this.categoriesBusiness == null) {
-//			this.categoriesBusiness = new String[]{"GDP", "Investment", "Import/Export", "Labor Force", "Tax"};
-//		}
-//		return this.categoriesBusiness;
-//	}
-//	
-//	public String[] getCityLifeIndicatorTitles() {
-//		if(this.categoriesCityLife == null) {
-//			this.categoriesCityLife = new String[]{"Population", "Age Distribution", "Life Expectancy"};
-//		}
-//		return this.categoriesCityLife;
-//	}
-//	
-//	public String[] getClimateIndicatorTitles() {
-//		if(this.categoriesClimate == null) {
-//			this.categoriesClimate = new String[]{"CO2 Emissions", "Methane Emissions"};
-//		}
-//		return this.categoriesClimate;
-//	}
-//	
-//	public String[] getDemographicsIndicatorTitles() {
-//		if(this.categoriesDemographics == null) {
-//			this.categoriesDemographics = new String[]{};
-//		}
-//		return this.categoriesDemographics;
-//	}
-//	
-//	public String[] getEducationIndicatorTitles() {
-//		if(this.categoriesEducation == null) {
-//			this.categoriesEducation = new String[]{};
-//		}
-//		return this.categoriesEducation;
-//	}
-//	
-//	public String[] getEmploymentProspectsIndicatorTitles() {
-//		if(this.categoriesEmploymentProspects == null) {
-//			this.categoriesEmploymentProspects = new String[]{};
-//		}
-//		return this.categoriesEmploymentProspects;
-//	}
-//	
-//	public String[] getFinanceIndicatorTitles() {
-//		if(this.categoriesFinance == null) {
-//			this.categoriesFinance = new String[]{};
-//		}
-//		return this.categoriesFinance;
-//	}
-//	
-//	public String[] getQualityOfLifeIndicatorTitles() {
-//		if(this.categoriesQualityOfLife == null) {
-//			this.categoriesQualityOfLife = new String[]{};
-//		}
-//		return this.categoriesQualityOfLife;
-//	}
-//	
-//	public String[] getRuralLifeIndicatorTitles() {
-//		if(this.categoriesRuralLife == null) {
-//			this.categoriesRuralLife = new String[]{};
-//		}
-//		return this.categoriesRuralLife;
-//	}
-	
+	}	
 	
 	GraphData data = null;
 	GraphView graph = null;
 	/**
 	 * Loads the screen in landscape.
 	 */
-	private void setupLandscape()
-	{
+	private void setupLandscape() {
 		final Spinner categories = (Spinner)findViewById(R.id.categoriesSelectSpinner);
 		final Spinner subCategories = (Spinner)findViewById(R.id.subCategoriesSelectSpinner);
 		
@@ -273,8 +206,7 @@ public class CompareCategoriesActivity extends Activity implements
 		categories.setAdapter(new SpinnerAdapter(this, 
 							  android.R.layout.simple_spinner_item, 
 							  appController.getCategories()));	
-		categories.setOnItemSelectedListener(new OnItemSelectedListener() 
-		{
+		categories.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) 
 			{
@@ -289,11 +221,9 @@ public class CompareCategoriesActivity extends Activity implements
 			public void onNothingSelected(AdapterView<?> parent) {}
 		});
 		
-		subCategories.setOnItemSelectedListener(new OnItemSelectedListener() 
-		{
+		subCategories.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) 
-			{
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				graph = (GraphView)findViewById(R.id.landscapeGraphView);
 				if (subCategories.getSelectedItemPosition() == 0)
 					data = GraphDataFactory.createDataFromCategory(categories.getSelectedItem().toString());
@@ -314,29 +244,25 @@ public class CompareCategoriesActivity extends Activity implements
 	/**
 	 * Initializes ExpandableListView.
 	 */
-	private void initializeELV()
-	{
+	private void initializeELV() {
 		// Initializing the ExpandableListView object
 		adapter = new CompareExpandableListAdapter(this, groups, childs);
 		elvCategories.setAdapter(adapter);
 		elvCategories.setOnChildClickListener(this);
 		elvCategories.setOnGroupExpandListener(this);
 		elvCategories.setOnGroupCollapseListener(this);
-		elvCategories.setOnTouchListener(new SwipeDetector(this, new SwipeListener() 
-		{	
+		elvCategories.setOnTouchListener(new SwipeDetector(this, new SwipeListener() {	
 			@Override public boolean onTopToBottomSwipe() {return false;}
 			@Override public boolean onBottomToTopSwipe() {return false;}
 				
 			@Override
-			public boolean onRightToLeftSwipe() 
-			{
+			public boolean onRightToLeftSwipe() {
 				selectNextCountry();
 				return true;
 			}
 				
 			@Override
-			public boolean onLeftToRightSwipe() 
-			{
+			public boolean onLeftToRightSwipe() {
 				selectPreviousCountry();
 				return true;
 			}

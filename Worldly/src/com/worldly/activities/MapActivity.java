@@ -68,81 +68,43 @@ public class MapActivity extends FragmentActivity {
 		self = this;
 
 		if (appController.getCurrentSelectedCountries() != null) {
-			this.selectedCountries = appController
-					.getCurrentSelectedCountries();
+			this.selectedCountries = appController.getCurrentSelectedCountries();
 		}
-
+		
 		if (hasGLES20()) {
-			map = ((SupportMapFragment) getSupportFragmentManager()
-					.findFragmentById(R.id.map)).getMap();
+			map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 			map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 				@Override
 				public void onInfoWindowClick(Marker marker) {
 					Country aCountry = markerToCountry.get(marker);
 					boolean alreadySelected = false;
 					for (Country existingCountry : selectedCountries) {
-						if (existingCountry.getIso2Code().equals(
-								aCountry.getIso2Code())) {
+						if (existingCountry.getIso2Code().equals(aCountry.getIso2Code())) {
 							alreadySelected = true;
+							selectedCountries.remove(existingCountry);
+							Toast.makeText(self, aCountry + " removed!", Toast.LENGTH_SHORT).show();
 							break;
 						}
 					}
-					if (alreadySelected) {
-						selectedCountries.remove(aCountry);
-						Toast.makeText(self, aCountry + " removed!",
-								Toast.LENGTH_SHORT).show();
-					} else {
+					if (!alreadySelected) {
 						selectedCountries.add(aCountry);
-						Toast.makeText(self, aCountry + " added!",
-								Toast.LENGTH_SHORT).show();
-					}
-					arrayAdapter.notifyDataSetChanged();
-					marker.hideInfoWindow();
-				}
-			});
-		}
-		// allSelectedCountrySpinner = (Spinner)
-		// findViewById(R.id.countries_selected_spinner);
-		countrySearchField = (EditText) findViewById(R.id.country_search_field);
-		goCompareButton = (Button) findViewById(R.id.compare_button);
-		allSelectedCountriesButton = (Button) findViewById(R.id.countries_selected_button);
-		clearSelectionButton = (Button) findViewById(R.id.clear_country_selection_button);
-
-		if (appController.getCurrentSelectedCountries() != null) {
-			this.selectedCountries = appController
-					.getCurrentSelectedCountries();
-			updateUIButtons();
-		}
-
-		if (hasGLES20()) {
-			map = ((SupportMapFragment) getSupportFragmentManager()
-					.findFragmentById(R.id.map)).getMap();
-			map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
-				@Override
-				public void onInfoWindowClick(Marker marker) {
-					Country aCountry = markerToCountry.get(marker);
-					boolean alreadySelected = false;
-					for (Country existingCountry : selectedCountries) {
-						if (existingCountry.getIso2Code().equals(
-								aCountry.getIso2Code())) {
-							alreadySelected = true;
-							break;
-						}
-					}
-					if (alreadySelected) {
-						selectedCountries.remove(aCountry);
-						Toast.makeText(self, aCountry + " removed!",
-								Toast.LENGTH_SHORT).show();
-					} else {
-						selectedCountries.add(aCountry);
-						Toast.makeText(self, aCountry + " added!",
-								Toast.LENGTH_SHORT).show();
+						Toast.makeText(self, aCountry + " added!", Toast.LENGTH_SHORT).show();
 					}
 					updateUIButtons();
 					arrayAdapter.notifyDataSetChanged();
 					marker.hideInfoWindow();
 				}
 			});
+		}
+
+		countrySearchField = (EditText) findViewById(R.id.country_search_field);
+		goCompareButton = (Button) findViewById(R.id.compare_button);
+		allSelectedCountriesButton = (Button) findViewById(R.id.countries_selected_button);
+		clearSelectionButton = (Button) findViewById(R.id.clear_country_selection_button);
+
+		if (appController.getCurrentSelectedCountries() != null) {
+			this.selectedCountries = appController.getCurrentSelectedCountries();
+			updateUIButtons();
 		}
 
 		// Fetches and displays all Countries on the map
@@ -167,13 +129,8 @@ public class MapActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				new AlertDialog.Builder(self)
-						.setTitle(
-								selectedCountries.size()
-										+ " "
-										+ getResources()
-												.getString(
-														R.string.countries_spinner_prompt))
-						.setAdapter(arrayAdapter,
+						.setTitle(selectedCountries.size() + " " + getResources().getString(
+								R.string.countries_spinner_prompt)).setAdapter(arrayAdapter,
 								new DialogInterface.OnClickListener() {
 									@Override
 									public void onClick(DialogInterface dialog,
