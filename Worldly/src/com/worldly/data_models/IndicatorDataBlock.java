@@ -1,13 +1,14 @@
 package com.worldly.data_models;
 
-import android.annotation.SuppressLint;
-
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
+
+import android.annotation.SuppressLint;
 
 @SuppressLint("UseSparseArrays")
 public class IndicatorDataBlock {
-	private HashMap<Integer, Object> data = new HashMap<Integer, Object>();
+	private Map<Integer, Object> data = new HashMap<Integer, Object>();
 	private Indicator referencing;
 	
 	public IndicatorDataBlock(Indicator r) {

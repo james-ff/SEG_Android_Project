@@ -16,7 +16,7 @@ public class GraphDataColumn
 	/**
 	 * Starts with the name of the column and follows with data.
 	 */
-	List<Object> columnData;
+	private List<Object> columnData;
 	
 	/**
 	 * Constructor which directly sets the given List as
@@ -65,7 +65,7 @@ public class GraphDataColumn
 	 * 
 	 * @param index Index of an element to be removed.
 	 */
-	public void removeColumnData(int index)
+	void removeColumnData(int index)
 	{
 		if (index >= 0 && index < columnData.size())
 			this.columnData.remove(index);
@@ -76,7 +76,7 @@ public class GraphDataColumn
 	 * 
 	 * @return Data from the column in an unchanged format.
 	 */
-	public List<Object> getColumnData()
+	List<Object> getColumnData()
 	{
 		return columnData;
 	}
@@ -86,7 +86,7 @@ public class GraphDataColumn
 	 * 
 	 * @return Number of elements in the column.
 	 */
-	public int size()
+	int size()
 	{
 		return columnData.size();
 	}
@@ -96,7 +96,7 @@ public class GraphDataColumn
 	 * 
 	 * @return Column data in a human readable format.
 	 */
-	public String getColumnDataString()
+	private String getColumnDataString()
 	{
 		String result = "";
 		
@@ -120,7 +120,7 @@ public class GraphDataColumn
 	 * 
 	 * @return Column name.
 	 */
-	public String getColumnName()
+	String getColumnName()
 	{
 		return columnData.get(0).toString();
 	}
@@ -132,7 +132,7 @@ public class GraphDataColumn
 	 * @param name Name of the column.
 	 * @throws CannotBeNullException If name is NULL, exception is thrown.
 	 */
-	public void setColumnName(String name) throws CannotBeNullException
+	void setColumnName(String name) throws CannotBeNullException
 	{
 		if (name == null || name.equals(null))
 			throw new CannotBeNullException();

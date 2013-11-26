@@ -139,7 +139,7 @@ public abstract class Chart
 	 * @throws CannotBeNullException If column or any of its content is NULL exception is thrown.
 	 * @throws GraphDataSizeMismatchException If column does not have the correct length exception is thrown.
 	 */
-	public void addColumn(GraphDataColumn column) throws CannotBeNullException, GraphDataSizeMismatchException
+	void addColumn(GraphDataColumn column) throws CannotBeNullException, GraphDataSizeMismatchException
 	{
 		this.data.addColumn(column);
 		listener.onGraphDataChanged(this);
@@ -153,7 +153,7 @@ public abstract class Chart
 	 * @throws GraphDataSizeMismatchException If the row's length is different to current length of row 
 	 * in the GraphData exception is thrown.
 	 */
-	public void addRow(GraphDataRow row) throws CannotBeNullException, GraphDataSizeMismatchException
+	void addRow(GraphDataRow row) throws CannotBeNullException, GraphDataSizeMismatchException
 	{
 		this.data.addRow(row);
 		listener.onGraphDataChanged(this);
@@ -165,7 +165,7 @@ public abstract class Chart
 	 * 
 	 * @param index Index of row to be removed.
 	 */
-	public void removeRow(int index)
+	void removeRow(int index)
 	{
 		this.data.removeRow(index);
 		listener.onGraphDataChanged(this);
@@ -176,7 +176,7 @@ public abstract class Chart
 	 * 
 	 * @param index Index of a column to be removed.
 	 */
-	public void removeColumn(int index)
+	void removeColumn(int index)
 	{
 		this.data.removeColumn(index);
 		listener.onGraphDataChanged(this);
@@ -197,7 +197,7 @@ public abstract class Chart
 	 * 
 	 * @return Number of columns in graph's data.
 	 */
-	public int getNumberOfColumns()
+	int getNumberOfColumns()
 	{
 		return data.getNumberOfColumns();
 	}
@@ -207,7 +207,7 @@ public abstract class Chart
 	 * 
 	 * @return Number of rows in graph's data.
 	 */
-	public int getNumberOfRows()
+	int getNumberOfRows()
 	{
 		return data.getNumberOfRows();
 	}

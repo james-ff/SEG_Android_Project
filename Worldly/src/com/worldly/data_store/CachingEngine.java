@@ -8,7 +8,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import android.os.Environment;
@@ -21,7 +20,7 @@ import com.worldly.data_models.Country;
  * This class handles the caching of data to disk and also the procedure to read
  * data from an existing cached file.
  * 
- * @author Annie the Eagle & Rafael da Silva Costa & Team
+ * @author Ferdinand Keller & Rafael da Silva Costa & Team
  * 
  */
 public class CachingEngine
@@ -44,8 +43,6 @@ public class CachingEngine
 	 * Constant representing the separator used whilst writing to files.
 	 */
 	private static final String SEPARATOR = ", ", NEWLINE = "\n";
-
-	public static HashMap<String, String> indicatorJSONResponses = new HashMap<String, String>();
 
 	/**
 	 * Static method which writes the entire data of all countries from an

@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import com.example.worldly.R;
 
 @SuppressLint("NewApi")
-public class AboutActivity extends Activity {
+class AboutActivity extends Activity {
 
 	private ImageView logo;
 	
@@ -29,5 +29,4 @@ public class AboutActivity extends Activity {
 		getMenuInflater().inflate(R.menu.about, menu);
 		return true;
 	}
-
 }

@@ -41,7 +41,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.worldly.controller.WorldlyController;
 import com.worldly.data_models.Country;
 
-public class MapActivity extends FragmentActivity {
+class MapActivity extends FragmentActivity {
 
 	private Activity self;
 	private WorldlyController appController = WorldlyController.getInstance();
@@ -149,23 +149,6 @@ public class MapActivity extends FragmentActivity {
 			}
 		});
 
-		// this.arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		// allSelectedCountrySpinner.setAdapter(this.arrayAdapter);
-		// allSelectedCountrySpinner.setOnItemSelectedListener(new
-		// OnItemSelectedListener() {
-		//
-		// @Override public void onItemSelected(AdapterView<?> parent, View
-		// view, int position, long id) {
-		// //Log.v(getClass().getName(), "SELECTED");
-		// parent.setSelection(0);
-		// }
-		//
-		// @Override public void onNothingSelected(AdapterView<?> parent) {
-		// //Log.v(getClass().getName(), "NOT SELECTED");
-		// }
-		//
-		// });
-
 		countrySearchField.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
@@ -246,7 +229,7 @@ public class MapActivity extends FragmentActivity {
 		appController = WorldlyController.getInstance();
 	}
 
-	public boolean hasGLES20() {
+	private boolean hasGLES20() {
 		ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		ConfigurationInfo info = am.getDeviceConfigurationInfo();
 		Log.i(getClass().getName(),
@@ -255,13 +238,13 @@ public class MapActivity extends FragmentActivity {
 		return info.reqGlEsVersion >= 0x20000;
 	}
 
-	public void updateUIButtons() {
+	private void updateUIButtons() {
 		boolean hasItems = selectedCountries.size() > 0;
 		clearSelectionButton.setEnabled(hasItems);
 		goCompareButton.setEnabled(hasItems);
 	}
 
-	public void plotCountriesOnMap() {
+	private void plotCountriesOnMap() {
 		self.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -270,7 +253,7 @@ public class MapActivity extends FragmentActivity {
 		});
 	}
 
-	public void plotSpecificCountriesOnMap() {
+	private void plotSpecificCountriesOnMap() {
 		if (map != null) {
 			map.clear();
 			markerToCountry = new HashMap<Marker, Country>();

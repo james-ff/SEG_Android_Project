@@ -34,7 +34,7 @@ public class GraphData implements Serializable
 	/**
 	 * List of GraphDataRows which contains all the data for the graph.
 	 */
-	List<GraphDataRow> data;
+	private List<GraphDataRow> data;
 	
 	/**
 	 * Constructor which sets rowNames and first line of data.

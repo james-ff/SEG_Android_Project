@@ -25,9 +25,6 @@ public class SwipeDetector implements View.OnTouchListener
 		gd = new GestureDetector(context, swipeListener);
 	}
 	
-	/* (non-Javadoc)
-	 * @see android.view.View.OnTouchListener#onTouch(android.view.View, android.view.MotionEvent)
-	 */
 	public boolean onTouch(View v, MotionEvent event) 
 	{
 		return gd.onTouchEvent(event);

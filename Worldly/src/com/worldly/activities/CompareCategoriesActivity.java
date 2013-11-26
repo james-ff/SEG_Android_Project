@@ -34,7 +34,6 @@ import com.worldly.data_models.Country;
 import com.worldly.data_models.Indicator;
 import com.worldly.data_models.IndicatorDataBlock;
 import com.worldly.data_store.ListOfIndicators;
-import com.worldly.graph.GraphTestActivity;
 import com.worldly.graph.data.GraphData;
 import com.worldly.graph.data.GraphDataFactory;
 import com.worldly.graph.exception.CannotBeNullException;
@@ -44,7 +43,7 @@ import com.worldly.swipe.SwipeDetector;
 import com.worldly.swipe.SwipeListener;
 import com.worldly.view.LogoTextView;
 
-public class CompareCategoriesActivity extends Activity implements
+class CompareCategoriesActivity extends Activity implements
 		OnChildClickListener, OnGroupExpandListener, OnGroupCollapseListener, OnGroupClickListener {
 	
 	private List<String> groups;
@@ -187,12 +186,6 @@ public class CompareCategoriesActivity extends Activity implements
 		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 	}
 	
-	public void showGraph(View v) {
-		Intent i = new Intent(CompareCategoriesActivity.this, GraphTestActivity.class);
-		startActivity(i);
-		onStop();
-	}	
-	
 	GraphData data = null;
 	GraphView graph = null;
 	/**
@@ -269,7 +262,7 @@ public class CompareCategoriesActivity extends Activity implements
 		}));
 	}
 	
-	public boolean selectNextCountry() {
+	private boolean selectNextCountry() {
 		if (appController.getCurrentlySelectedCountryIndex() >= this.appController.getCurrentSelectedCountries().size() - 1) {
 			Toast.makeText(this, "There is not a next country", Toast.LENGTH_SHORT).show();
 			return false;
@@ -281,7 +274,7 @@ public class CompareCategoriesActivity extends Activity implements
 		}
 	}
 	
-	public boolean selectPreviousCountry() {
+	private boolean selectPreviousCountry() {
 		if (appController.getCurrentlySelectedCountryIndex() <= 0) {
 			Toast.makeText(this, "There is not a previous country", Toast.LENGTH_SHORT).show();
 			return false;
@@ -293,7 +286,7 @@ public class CompareCategoriesActivity extends Activity implements
 		}
 	}
 	
-	public void updateUIAfterSelection() {
+	private void updateUIAfterSelection() {
 		// Checking if previous button should be enabled
 		if (appController.getCurrentlySelectedCountryIndex() <= 0) {
 			// Grey out previous
