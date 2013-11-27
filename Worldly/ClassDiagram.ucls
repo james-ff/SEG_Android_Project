@@ -371,6 +371,8 @@
     <end type="TARGET" refId="22"/>  
   </generalization>  
   <association id="57">    
+    <bendpoint x="1630" y="1678"/>    
+    <bendpoint x="1614" y="1958"/>    
     <end type="SOURCE" refId="12" navigable="false">      
       <attribute id="58" name="loadedIndicators"/>      
       <multiplicity id="59" minimum="0" maximum="2147483647"/>    
@@ -455,7 +457,6 @@
     <end type="TARGET" refId="21"/>  
   </dependency>  
   <association id="78">    
-    <bendpoint x="2066" y="615"/>    
     <bendpoint x="2073" y="739"/>    
     <end type="SOURCE" refId="4" navigable="false">      
       <attribute id="79" name="appController"/>      
