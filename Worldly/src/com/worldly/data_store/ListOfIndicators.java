@@ -47,6 +47,11 @@ public class ListOfIndicators {
 	 */
 	private static Map<String, Map<String, String>> categories = new HashMap<String, Map<String, String>>();
 	
+	/**
+	 * Static Map containing indicator readable names to indicator codes
+	 */
+	private static Map<String, String> indicatorReference = new HashMap<String, String>();
+	
 	public ListOfIndicators() {
 		// Category Setup -- These categories will be the headings of the expandable groups (use droneStrikes.keySet())
 		categories.put(CATEGORY_BUSINESS, new HashMap<String, String>());
@@ -67,16 +72,22 @@ public class ListOfIndicators {
 		reference.put("IC.LGL.CRED.XQ", "Strength of legal rights index (0=weak to 10=strong)");
 		reference.put("SL.TLF.TOTL.IN", "Labor Force");
 		reference.put("IC.TAX.TOTL.CP.ZS", "Total tax rate (% of commercial profits)");
+		indicatorReference.putAll(reference);
+		
 		reference = categories.get(CATEGORY_CITY_LIFE);
 		reference.put("SH.XPD.PCAP", "Health expenditure per capita (current US$)");
 		reference.put("SH.H2O.SAFE.UR.ZS", "% of urban population with access to improved water source");
 		reference.put("SH.SDA.ACSN.UR", "% of urban population with access to improved Sanitation Facilities");
 		reference.put("IS.VEH.ROAD.K1", "Vehicles per km of road");
+		indicatorReference.putAll(reference);
+		
 		reference = categories.get(CATEGORY_CLIMATE);
 		reference.put("EN.ATM.CO2E.KT", "CO2 emissions in kilotons");
 		reference.put("EN.ATM.METH.KT.CE", "Methane emissions in kilotons of CO2 equivalent");
 		reference.put("EN.ATM.NOXE.KT.CE", "Nitrous oxide emissions (thousand metric tons of CO2 equivalent)");
 		reference.put("EN.ATM.GHGO.KT.CE", "Other greenhouse gas emissions (thousand metric tons of CO2 equivalent)");
+		indicatorReference.putAll(reference);
+		
 		reference = categories.get(CATEGORY_DEMOGRAPHICS);
 		reference.put("SP.RUR.TOTL.ZS", "Rural population (% of total population)");
 		reference.put("SP.URB.TOTL.IN.ZS", "Urban population (% of total population)");
@@ -86,30 +97,51 @@ public class ListOfIndicators {
 		reference.put("SM.POP.NETM", "Net migration");
 		reference.put("SE.ADT.LITR.ZS", "Literacy rate: adult total");
 		reference.put("SP.DYN.LE00.IN", "Life expectancy at birth (total: years)");
+		indicatorReference.putAll(reference);
+		
 		reference = categories.get(CATEGORY_EDUCATION);
 		reference.put("SE.XPD.TOTL.GD.ZS", "Public spending on education, total (% of GDP)");
 		reference.put("SE.TER.ENRR", "School enrollment, tertiary (% gross)");
+		indicatorReference.putAll(reference);
+		
 		reference = categories.get(CATEGORY_EMPLOYMENT_PROSPECTS);
 		reference.put("SL.AGR.EMPL.ZS", "Employment in agriculture (% of total employment)");
 		reference.put("SL.SRV.EMPL.ZS", "Employment in services (% of total employment)");
 		reference.put("SL.IND.EMPL.ZS", "Employment in industry (% of total employment)");
 		reference.put("SL.UEM.TOTL.ZS", "Unemployment, total (% of total labor force)");
 		reference.put("SL.UEM.LTRM.ZS", "Long-term unemployment (% of total unemployment)");
+		indicatorReference.putAll(reference);
+		
 		reference = categories.get(CATEGORY_FINANCE);
 		reference.put("FR.INR.RINR", "Real interest rate (%)");
 		reference.put("FR.INR.LEND", "Lending interest rate (%)");
+		indicatorReference.putAll(reference);
+		
 		reference = categories.get(CATEGORY_QUALITY_OF_LIFE);
 		reference.put("IS.ROD.PAVE.ZS", "Roads, paved (% of total roads)");
 		reference.put("IT.NET.USER.P2", "Internet users (per 100 people)");
 		reference.put("IT.CEL.SETS.P2", "Mobile cellular subscriptions (per 100 people)");
 		reference.put("IS.VEH.NVEH.P3", "Motor vehicles (per 1,000 people)");
 		reference.put("IS.RRS.TOTL.KM", "Rail lines (total route-km)");
+		indicatorReference.putAll(reference);
+		
 		reference = categories.get(CATEGORY_RURAL_LIFE);
 		reference.put("SH.H2O.SAFE.RU.ZS", "Improved water source, rural (% of rural population with access)");
 		reference.put("AG.LND.FRST.ZS", "Forest area (% of land area)");
 		reference.put("AG.LND.AGRI.ZS", "Agricultural land (% of land area)");
 		reference.put("AG.LND.ARBL.ZS", "Arable land (% of land area)");
 		reference.put("AG.LND.CROP.ZS", "Permanent cropland (% of land area)");
+		indicatorReference.putAll(reference);
+		
+		// Creates a <Readable Indicator> to <Query Parameter> Map
+		indicatorReference = reverseMap(indicatorReference);
+	}
+	
+	public static HashMap<String, String> reverseMap(Map<String, String> map) {
+	    HashMap<String, String> reversedMap = new HashMap<String, String>();
+	    for(Map.Entry<String, String> anEntry : map.entrySet())
+	        reversedMap.put(anEntry.getValue(), anEntry.getKey());
+	    return reversedMap;
 	}
 	
 	private static boolean addIndicator(String category, String code) {
@@ -186,93 +218,6 @@ public class ListOfIndicators {
 	
 	public static String getIndicatorCodeFromName(String name)
 	{
-		if (name.equals("GDP growth (Annual %)"))
-			return "NY.GDP.MKTP.KD.ZG";
-		else if (name.equals("Listed domestic companies"))
-			return "CM.MKT.LDOM.NO";
-		else if (name.equals("Health expenditure per capita (current US$)"))
-			return "SH.XPD.PCAP";
-		else if (name.equals("% of urban populating with access to improved water"))
-			return "SH.H2O.SAFE.UR.ZS";
-		else if (name.equals("CO2 emissions in kilotons"))
-			return "EN.ATM.CO2E.KT";
-		else if (name.equals("Methane emissions in kilotons of CO2 equivalent"))
-			return "EN.ATM.METH.KT.CE";
-		else if (name.equals("Total Population"))
-			return "SP.POP.TOTL";
-		else if (name.equals("Net migration"))
-			return "SM.POP.NETM";
-		else if (name.equals("Ease of doing business index (1=easiest)"))
-			return "IC.BUS.EASE.XQ";
-		else if (name.equals("Strength of legal rights index (0=weak to 10=strong)"))
-			return "IC.LGL.CRED.XQ";
-		else if (name.equals("Labor Force"))
-			return "SL.TLF.TOTL.IN";
-		else if (name.equals("Total tax rate (% of commercial profits)"))
-			return "IC.TAX.TOTL.CP.ZS";
-		else if (name.equals("Health expenditure per capita (current US$)"))
-			return "SH.XPD.PCAP";
-		else if (name.equals("% of urban population with access to improved water source"))
-			return "SH.H2O.SAFE.UR.ZS";
-		else if (name.equals("% of urban population with access to improved Sanitation Facilities"))
-			return "SH.SDA.ACSN.UR";
-		else if (name.equals("Vehicles per km of road"))
-			return "IS.VEH.ROAD.K1";
-		else if (name.equals("Nitrous oxide emissions (thousand metric tons of CO2 equivalent)"))
-			return "EN.ATM.NOXE.KT.CE";
-		else if (name.equals("Other greenhouse gas emissions (thousand metric tons of CO2 equivalent)"))
-			return "EN.ATM.GHGO.KT.CE";
-		else if (name.equals("Rural population (% of total population)"))
-			return "SP.RUR.TOTL.ZS";
-		else if (name.equals("Urban population (% of total population)"))
-			return "SP.URB.TOTL.IN.ZS";
-		else if (name.equals("Population in the largest city (% of urban population)"))
-			return "EN.URB.LCTY.UR.ZS";
-		else if (name.equals("Population growth (annual %)"))
-			return "SP.POP.GROW";
-		else if (name.equals("Literacy rate: adult total"))
-			return "SE.ADT.LITR.ZS";
-		else if (name.equals("Life expectancy at birth (total: years)"))
-			return "SP.DYN.LE00.IN";
-		else if (name.equals("Public spending on education, total (% of GDP)"))
-			return "SE.XPD.TOTL.GD.ZS";
-		else if (name.equals("School enrollment, tertiary (% gross)"))
-			return "SE.TER.ENRR";
-		else if (name.equals("Employment in agriculture (% of total employment)"))
-			return "SL.AGR.EMPL.ZS";
-		else if (name.equals("Employment in services (% of total employment)"))
-			return "SL.SRV.EMPL.ZS";
-		else if (name.equals("Employment in industry (% of total employment)"))
-			return "SL.IND.EMPL.ZS";
-		else if (name.equals("Unemployment, total (% of total labor force)"))
-			return "SL.UEM.TOTL.ZS";
-		else if (name.equals("Long-term unemployment (% of total unemployment)"))
-			return "SL.UEM.LTRM.ZS";
-		else if (name.equals("Real interest rate (%)"))
-			return "FR.INR.RINR";
-		else if (name.equals("Lending interest rate (%)"))
-			return "FR.INR.LEND";
-		else if (name.equals("Roads, paved (% of total roads)"))
-			return "IS.ROD.PAVE.ZS";
-		else if (name.equals("Internet users (per 100 people)"))
-			return "IT.NET.USER.P2";
-		else if (name.equals("Mobile cellular subscriptions (per 100 people)"))
-			return "IT.CEL.SETS.P2";
-		else if (name.equals("Motor vehicles (per 1,000 people)"))
-			return "IS.VEH.NVEH.P3";
-		else if (name.equals("Rail lines (total route-km)"))
-			return "IS.RRS.TOTL.KM";
-		else if (name.equals("Improved water source, rural (% of rural population with access)"))
-			return "SH.H2O.SAFE.RU.ZS";
-		else if (name.equals("Forest area (% of land area)"))
-			return "AG.LND.FRST.ZS";
-		else if (name.equals("Agricultural land (% of land area)"))
-			return "AG.LND.AGRI.ZS";
-		else if (name.equals("Arable land (% of land area)"))
-			return "AG.LND.ARBL.ZS";
-		else if (name.equals("Permanent cropland (% of land area)"))
-			return "AG.LND.CROP.ZS";		
-		else
-			return null;
+		return indicatorReference.get(name);
 	}
 }
