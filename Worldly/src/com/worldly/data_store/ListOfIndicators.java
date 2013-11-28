@@ -1,7 +1,6 @@
 package com.worldly.data_store;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -179,8 +178,10 @@ public class ListOfIndicators {
 							CATEGORY_RURAL_LIFE};
 	}
 	
-	public static Collection<String> getReadableNamesOfIndicatorsInCategory(String category) {
-		return categories.get(category).values();
+	public static List<String> getReadableNamesOfIndicatorsInCategory(String category) {
+		List<String> indicatorNames = new ArrayList<String>();
+		indicatorNames.addAll(categories.get(category).values());	
+		return indicatorNames;
 	}
 	
 	public static String getIndicatorCodeFromName(String name)
