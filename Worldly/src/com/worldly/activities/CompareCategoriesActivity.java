@@ -24,7 +24,6 @@ import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.worldly.R;
 import com.worldly.controller.WorldlyController;
@@ -42,6 +41,11 @@ import com.worldly.swipe.SwipeDetector;
 import com.worldly.swipe.SwipeListener;
 import com.worldly.view.LogoTextView;
 
+/**
+ * Activity used to compare the indicators and to display the graphs, it implements Listeners used by the ExpandableListView.
+ * @author Rafael da Silva Costa & Team
+ *
+ */
 public class CompareCategoriesActivity extends Activity implements
 		OnChildClickListener, OnGroupExpandListener, OnGroupCollapseListener, OnGroupClickListener {
 	
@@ -71,11 +75,10 @@ public class CompareCategoriesActivity extends Activity implements
 		elvCategories = (ExpandableListView) findViewById(R.id.elvCategories);
 
 		// if in landscape
-		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) 
 			setupLandscape();
-		} else {
+		else 
 			setupPortrait();
-		}
 	}
 
 	@Override
@@ -156,13 +159,7 @@ public class CompareCategoriesActivity extends Activity implements
 	}
 
 	@Override
-	public void onGroupCollapse(int groupPosition) {
-		displayMessage(groups.get(groupPosition) + " Collapsed");
-	}
-
-	private void displayMessage(String msg) {
-		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-	}
+	public void onGroupCollapse(int groupPosition) {}
 	
 	/**
 	 * Loads the screen in landscape.
