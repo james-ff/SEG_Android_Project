@@ -68,12 +68,12 @@ public class MapActivity extends FragmentActivity {
 		goCompareButton = (Button) findViewById(R.id.compare_button);
 		allSelectedCountriesButton = (Button) findViewById(R.id.countries_selected_button);
 		clearSelectionButton = (Button) findViewById(R.id.clear_country_selection_button);
-
+		
 		if (appController.getCurrentSelectedCountries() != null) {
 			this.selectedCountries = appController.getCurrentSelectedCountries();
 			updateUIButtons();
 		}
-
+		
 		if (hasGLES20()) {
 			map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 			map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
@@ -96,12 +96,12 @@ public class MapActivity extends FragmentActivity {
 					updateUIButtons();
 					arrayAdapter.notifyDataSetChanged();
 					marker.hideInfoWindow();
+					
 				}
 			});
 		}
 
 		// Fetches and displays all Countries on the map
-
 		Thread aThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -119,18 +119,24 @@ public class MapActivity extends FragmentActivity {
 		allSelectedCountriesButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new AlertDialog.Builder(self).setTitle(selectedCountries.size()
-						+ " "
-						+ getResources().getString(R.string.countries_spinner_prompt)).setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						countrySearchField.setText("");
-						Country aCountry = selectedCountries.get(which);
-						LatLng aMarker = new LatLng(aCountry.getLatitude(), aCountry.getLongitude());
-						map.moveCamera(CameraUpdateFactory.newLatLngZoom(aMarker, 4));
-					}
-				}).create().show();
+				new AlertDialog.Builder(self)
+						.setTitle(selectedCountries.size() + " " + getResources().getString(
+								R.string.countries_spinner_prompt)).setAdapter(arrayAdapter,
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										dialog.dismiss();
+										countrySearchField.setText("");
+										Country aCountry = selectedCountries
+												.get(which);
+										LatLng aMarker = new LatLng(aCountry
+												.getLatitude(), aCountry
+												.getLongitude());
+										map.moveCamera(CameraUpdateFactory
+												.newLatLngZoom(aMarker, 4));
+									}
+								}).create().show();
 			}
 		});
 
@@ -216,7 +222,7 @@ public class MapActivity extends FragmentActivity {
 	}
 
 	private void updateUIButtons() {
-		boolean hasItems = selectedCountries.size() > 0;
+		boolean hasItems = selectedCountries.size() > 0;		
 		clearSelectionButton.setEnabled(hasItems);
 		goCompareButton.setEnabled(hasItems);
 	}
