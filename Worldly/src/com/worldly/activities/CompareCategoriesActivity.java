@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -124,9 +123,8 @@ public class CompareCategoriesActivity extends Activity implements
 	}
 
 	@Override
-	public boolean onChildClick(ExpandableListView parent, View v,
-			int groupPosition, int childPosition, long id) {
-		Log.e(getClass().getName(), "Child View Clicked");
+	public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+		//Log.d(getClass().getName(), "Child View Clicked");
 
 		Indicator i = ListOfIndicators.getAllLoadedIndicatorsFromCategory(groups.get(groupPosition)).get(childPosition);
 
@@ -135,7 +133,7 @@ public class CompareCategoriesActivity extends Activity implements
 
 		GraphData data = GraphDataFactory.createDataFromIndicator(idb);
 
-		Log.e(getClass().getName(), data.getData().toString());
+		//Log.d(getClass().getName(), data.getData().toString());
 
 		adapter.addGraphData(adapter.getChildId(groupPosition, childPosition), data);
 
