@@ -52,7 +52,8 @@
         
         <activity
             android:name="com.worldly.activities.CompareCategoriesActivity"
-            android:label="@string/title_activity_categories" >
+            android:label="@string/title_activity_categories" 
+            android:parentActivityName="com.worldly.activities.MapActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.worldly.activities.MapActivity" />

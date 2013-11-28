@@ -1,5 +1,6 @@
 package com.worldly.activities;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -296,7 +297,7 @@ public class CompareCategoriesActivity extends Activity implements
 	}
 
 	private List<String> getSubcategories(String category) {
-		List<String> list = ListOfIndicators.getReadableNamesOfIndicatorsInCategory(category);
+		Collection<String> list = ListOfIndicators.getReadableNamesOfIndicatorsInCategory(category);
 		list.add(0, "All indicators");
 		return list;
 	}

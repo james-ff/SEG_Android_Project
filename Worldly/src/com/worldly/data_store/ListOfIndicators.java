@@ -1,6 +1,7 @@
 package com.worldly.data_store;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,6 @@ import org.json.JSONException;
 import android.util.Log;
 
 import com.worldly.data_models.Indicator;
-import com.worldly.data_models.UnloadedIndicatorDescription;
 import com.worldly.network.QuerySystem;
 
 /**
@@ -25,82 +25,92 @@ import com.worldly.network.QuerySystem;
  */
 public class ListOfIndicators {
 	
-	public static final String CATEGORY_BUSINESS = "Business";
-	public static final String CATEGORY_CITY_LIFE = "City Life";
-	public static final String CATEGORY_CLIMATE = "Climate";
-	public static final String CATEGORY_DEMOGRAPHICS = "Demographics";
-	public static final String CATEGORY_EDUCATION = "Education";
-	public static final String CATEGORY_EMPLOYMENT_PROSPECTS = "Employment Prospects";
-	public static final String CATEGORY_FINANCE = "Finance";
-	public static final String CATEGORY_QUALITY_OF_LIFE = "Quality of Life";
-	public static final String CATEGORY_RURAL_LIFE = "Rural Life";
+	/**
+	 * Constant representing the indicator categories.
+	 */
+	public static final String CATEGORY_BUSINESS = "Business"
+	, CATEGORY_CITY_LIFE = "City Life"
+	, CATEGORY_CLIMATE = "Climate"
+	, CATEGORY_DEMOGRAPHICS = "Demographics"
+	, CATEGORY_EDUCATION = "Education"
+	, CATEGORY_EMPLOYMENT_PROSPECTS = "Employment Prospects"
+	, CATEGORY_FINANCE = "Finance"
+	, CATEGORY_QUALITY_OF_LIFE = "Quality of Life"
+	, CATEGORY_RURAL_LIFE = "Rural Life";
 	
+	/**
+	 * Static List holding the loaded indicators' data.
+	 */
 	private static List<Indicator> loadedIndicators = new ArrayList<Indicator>();
-	private static Map<String, ArrayList<UnloadedIndicatorDescription>> categories = new HashMap<String, ArrayList<UnloadedIndicatorDescription>>();
+	
+	/**
+	 * Static Map containing the indicator categories, subcategories, indicator readable names and indicator codes.
+	 */
+	private static Map<String, Map<String, String>> categories = new HashMap<String, Map<String, String>>();
 	
 	public ListOfIndicators() {
 		// Category Setup -- These categories will be the headings of the expandable groups (use droneStrikes.keySet())
-		categories.put(CATEGORY_BUSINESS, new ArrayList<UnloadedIndicatorDescription>());
-		categories.put(CATEGORY_CITY_LIFE, new ArrayList<UnloadedIndicatorDescription>());
-		categories.put(CATEGORY_CLIMATE, new ArrayList<UnloadedIndicatorDescription>());
-		categories.put(CATEGORY_DEMOGRAPHICS, new ArrayList<UnloadedIndicatorDescription>());
-		categories.put(CATEGORY_EDUCATION, new ArrayList<UnloadedIndicatorDescription>());
-		categories.put(CATEGORY_EMPLOYMENT_PROSPECTS, new ArrayList<UnloadedIndicatorDescription>());
-		categories.put(CATEGORY_FINANCE, new ArrayList<UnloadedIndicatorDescription>());
-		categories.put(CATEGORY_QUALITY_OF_LIFE, new ArrayList<UnloadedIndicatorDescription>());
-		categories.put(CATEGORY_RURAL_LIFE, new ArrayList<UnloadedIndicatorDescription>());
+		categories.put(CATEGORY_BUSINESS, new HashMap<String, String>());
+		categories.put(CATEGORY_CITY_LIFE, new HashMap<String, String>());
+		categories.put(CATEGORY_CLIMATE, new HashMap<String, String>());
+		categories.put(CATEGORY_DEMOGRAPHICS, new HashMap<String, String>());
+		categories.put(CATEGORY_EDUCATION, new HashMap<String, String>());
+		categories.put(CATEGORY_EMPLOYMENT_PROSPECTS, new HashMap<String, String>());
+		categories.put(CATEGORY_FINANCE, new HashMap<String, String>());
+		categories.put(CATEGORY_QUALITY_OF_LIFE, new HashMap<String, String>());
+		categories.put(CATEGORY_RURAL_LIFE, new HashMap<String, String>());
 		
 		/* -- Indicators Setup -- Here we add the known codes of indicators we are interested in. -- */ 
-		List<UnloadedIndicatorDescription> reference = categories.get(CATEGORY_BUSINESS);
-		reference.add(new UnloadedIndicatorDescription("GDP growth (Annual %)", "NY.GDP.MKTP.KD.ZG"));
-		reference.add(new UnloadedIndicatorDescription("Listed domestic companies", "CM.MKT.LDOM.NO"));
-		reference.add(new UnloadedIndicatorDescription("Ease of doing business index (1=easiest)", "IC.BUS.EASE.XQ"));
-		reference.add(new UnloadedIndicatorDescription("Strength of legal rights index (0=weak to 10=strong)", "IC.LGL.CRED.XQ"));
-		reference.add(new UnloadedIndicatorDescription("Labor Force", "SL.TLF.TOTL.IN"));
-		reference.add(new UnloadedIndicatorDescription("Total tax rate (% of commercial profits)", "IC.TAX.TOTL.CP.ZS"));
+		Map<String, String> reference = categories.get(CATEGORY_BUSINESS);
+		reference.put("NY.GDP.MKTP.KD.ZG", "GDP growth (Annual %)");
+		reference.put("CM.MKT.LDOM.NO", "Listed domestic companies");
+		reference.put("IC.BUS.EASE.XQ", "Ease of doing business index (1=easiest)");
+		reference.put("IC.LGL.CRED.XQ", "Strength of legal rights index (0=weak to 10=strong)");
+		reference.put("SL.TLF.TOTL.IN", "Labor Force");
+		reference.put("IC.TAX.TOTL.CP.ZS", "Total tax rate (% of commercial profits)");
 		reference = categories.get(CATEGORY_CITY_LIFE);
-		reference.add(new UnloadedIndicatorDescription("Health expenditure per capita (current US$)", "SH.XPD.PCAP"));
-		reference.add(new UnloadedIndicatorDescription("% of urban population with access to improved water source", "SH.H2O.SAFE.UR.ZS"));
-		reference.add(new UnloadedIndicatorDescription("% of urban population with access to improved Sanitation Facilities", "SH.SDA.ACSN.UR"));
-		reference.add(new UnloadedIndicatorDescription("Vehicles per km of road", "IS.VEH.ROAD.K1"));
+		reference.put("SH.XPD.PCAP", "Health expenditure per capita (current US$)");
+		reference.put("SH.H2O.SAFE.UR.ZS", "% of urban population with access to improved water source");
+		reference.put("SH.SDA.ACSN.UR", "% of urban population with access to improved Sanitation Facilities");
+		reference.put("IS.VEH.ROAD.K1", "Vehicles per km of road");
 		reference = categories.get(CATEGORY_CLIMATE);
-		reference.add(new UnloadedIndicatorDescription("CO2 emissions in kilotons", "EN.ATM.CO2E.KT"));
-		reference.add(new UnloadedIndicatorDescription("Methane emissions in kilotons of CO2 equivalent", "EN.ATM.METH.KT.CE"));
-		reference.add(new UnloadedIndicatorDescription("Nitrous oxide emissions (thousand metric tons of CO2 equivalent)", "EN.ATM.NOXE.KT.CE"));
-		reference.add(new UnloadedIndicatorDescription("Other greenhouse gas emissions (thousand metric tons of CO2 equivalent)", "EN.ATM.GHGO.KT.CE"));
+		reference.put("EN.ATM.CO2E.KT", "CO2 emissions in kilotons");
+		reference.put("EN.ATM.METH.KT.CE", "Methane emissions in kilotons of CO2 equivalent");
+		reference.put("EN.ATM.NOXE.KT.CE", "Nitrous oxide emissions (thousand metric tons of CO2 equivalent)");
+		reference.put("EN.ATM.GHGO.KT.CE", "Other greenhouse gas emissions (thousand metric tons of CO2 equivalent)");
 		reference = categories.get(CATEGORY_DEMOGRAPHICS);
-		reference.add(new UnloadedIndicatorDescription("Rural population (% of total population)", "SP.RUR.TOTL.ZS"));
-		reference.add(new UnloadedIndicatorDescription("Urban population (% of total population)", "SP.URB.TOTL.IN.ZS"));
-		reference.add(new UnloadedIndicatorDescription("Population in the largest city (% of urban population)", "EN.URB.LCTY.UR.ZS"));
-		reference.add(new UnloadedIndicatorDescription("Population growth (annual %)", "SP.POP.GROW"));
-		reference.add(new UnloadedIndicatorDescription("Total Population", "SP.POP.TOTL"));
-		reference.add(new UnloadedIndicatorDescription("Net migration", "SM.POP.NETM"));
-		reference.add(new UnloadedIndicatorDescription("Literacy rate: adult total", "SE.ADT.LITR.ZS"));
-		reference.add(new UnloadedIndicatorDescription("Life expectancy at birth (total: years)", "SP.DYN.LE00.IN"));
+		reference.put("SP.RUR.TOTL.ZS", "Rural population (% of total population)");
+		reference.put("SP.URB.TOTL.IN.ZS", "Urban population (% of total population)");
+		reference.put("EN.URB.LCTY.UR.ZS", "Population in the largest city (% of urban population)");
+		reference.put("SP.POP.GROW", "Population growth (annual %)");
+		reference.put("SP.POP.TOTL", "Total Population");
+		reference.put("SM.POP.NETM", "Net migration");
+		reference.put("SE.ADT.LITR.ZS", "Literacy rate: adult total");
+		reference.put("SP.DYN.LE00.IN", "Life expectancy at birth (total: years)");
 		reference = categories.get(CATEGORY_EDUCATION);
-		reference.add(new UnloadedIndicatorDescription("Public spending on education, total (% of GDP)", "SE.XPD.TOTL.GD.ZS"));
-		reference.add(new UnloadedIndicatorDescription("School enrollment, tertiary (% gross)", "SE.TER.ENRR"));
+		reference.put("SE.XPD.TOTL.GD.ZS", "Public spending on education, total (% of GDP)");
+		reference.put("SE.TER.ENRR", "School enrollment, tertiary (% gross)");
 		reference = categories.get(CATEGORY_EMPLOYMENT_PROSPECTS);
-		reference.add(new UnloadedIndicatorDescription("Employment in agriculture (% of total employment)", "SL.AGR.EMPL.ZS"));
-		reference.add(new UnloadedIndicatorDescription("Employment in services (% of total employment)", "SL.SRV.EMPL.ZS"));
-		reference.add(new UnloadedIndicatorDescription("Employment in industry (% of total employment)", "SL.IND.EMPL.ZS"));
-		reference.add(new UnloadedIndicatorDescription("Unemployment, total (% of total labor force)", "SL.UEM.TOTL.ZS"));
-		reference.add(new UnloadedIndicatorDescription("Long-term unemployment (% of total unemployment)", "SL.UEM.LTRM.ZS"));
+		reference.put("SL.AGR.EMPL.ZS", "Employment in agriculture (% of total employment)");
+		reference.put("SL.SRV.EMPL.ZS", "Employment in services (% of total employment)");
+		reference.put("SL.IND.EMPL.ZS", "Employment in industry (% of total employment)");
+		reference.put("SL.UEM.TOTL.ZS", "Unemployment, total (% of total labor force)");
+		reference.put("SL.UEM.LTRM.ZS", "Long-term unemployment (% of total unemployment)");
 		reference = categories.get(CATEGORY_FINANCE);
-		reference.add(new UnloadedIndicatorDescription("Real interest rate (%)", "FR.INR.RINR"));
-		reference.add(new UnloadedIndicatorDescription("Lending interest rate (%)", "FR.INR.LEND"));
+		reference.put("FR.INR.RINR", "Real interest rate (%)");
+		reference.put("FR.INR.LEND", "Lending interest rate (%)");
 		reference = categories.get(CATEGORY_QUALITY_OF_LIFE);
-		reference.add(new UnloadedIndicatorDescription("Roads, paved (% of total roads)", "IS.ROD.PAVE.ZS"));
-		reference.add(new UnloadedIndicatorDescription("Internet users (per 100 people)", "IT.NET.USER.P2"));
-		reference.add(new UnloadedIndicatorDescription("Mobile cellular subscriptions (per 100 people)", "IT.CEL.SETS.P2"));
-		reference.add(new UnloadedIndicatorDescription("Motor vehicles (per 1,000 people)", "IS.VEH.NVEH.P3"));
-		reference.add(new UnloadedIndicatorDescription("Rail lines (total route-km)", "IS.RRS.TOTL.KM"));
+		reference.put("IS.ROD.PAVE.ZS", "Roads, paved (% of total roads)");
+		reference.put("IT.NET.USER.P2", "Internet users (per 100 people)");
+		reference.put("IT.CEL.SETS.P2", "Mobile cellular subscriptions (per 100 people)");
+		reference.put("IS.VEH.NVEH.P3", "Motor vehicles (per 1,000 people)");
+		reference.put("IS.RRS.TOTL.KM", "Rail lines (total route-km)");
 		reference = categories.get(CATEGORY_RURAL_LIFE);
-		reference.add(new UnloadedIndicatorDescription("Improved water source, rural (% of rural population with access)", "SH.H2O.SAFE.RU.ZS"));
-		reference.add(new UnloadedIndicatorDescription("Forest area (% of land area)", "AG.LND.FRST.ZS"));
-		reference.add(new UnloadedIndicatorDescription("Agricultural land (% of land area)", "AG.LND.AGRI.ZS"));
-		reference.add(new UnloadedIndicatorDescription("Arable land (% of land area)", "AG.LND.ARBL.ZS"));
-		reference.add(new UnloadedIndicatorDescription("Permanent cropland (% of land area)", "AG.LND.CROP.ZS"));
+		reference.put("SH.H2O.SAFE.RU.ZS", "Improved water source, rural (% of rural population with access)");
+		reference.put("AG.LND.FRST.ZS", "Forest area (% of land area)");
+		reference.put("AG.LND.AGRI.ZS", "Agricultural land (% of land area)");
+		reference.put("AG.LND.ARBL.ZS", "Arable land (% of land area)");
+		reference.put("AG.LND.CROP.ZS", "Permanent cropland (% of land area)");
 	}
 	
 	private static boolean addIndicator(String category, String code) {
@@ -117,8 +127,8 @@ public class ListOfIndicators {
 	}
 	
 	public static boolean loadIndicatorsForCategory(final String category) {
-		final ArrayList<UnloadedIndicatorDescription> codes = categories.get(category);
-		if (codes == null || codes.size() == 0) {
+		final Map<String, String> subCategory = categories.get(category);
+		if (subCategory == null || subCategory.size() == 0) {
 			Log.w("IndicatorLoad", "No indicators are present for category name: " + category);
 			return false;
 		}
@@ -127,7 +137,9 @@ public class ListOfIndicators {
 				Thread aThread = new Thread(new Runnable() {
 				@Override
 				public void run() { 
-					for (int i = 0; i < codes.size(); i++) { addIndicator(category, codes.get(i).getCode()); }
+					for (String code : subCategory.keySet())
+						addIndicator(category, code);
+					
 					latch.countDown();
 				}
 			});
@@ -140,14 +152,14 @@ public class ListOfIndicators {
 	}
 	
 	public static List<Indicator> getAllLoadedIndicatorsFromCategory(String category) {
-		List<Indicator> returns = new ArrayList<Indicator>();
+		List<Indicator> indicators = new ArrayList<Indicator>();
 		for (int i = 0; i < loadedIndicators.size(); i++) {
 			if (loadedIndicators.get(i).getCategory().equals(category)) {
-				returns.add(loadedIndicators.get(i));
+				indicators.add(loadedIndicators.get(i));
 			}
 		}
-		if (returns.size() == 0) { Log.w("IndicatorGrab", "Found no indicators with category: " + category); }
-		return returns;
+		if (indicators.size() == 0) { Log.w("IndicatorGrab", "Found no indicators with category: " + category); }
+		return indicators;
 	}
 	
 	public static int getNumberOfLoadedIndicatorsFromCategory(String category)
@@ -167,17 +179,13 @@ public class ListOfIndicators {
 							CATEGORY_RURAL_LIFE};
 	}
 	
-	public static List<String> getReadableNamesOfIndicatorsInCategory(String category) {
-		List<String> returner = new ArrayList<String>();
-		for (int i = 0; i < categories.get(category).size(); i++) {
-			returner.add(categories.get(category).get(i).getName());
-		}
-		return returner;
+	public static Collection<String> getReadableNamesOfIndicatorsInCategory(String category) {
+		return categories.get(category).values();
 	}
 	
 	public static String getIndicatorCodeFromName(String name)
 	{
-		if (name.equals("GDP growth (Annual %"))
+		if (name.equals("GDP growth (Annual %)"))
 			return "NY.GDP.MKTP.KD.ZG";
 		else if (name.equals("Listed domestic companies"))
 			return "CM.MKT.LDOM.NO";
