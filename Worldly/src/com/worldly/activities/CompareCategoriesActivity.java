@@ -21,6 +21,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +53,7 @@ public class CompareCategoriesActivity extends Activity implements
 
 	private GraphData data = null;
 	private GraphView graph = null;
+	private ScrollView scrollView = null;
 
 	private ExpandableListView elvCategories;
 	private CompareExpandableListAdapter adapter;
@@ -190,15 +192,21 @@ public class CompareCategoriesActivity extends Activity implements
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
 				graph = (GraphView) findViewById(R.id.landscapeGraphView);
-				if (subCategories.getSelectedItemPosition() == 0)
-					data = GraphDataFactory.createDataFromCategory(categories.getSelectedItem().toString());
-				else
+				scrollView = (ScrollView) findViewById(R.id.landscapeScrollViewContainer);
+				if (subCategories.getSelectedItemPosition() == 0) {
+					// data = GraphDataFactory.createDataFromCategory(categories.getSelectedItem().toString());
+					ListOfIndicators.loadIndicatorsForCategory(categories.getSelectedItem().toString());
+					graph.setVisibility(View.INVISIBLE);
+					scrollView.setVisibility(View.INVISIBLE);
+				} else {
 					data = GraphDataFactory.createGraphDataFromSubCategory(categories.getSelectedItem().toString(), subCategories.getSelectedItem().toString());
-
-				try {
-					graph.loadGraph(new BarChart(data, context));
-				} catch (CannotBeNullException e) {
-					e.printStackTrace();
+					graph.setVisibility(View.VISIBLE);
+					scrollView.setVisibility(View.VISIBLE);
+					try {
+						graph.loadGraph(new BarChart(data, context));
+					} catch (CannotBeNullException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 
@@ -295,7 +303,7 @@ public class CompareCategoriesActivity extends Activity implements
 
 	private List<String> getSubcategories(String category) {
 		List<String> indicatorNames = ListOfIndicators.getReadableNamesOfIndicatorsInCategory(category);
-		indicatorNames.add(0, "All indicators");
+		indicatorNames.add(0, "Please select information of interest");
 		return indicatorNames;
 	}
 }
