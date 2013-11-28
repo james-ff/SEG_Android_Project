@@ -49,9 +49,11 @@ public class GraphDataFactory
 		if (list.size() == 1)
 			list.add(new GraphDataRow(NO_VALUES_TEXT, 0, false));
 		
-		try{
+		try {
 			return new GraphData(list);
-		}catch(GraphDataSizeMismatchException e){e.printStackTrace(); return null;}
+		} catch(GraphDataSizeMismatchException e) {
+			e.printStackTrace(); return null;
+		}
 	}
 	
 	public static GraphData createDataFromCategory(String category)
