@@ -176,6 +176,9 @@ public class CachingEngine
 		// Tries to save the data to a file in the device's external storage
 		try
 		{
+			// Creates the directory in which the file will be stored
+			WORKING_DIRECTORY.mkdirs();
+						
 			// Creates the file and opens an OutputStream to begin writing to it
 			File cacheFile = new File(WORKING_DIRECTORY + filename);
 			FileOutputStream fos = new FileOutputStream(cacheFile);

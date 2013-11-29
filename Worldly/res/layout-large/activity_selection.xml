@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal" >
 
         <com.worldly.view.LogoTextView
             android:id="@+id/ltvFamily"
@@ -24,7 +24,7 @@
             android:paddingRight="10dp"
             android:text="@string/strFamily"
             android:textColor="@color/logo_text_view"
-            android:textSize="50sp"
+            android:textSize="100sp"
             logo:logo_type="home" />
 
         <Button
@@ -35,6 +35,8 @@
             android:background="@color/button_view"
             android:onClick="chooseMode"
             android:text="@string/strFamily"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="50sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -42,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal" >
 
         <com.worldly.view.LogoTextView
             android:id="@+id/ltvNewLife"
@@ -53,7 +55,7 @@
             android:paddingRight="10dp"
             android:text="@string/strNewLife"
             android:textColor="@color/logo_text_view"
-            android:textSize="50sp"
+            android:textSize="100sp"
             logo:logo_type="road" />
 
         <Button
@@ -64,6 +66,8 @@
             android:background="@color/button_view"
             android:onClick="chooseMode"
             android:text="@string/strNewLife"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="50sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -71,7 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal" >
 
         <com.worldly.view.LogoTextView
             android:id="@+id/ltvBusiness"
@@ -82,7 +86,7 @@
             android:paddingRight="10dp"
             android:text="@string/strBusiness"
             android:textColor="@color/logo_text_view"
-            android:textSize="40sp"
+            android:textSize="100sp"
             logo:logo_type="briefcase" />
 
         <Button
@@ -93,6 +97,8 @@
             android:background="@color/button_view"
             android:onClick="chooseMode"
             android:text="@string/strBusiness"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="50sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -100,7 +106,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal" >
 
         <com.worldly.view.LogoTextView
             android:id="@+id/ltvCustom"
@@ -111,7 +117,7 @@
             android:paddingRight="10dp"
             android:text="@string/strCustom"
             android:textColor="@color/logo_text_view"
-            android:textSize="50sp"
+            android:textSize="100sp"
             logo:logo_type="tags" />
 
         <Button
@@ -122,6 +128,8 @@
             android:background="@color/button_view"
             android:onClick="chooseMode"
             android:text="@string/strCustom"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="50sp"
             android:textStyle="bold" />
     </LinearLayout>
 

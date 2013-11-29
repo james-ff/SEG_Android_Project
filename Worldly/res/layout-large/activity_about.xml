@@ -1,0 +1,101 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/about_created_by_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_contributor_title"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="50sp" />
+
+        <TextView
+            android:id="@+id/contributor_james_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/contributor_james"
+            
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/contributor_rafael_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/contributor_rafael"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/contributor_ferdinand_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/contributor_ferdinand"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/contributor_marek_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/contributor_marek"
+            android:textSize="40sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/about_acknowledgements_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/about_acknowlegdements_title"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="50sp" />
+
+        <TextView
+            android:id="@+id/world_bank_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:clickable="true"
+            android:onClick="worldBankAttribution"
+            android:text="@string/acknowlegdement_world_bank"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/google_maps_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:clickable="true"
+            android:onClick="googleMapsAttribution"
+            android:text="@string/acknowlegdement_google_maps"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/google_graphs_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:clickable="true"
+            android:onClick="googleGraphAttribution"
+            android:text="@string/acknowledgement_google_graph"
+            android:textSize="40sp" />
+    </LinearLayout>
+
+</LinearLayout>
