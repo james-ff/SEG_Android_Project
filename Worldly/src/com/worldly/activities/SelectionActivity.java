@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.worldly.R;
+import com.worldly.R;
 import com.worldly.controller.WorldlyController;
 import com.worldly.data_store.ListOfIndicators;
 

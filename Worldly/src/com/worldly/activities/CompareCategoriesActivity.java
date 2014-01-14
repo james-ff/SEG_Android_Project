@@ -25,7 +25,7 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.worldly.R;
+import com.worldly.R;
 import com.worldly.controller.WorldlyController;
 import com.worldly.custom_adapter.CompareExpandableListAdapter;
 import com.worldly.custom_adapter.SpinnerAdapter;

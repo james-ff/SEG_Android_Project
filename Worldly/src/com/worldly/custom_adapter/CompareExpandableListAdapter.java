@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-import com.example.worldly.R;
+import com.worldly.R;
 import com.worldly.graph.data.GraphData;
 import com.worldly.graph.types.BarChart;
 import com.worldly.graph.view.GraphView;

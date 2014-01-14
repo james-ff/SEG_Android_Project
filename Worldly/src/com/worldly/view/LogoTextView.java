@@ -7,7 +7,7 @@ import android.text.Html;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import com.example.worldly.R;
+import com.worldly.R;
 
 /**
  * Class that extends TextView and uses specifically Font Awesome (http://fontawesome.io/icons/) to

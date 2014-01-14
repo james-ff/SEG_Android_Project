@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 
-import com.example.worldly.R;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.worldly.R;
 
 /**
  * About Activity, displaying the team members and attributions.
